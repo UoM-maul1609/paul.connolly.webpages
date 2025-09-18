@@ -1,0 +1,2 @@
+*.ppt !text !filter !merge !diff
+*.pptx !text !filter !merge !diff
