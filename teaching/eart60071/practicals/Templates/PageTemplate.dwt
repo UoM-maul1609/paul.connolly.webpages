@@ -1,0 +1,48 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="css/ui-strong/jquery-ui-1.10.3.custom.min.css" />
+<link rel="stylesheet" type="text/css" href="css/import.css" />
+<!-- TemplateBeginEditable name="styles" -->
+<!-- TemplateEndEditable -->
+<!-- TemplateBeginEditable name="doctitle" -->
+<title>Earth's radiation balance</title>
+<!-- TemplateEndEditable -->
+<!-- TemplateBeginEditable name="head" -->
+<!-- TemplateEndEditable -->
+<!-- TemplateParam name="page-type" type="text" value="page-info" -->
+</head>
+
+<body>
+<!-- TemplateBeginEditable name="warnings" -->
+<!-- TemplateEndEditable -->
+<div id="climate-sim" class="@@(_document['page-type'])@@">
+<!-- TemplateBeginEditable name="main" -->
+<!-- TemplateEndEditable -->
+<footer>
+        <div class="logo">
+            <a href="http://www.manchester.ac.uk">
+                <img src="assets/logos/TAB_col_white_background.png" width="107" height="45" alt="University of Manchester">
+            </a>
+        </div>
+    	<ul class="fmenu menu1">
+        	<li><a href="about.html">About</a></li>
+            <li><a href="credits.html">Credits</a></li>
+        </ul>
+        <ul class="fmenu menu2">
+            <li><a href="http://www.manchester.ac.uk/aboutus/documents/disclaimer/">Disclaimer</a></li>
+            <li><a href="http://www.manchester.ac.uk/aboutus/documents/privacy/">Privacy</a></li>
+            <li><a href="http://www.manchester.ac.uk/aboutus/documents/copyright/">Copyright notice</a></li>
+            <li><a href="http://www.manchester.ac.uk/aboutus/documents/accessibility/">Accessibility</a></li>
+            <li><a href="http://www.manchester.ac.uk/aboutus/documents/foi/">Freedom of information</a></li>
+            <li><a href="http://www.manchester.ac.uk/aboutus/governance/charitable-status/">Charitable status</a></li>
+            <li>Royal Charter Number: RC000797</li>
+        </ul>
+		
+    </footer>
+</div>
+<!-- TemplateBeginEditable name="scripts" -->
+<!-- TemplateEndEditable -->
+</body>
+</html>

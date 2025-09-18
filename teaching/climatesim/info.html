@@ -1,0 +1,154 @@
+<!DOCTYPE HTML>
+<html><!-- InstanceBegin template="/Templates/PageTemplate.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="css/ui-strong/jquery-ui-1.10.3.custom.min.css" />
+<link rel="stylesheet" type="text/css" href="css/import.css" />
+<!-- InstanceBeginEditable name="styles" -->
+<link rel="stylesheet" type="text/css" href="js/utils/scrolltotop/scrolltotop.css" />
+<!-- InstanceEndEditable -->
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>Earth's radiation balance</title>
+<!-- InstanceEndEditable -->
+<!-- InstanceBeginEditable name="head" -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+	jax: ["input/TeX","output/HTML-CSS"],
+	tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+    },
+	menuSettings: {
+		zoom: "Click",
+		zscale: "150%"
+	},
+	styles: {
+		".MathJax_Display": {
+			"font-size" : "125%",
+			"padding-left" : "1em"
+		}
+	}
+});
+</script>
+<script type="text/javascript"
+  src="../../MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- InstanceEndEditable -->
+<!-- InstanceParam name="page-type" type="text" value="page-info" -->
+</head>
+
+<body>
+<!-- InstanceBeginEditable name="warnings" -->
+<!-- InstanceEndEditable -->
+<div id="climate-sim" class="page-info">
+<!-- InstanceBeginEditable name="main" -->
+<div class="cs-page-back">
+	<span class="page-link"><a href="index.html">Back to Climate Sim</a></span>
+</div>
+<div class="text-page text-block">
+<h1>Information</h1>
+<dl>
+<dt><a name="temp"></a><dfn>Surface temperature</dfn></dt>
+<dd>
+<p>When viewed from space earth emits infrared energy (radiation). From the amount of energy radiated we can determine the <em>effective temperature</em>, which is the temperature earth's surface would be if there were no atmosphere. However, gases in the earth's atmosphere, such as carbon dioxide and methane, effectively 'trap' some of the radiation emitted from earth. For this reason the surface temperature of earth is greater than the effective temperature.</p>
+<div class="more-info">Advanced info...</div>
+<div class="collapsable">
+    <p>In general the surface temperature of earth will be higher than the effective temperature because infrared radiation is absorbed by greenhouse gases, such as CO<sub>2</sub>, CH<sub>4</sub> and water vapour. Because of this absorption infrared radiation does not pass perfectly through the atmosphere; hence, we can define a quantity called the <em>optical depth</em>, $\tau _{TOT}$, which describes how much infrared absorption occurs when it travels through an absorbing medium. Since the atmosphere <em>absorbs</em> infrared this also must mean that the atmosphere does not <em>emit</em> infrared perfectly. Therefore we can also define a quantity called the emissivity, $\epsilon$, which is how effectively the atmosphere emits the infrared. <em>Emissivity</em> and <em>optical depth</em>, are approximately dependent on each other in the following way:</p>
+    <p>$$\epsilon=\frac{1}{1+0.75\tau _{TOT}}$$</p>
+    <p>Stefan's law describes that a perfect emitter's temperature is related to the energy it emits by the following formula:</p>
+    <p>$$E=\sigma T_{eff}^4$$</p>
+    <p>For a body that is not a perfect emitter, the energy emitted at the surface will be greater than the measured energy emitted into space by an amount $\frac{1}{\epsilon}$, therefore we can write:</p>
+    <p>$$\frac{E}{\epsilon}=\sigma T_{surface}^4$$</p>
+    <p>or, rearranging:</p>
+    <p>$$T_{surface}=\left(\frac{E}{\epsilon\sigma}\right)^{0.25}$$</p>
+</div>
+</dd>
+<dt><a name="ch4"></a><dfn>CH<sub>4</sub> (Methane)</dfn></dt>
+<dd>
+	<p>Methane concentrations on earth are currently approximately 1.75 parts of methane for every million parts of air. This means that 1 million moles of air contains 1.75 moles of methane. Methane concentrations may increase and decrease in the atmosphere. For example, sources of methane include: cows belching; methane trapped in frozen soil, plant life and landfill sites. Chemistry in the atmosphere can reduce the concentration of methane. </p>
+<div class="more-info">Advanced info...</div>
+<div class="collapsable">
+    <p>The main sink of CH<sub>4</sub> in the atmosphere is the hydroxyl radical, which reacts with methane to form the methyl radical and water. The methyl radical (CH<sub>3</sub>) then adds molecular oxygen (O<sub>2</sub>) to form the methylperoxy radical (CH<sub>3</sub>O<sub>2</sub>) (see <a href="http://acmg.seas.harvard.edu/people/faculty/djj/book/bookchap11.html" target="_blank">http://acmg.seas.harvard.edu/people/faculty/djj/book/bookchap11.html</a> for further information) </p>
+    <p>Optical depths of absorbing gases can be estimated from the partial pressure of the gas via a power law: $\tau=A\sqrt{e}$,</p>
+    <p>where $A$ is a constant, specific to the gas, and $e$ is the partial pressure of the gas in pascals.</p>
+    <p>We can calculate the optical depth, due to methane alone, from the partial pressure of methane, via:</p>
+    <p>$$\tau _{CH_4}=0.725\sqrt{e_{CH_4}}$$</p>
+    <p>The partial pressure of methane can be calculated from the atmospheric concentration of methane, by multiplying the concentration in ppm by the total pressure and dividing by $10^6$.</p>
+</div>
+</dd>
+<dt><a name="co2"></a><dfn>CO<sub>2</sub> (Carbon dioxide)</dfn></dt>
+<dd>
+	<p>Carbon dioxide concentrations on earth are currently approximately 400 parts for every million parts of air. They are increasing mainly due to the burning of fossil fuels, but also due to deforestation. Like methane, carbon dioxide `traps' infrared radiation from escaping to space and thus acts to warm the earth's surface. </p>
+<div class="more-info">Advanced info...</div>
+<div class="collapsable">
+    <p>The basic chemistry whereby CO<sub>2</sub> concentrations increase in the atmosphere is the burning of hydrocarbons in the presence of oxygen to form CO<sub>2</sub> and water.</p>
+    <p>As for methane, we can calculate the optical depth, due to CO<sub>2</sub> alone, from the partial pressure of CO<sub>2</sub> via:</p>
+    <p>$$\tau _{CO_2}=0.029\sqrt{e_{CO_2}}$$</p>
+    <p>The partial pressure of carbon dioxide can be calculated from the concentration of carbon dioxide, by multiplying the concentration in ppm by the total pressure and dividing by $10^6$.</p>
+    <p>Note that another significant absorbing gas is water vapour, whose optical depth can be calculated similarly via: $\tau$ $$_{H_2O}=0.087\sqrt{e_{H_2O}}$$</p>
+    <p>The total optical depth is then just the sum of all optical depths:</p>
+    <p>$$\tau=\tau_{H_2O}+\tau _{CO_2}+\tau_{CH4}$$</p>
+</div>
+</dd>
+<dt><a name="cloud"></a><dfn>Cloudy fraction</dfn></dt>
+<dd>
+	<p>At any one time approximately 70% of the earth has clouds covering it. We refer to this fraction as the <em>cloudy fraction</em>. Scientists are trying to understand whether this number will either increase or decrease as our climate changes due to processes known as <em>cloud feedbacks</em> due to climate change.</p>
+<div class="more-info">Advanced info...</div>
+<div class="collapsable">
+    <p>See <a href="http://earthobservatory.nasa.gov/GlobalMaps/view.php?d1=MODAL2_M_CLD_FR" target="_blank">http://earthobservatory.nasa.gov/GlobalMaps/view.php?d1=MODAL2_M_CLD_FR</a> for a global map of cloud fraction, $cf$, determined from satellite. You will notice places that have lots of cloud (sub-tropical oceans and rainforests) and places that do not (e.g. the deserts / arid regions).</p>
+</div>
+</dd>
+<dt><a name="albedo"></a><dfn>Cloud albedo</dfn></dt>
+<dd>
+	<p>The cloud albedo is defined as the ratio between the amount of sunlight that is reflected from the cloud and the amount that hits it. Cloud albedo can take on a number between 0 (no sunlight reflected) and 1 (all sunlight reflected) depending how reflective the clouds are. In practice a typical cloud albedo is approximately 0.3 or 0.4.</p>
+<div class="more-info">Advanced info...</div>
+<div class="collapsable">
+    <p>For a given cloud we can define its cloud albedo, $A_c$; however we wish to know how the clouds affect the amount of energy reflected to space. For this we need to know the planetary albedo, $A_p$. For this we can define the non-cloudy albedo, $A_s$, as the albedo of the area that isn't covered with clouds and then calculate the planetary albedo as a weighted average of the two.</p>
+    <p>$$A_p=A_c\times cf + A_s\times \left(1-cf\right)$$</p>
+    <p>where $cf$ is the cloudy fraction</p>
+    <p>We can then perform an energy budget to equate the energy falling on earth's disk (projected area of a disk, with radius of earth, $R_e$, multiplied by the solar flux, $S_{flux}$) to the energy that is radiated from earth due to Stefan's law:</p>
+    <p>$$\pi R_e^2 \left(1-A_p \right)S_{flux}= 4\pi R_e^2 \sigma\epsilon T_{surface}^4$$</p>
+    <p>which is solved for $T_{surface}$ in kelvin.</p>
+</div>
+</dd>
+</dl>
+</div>
+<!-- InstanceEndEditable -->
+<footer>
+        <div class="logo">
+            <a href="http://www.manchester.ac.uk">
+                <img src="assets/logos/TAB_col_white_background.png" width="107" height="45" alt="University of Manchester">
+            </a>
+        </div>
+    	<ul class="fmenu menu1">
+        	<li><a href="about.html">About</a></li>
+            <li><a href="credits.html">Credits</a></li>
+        </ul>
+        <ul class="fmenu menu2">
+            <li><a href="http://www.manchester.ac.uk/aboutus/documents/disclaimer/">Disclaimer</a></li>
+            <li><a href="http://www.manchester.ac.uk/aboutus/documents/privacy/">Privacy</a></li>
+            <li><a href="http://www.manchester.ac.uk/aboutus/documents/copyright/">Copyright notice</a></li>
+            <li><a href="http://www.manchester.ac.uk/aboutus/documents/accessibility/">Accessibility</a></li>
+            <li><a href="http://www.manchester.ac.uk/aboutus/documents/foi/">Freedom of information</a></li>
+            <li><a href="http://www.manchester.ac.uk/aboutus/governance/charitable-status/">Charitable status</a></li>
+            <li>Royal Charter Number: RC000797</li>
+        </ul>
+		
+    </footer>
+</div>
+<!-- InstanceBeginEditable name="scripts" -->
+
+<script language="javascript" type="text/javascript" src="js/jquery/jquery-1.10.2.min.js" ></script>
+<script type="text/javascript">
+jQuery(document).ready(function() {
+  $(".collapsable").hide();
+  $(".more-info").click(function() {
+  		$(this).next(".collapsable").slideToggle(500);
+  });
+});
+</script>
+
+<script type="text/javascript" src="js/utils/scrolltotop/scrolltotop.js"></script>
+<!-- InstanceEndEditable -->
+</body>
+<!-- InstanceEnd --></html>

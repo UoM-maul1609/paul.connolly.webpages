@@ -1,0 +1,1 @@
+Columns correspond to:  time, IWC from CPI, IWC from CPI and FSSP, Ext from CPI, Ext from CPI and FSSP.

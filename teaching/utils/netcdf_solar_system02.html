@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+<meta name="description" content="NetCDF example">
+<META NAME="ROBOTS" CONTENT="INDEX, NOFOLLOW">
+<!--<meta name="keywords" content="HTML,CSS,XML,JavaScript">-->
+<meta name="author" content="Paul Connolly">
+
+  
+  <title>NetCDF example</title>
+  <!--https://nicolaspanel.github.io/numjs/ -->
+  <script src="https://cdn.jsdelivr.net/gh/nicolaspanel/numjs@0.15.1/dist/numjs.min.js">
+  var nj = require('numjs');</script>
+  
+  <script src="https://unpkg.com/mathjs@6.6.2/dist/math.min.js"></script>
+  <script src="https:////cdn.jsdelivr.net/npm/jstat@latest/dist/jstat.min.js"></script> <!-- include jStat, from the CDN or otherwise -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/netcdfjs@latest/dist/netcdfjs.min.js"></script>
+
+  <style>
+    body {
+      font-family: sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <h1>Upload and plot a Solar System Simulation NetCDF File</h1>
+  <p>
+    This web page plots the planet-Sun distance vs time for all objects in the simulation.
+  </p>
+  
+  <div id="myDiv" ></div>
+  <div id="myDivFFT" ></div>
+  
+  
+  
+  
+  <script>
+
+    var reader;
+    
+    var progress = document.querySelector('.percent');
+    function abortRead() {
+      reader.abort();
+    }
+
+    function handleFileSelect(evt) {
+      // Reset progress indicator on new file selection.
+      progress.style.width = '0%';
+      progress.textContent = '0%';
+
+      reader = new FileReader();
+      reader.onerror = errorHandler;
+      reader.onprogress = updateProgress;
+      reader.onabort = function(e) {
+        alert('File read cancelled');
+      };
+      reader.onloadstart = function(e) {
+        document.getElementById('progress_bar').className = 'loading';
+      };
+      reader.onload = function(e) {
+        // Ensure that the progress bar displays 100% at the end.
+        progress.style.width = '100%';
+        progress.textContent = '100%';
+        setTimeout("document.getElementById('progress_bar').className='';", 2000);
+        //var reader = new NetCDFReader(reader.result);
+
+        //replace reader with NetCDF reader
+        reader = new netcdfjs(this.result);
+        
+        
+        out1=reader.getDataVariable('time'); // go to offset and read it
+        out2a=reader.getDataVariable('pos'); // go to offset and read it
+        
+        //... your program here  ..//
+        
+        out2b=[...out2a[0]];
+        num_planets=out2b.length/3;
+        stride=1;
+        length1=out2a.length / stride;
+        out2 = new Array(length1);
+        //grid1 = new Array(100).fill(new Array(10))
+        out2 = new Array(num_planets-1);
+        
+        for (var i=0; i< num_planets-1; i++) {
+            out2[i] = new Array(length1);
+        }
+        
+        
+        for (var i=0; i< length1; i++) {
+            out2b=[...out2a[i*stride]];
+            out2b.reshape(num_planets,3);
+            
+            for (var j=1; j< num_planets; j++) {
+                out2[j-1][i]=Math.sqrt(out2b[j][0]**2+out2b[j][1]**2+out2b[j][2]**2);;
+            }
+        }
+        plot_data();
+        plot_dataFFT();
+
+        
+      };
+      reader.readAsArrayBuffer(evt.target.files[0]);
+    }
+
+    // Make input element <input type="file" id="files" name="file" />
+    var input = document.createElement('input');
+    input.id = 'files';
+    input.type = 'file';
+    input.className = 'file';
+    document.body.appendChild(input); // put it into the DOM
+
+    // Make a Progress bar <div id="progress_bar"><div class="percent">0%</div></div>
+    var progress = document.createElement('div');
+    progress.id = 'progress_bar';
+    inner = document.createElement('div');
+    inner.className = 'percent';
+    inner.id = 'innerdiv'; // set the CSS class
+    progress.appendChild(inner);
+    document.body.appendChild(progress); // put it into the DOM
+
+    //Start event listener to check if a file has been selected
+    run = document
+      .getElementById('files')
+      .addEventListener('change', handleFileSelect, false);
+
+    ///Progress bar and other functions
+    function errorHandler(evt) {
+      switch (evt.target.error.code) {
+        case evt.target.error.NOT_FOUND_ERR:
+          alert('File Not Found!');
+          break;
+        case evt.target.error.NOT_READABLE_ERR:
+          alert('File is not readable');
+          break;
+        case evt.target.error.ABORT_ERR:
+          break;
+        default:
+          alert('An error occurred reading this file.');
+      }
+    }
+
+    function updateProgress(evt) {
+      // evt is an ProgressEvent. Updates progress bar
+      if (evt.lengthComputable) {
+        var percentLoaded = Math.round((evt.loaded / evt.total) * 100);
+        // Increase the progress bar length.
+        if (percentLoaded < 100) {
+          progress.style.width = percentLoaded + '%';
+          progress.textContent = percentLoaded + '%';
+        }
+      }
+    }   
+    
+    
+    
+    
+    function plot_data() {
+        // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        // Routine to set-up the plot
+        // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        var planets=['Mercury','Venus','Earth','Mars','Jupiter',
+            'Saturn','Uranus','Neptune','Pluto'];
+        
+        var xaxis_s={
+                title: {
+                    text: 'time (s)'
+                },
+                showexponent: 'all',exponentformat: 'power',
+            };
+        var yaxis_s={
+                title: {
+                    text: 'Planet-Sun (m)'
+                },
+                showexponent: 'all',exponentformat: 'power',
+            };
+        var layout = {
+            title: 'Planet-sun distance - Milankowich cycles?',
+            width: 1400,
+            height: 1000,
+            grid: {rows:3, columns:3, pattern: 'independent'},
+            xaxis: xaxis_s,
+            yaxis: yaxis_s,
+        };
+
+        data = new Array(9);
+        for (var i = 0; i < 9; i++) {
+            if (i==0) {
+                data[i] = {
+                    x: out1,
+                    y: out2[i],
+                    name: planets[i],
+                    mode: 'line',
+                    type: 'scatter',
+                };
+            } else {
+                data[i] = {
+                    x: out1,
+                    y: out2[i],
+                    name: planets[i],
+                    mode: 'line',
+                    type: 'scatter',
+                    xaxis: 'x' + (i+1),
+                    yaxis: 'y' + (i+1),
+                };
+                layout['xaxis'+(i+1)]=xaxis_s;
+                layout['yaxis'+(i+1)]=yaxis_s;
+                
+            }
+                
+            //data[i]=trace;
+        }
+        // -------------------------------------------------------------------------------
+      
+        // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        // Do the plot
+        // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        // https://plotly.com/javascript/line-and-scatter/
+        Plotly.newPlot('myDiv',
+                 data, layout, {showSendToCloud: true});
+    }
+    
+    function plot_dataFFT() {
+        // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        // Routine to set-up the plot
+        // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        var planets=['Mercury','Venus','Earth','Mars','Jupiter',
+            'Saturn','Uranus','Neptune','Pluto'];
+        var xaxis_s={
+                type: 'log',
+                title: {
+                    text: 'Period (earth years)'
+                },
+                showexponent: 'all',exponentformat: 'power',
+            };
+        var yaxis_s={
+                type: 'log',
+                title: {
+                    text: 'Power spectrum (m)'
+                },
+                showexponent: 'all',exponentformat: 'power',
+            };
+        var layout = {
+            title: 'Fourier transform of planet-sun distance',
+            width: 750,
+            height: 750,
+            grid: {rows:1, columns:1, pattern: 'independent'},
+            xaxis: xaxis_s,
+            yaxis: yaxis_s,
+        };
+
+        data = new Array(1);
+        L=50000.;
+        NFFT=Math.floor(2**Math.ceil(Math.log(L)/Math.log(2.)));
+        dt=(out1[1]-out1[0])/(86400.*365.25);
+        Fs=1./dt;
+        r1=Math.floor(NFFT/2+1);
+        r2=Math.floor(NFFT);
+        f = nj.arange(r1).divide(r1-1).multiply(Fs/2.).pow(-1).valueOf();
+        
+        for (var i=0;i<num_planets-1;i++) {
+            RI = nj.concatenate(nj.array(out2[i]).slice([0,r2,1]).reshape(r2,1),
+                 nj.zeros([r2,1]));
+            fft = nj.fft(RI).divide(L);
+            yr=fft.slice(0,[1]).flatten().slice([1,r1,1]).valueOf();
+            yi=fft.slice(0,1).flatten().slice([1,r1,1]).valueOf();
+            //result=(fft.slice(0,[1]).flatten().slice([1,r1,1]).pow(2).add(
+            //    fft.slice(0,1).flatten().slice([1,r1,1]).pow(2))).pow(0.5);
+            result=nj.abs(yr,yi);
+            data[i] = {
+                x: f,
+                y: result.multiply(2.).valueOf(),
+                name: planets[i],
+                mode: 'line',
+                type: 'scatter',
+            };
+        }
+        Plotly.newPlot('myDivFFT',
+                 data, layout, {showSendToCloud: true});
+    }
+
+    
+    Array.prototype.reshape = function(rows, cols) {
+      var copy = this.slice(0); // Copy all elements.
+      this.length = 0; // Clear out existing array.
+
+      for (var r = 0; r < rows; r++) {
+        var row = [];
+        for (var c = 0; c < cols; c++) {
+          var i = r * cols + c;
+          if (i < copy.length) {
+            row.push(copy[i]);
+          }
+        }
+        this.push(row);
+      }
+    };
+  </script>
+  
+  
+</body>
+  
+</html>
+

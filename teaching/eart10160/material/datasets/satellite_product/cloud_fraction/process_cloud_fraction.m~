@@ -1,0 +1,27 @@
+function process_cloud_fraction(fileName)
+% question: is cloud fraction > 50%?
+% question: is cloud fraction in 2006-7 > cloud fraction in 2011-12?
+
+info=hdfinfo(fileName);
+datacfl=double(hdfread(fileName,'Cloud_Fraction_Liquid_FMean'));
+datacfi=double(hdfread(fileName,'Cloud_Fraction_Ice_FMean'));
+
+datacfl(find(datacfl(:)==-9999))=NaN;
+datacfi(find(datacfi(:)==-9999))=NaN;
+
+datacfl=datacfl./1e4;
+datacfi=datacfi./1e4;
+
+ind=findstr(fileName,'MOD08_M3.');
+
+fileName1=[fileName((ind+9):(ind+16)),'_liquid.csv'];
+fileName2=[fileName((ind+9):(ind+16)),'_ice.csv'];
+fileName3=[fileName((ind+9):(ind+16)),'_all.csv'];
+
+
+long=-179.5:1:179.5;
+lat=89.5:-1:-89.5;
+csvwrite(fileName1,datacfl);
+csvwrite(fileName2,datacfi);
+csvwrite(fileName3,datacfl+datacfi);
+

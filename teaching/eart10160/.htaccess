@@ -1,0 +1,14 @@
+AuthType Basic
+AuthName "Only EART10160 Instructors"
+AuthUserFile .htpasswd
+
+
+
+<FilesMatch "eart10160_instructors.html" >
+  require user instructor
+</FilesMatch>
+
+
+
+
+

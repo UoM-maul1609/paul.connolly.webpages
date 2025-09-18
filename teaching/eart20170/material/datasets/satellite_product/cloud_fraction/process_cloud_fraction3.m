@@ -1,0 +1,38 @@
+function [means1,means2]=process_cloud_fraction3
+% Read in the cloud fraction data and calculate a global mean for each
+% month. Is the global mean fraction of liquid clouds greater than ice
+% clouds?
+
+d1=dir('A*_liquid.csv'); 
+d2=dir('A*_ice.csv');
+
+N=length(d1); % sample size
+means1=zeros(size(d1));
+means2=zeros(size(d1));
+for i=1:length(d1)
+   dat1=csvread(d1(i).name); 
+   cloud_frac_liquid=dat1(2:end,2:end);
+   means1(i)=nanmean(cloud_frac_liquid(:));
+   
+   dat2=csvread(d2(i).name); 
+   cloud_frac_ice=dat2(2:end,2:end);
+   means2(i)=nanmean(cloud_frac_ice(:));
+   
+end
+
+% Is mean liquid cloud cover > mean ice cloud cover?
+% test at the 5% significance level
+Sp2=(N-1).*std(means1).^2+(N-1).*std(means2).^2;
+Sp2=Sp2./((N-1)+(N-1));
+t_statistic=abs((mean(means1)-mean(means2))./(sqrt(Sp2./N+Sp2./N)) )
+
+t_critical=abs(tinv(0.05,N+N-2))
+
+if(t_critical>t_statistic)
+    disp(['Accept the null hypothesis:', ...
+        'there is no between the fraction of liquid and ice clouds']);
+else
+    disp(['Reject the null hypothesis:', ...
+        'there is a difference between the fraction of ',...
+        'liquid and ice clouds']);
+end

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+<meta name="description" content="NetCDF example">
+<META NAME="ROBOTS" CONTENT="INDEX, NOFOLLOW">
+<!--<meta name="keywords" content="HTML,CSS,XML,JavaScript">-->
+<meta name="author" content="Paul Connolly">
+
+  
+  <title>NetCDF example</title>
+
+  <script src="https://unpkg.com/mathjs@6.6.2/dist/math.min.js"></script>
+  <script src="https:////cdn.jsdelivr.net/npm/jstat@latest/dist/jstat.min.js"></script> <!-- include jStat, from the CDN or otherwise -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/netcdfjs@latest/dist/netcdfjs.min.js"></script>
+
+  <style>
+    body {
+      font-family: sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <h1>NetCDF Example</h1>
+  <p>
+    Blah, Blah!
+  </p>
+  
+  <div id="myDiv" ></div>
+  
+  
+  
+  
+  <script>
+    var reader;
+    
+    
+    
+    
+    var progress = document.querySelector('.percent');
+    function abortRead() {
+      reader.abort();
+    }
+
+    function handleFileSelect(evt) {
+      // Reset progress indicator on new file selection.
+      progress.style.width = '0%';
+      progress.textContent = '0%';
+
+      reader = new FileReader();
+      reader.onerror = errorHandler;
+      reader.onprogress = updateProgress;
+      reader.onabort = function(e) {
+        alert('File read cancelled');
+      };
+      reader.onloadstart = function(e) {
+        document.getElementById('progress_bar').className = 'loading';
+      };
+      reader.onload = function(e) {
+        // Ensure that the progress bar displays 100% at the end.
+        progress.style.width = '100%';
+        progress.textContent = '100%';
+        setTimeout("document.getElementById('progress_bar').className='';", 2000);
+        //var reader = new NetCDFReader(reader.result);
+
+        //replace reader with NetCDF reader
+        reader = new netcdfjs(this.result);
+        out1=reader.getDataVariable('time'); // go to offset and read it
+        out2a=reader.getDataVariable('precip'); // go to offset and read it
+        
+        //... your program here  ..//
+        out2=[];
+        for (var i=0; i< out2a.length; i++) {
+            out2.push(out2a[i][0,0]);
+        }
+        plot_data();
+      };
+      reader.readAsArrayBuffer(evt.target.files[0]);
+    }
+
+    // Make input element <input type="file" id="files" name="file" />
+    var input = document.createElement('input');
+    input.id = 'files';
+    input.type = 'file';
+    input.className = 'file';
+    document.body.appendChild(input); // put it into the DOM
+
+    // Make a Progress bar <div id="progress_bar"><div class="percent">0%</div></div>
+    var progress = document.createElement('div');
+    progress.id = 'progress_bar';
+    inner = document.createElement('div');
+    inner.className = 'percent';
+    inner.id = 'innerdiv'; // set the CSS class
+    progress.appendChild(inner);
+    document.body.appendChild(progress); // put it into the DOM
+
+    //Start event listener to check if a file has been selected
+    run = document
+      .getElementById('files')
+      .addEventListener('change', handleFileSelect, false);
+
+    ///Progress bar and other functions
+    function errorHandler(evt) {
+      switch (evt.target.error.code) {
+        case evt.target.error.NOT_FOUND_ERR:
+          alert('File Not Found!');
+          break;
+        case evt.target.error.NOT_READABLE_ERR:
+          alert('File is not readable');
+          break;
+        case evt.target.error.ABORT_ERR:
+          break;
+        default:
+          alert('An error occurred reading this file.');
+      }
+    }
+
+    function updateProgress(evt) {
+      // evt is an ProgressEvent. Updates progress bar
+      if (evt.lengthComputable) {
+        var percentLoaded = Math.round((evt.loaded / evt.total) * 100);
+        // Increase the progress bar length.
+        if (percentLoaded < 100) {
+          progress.style.width = percentLoaded + '%';
+          progress.textContent = percentLoaded + '%';
+        }
+      }
+    }   
+    
+    
+    
+    
+    function plot_data() {
+        // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        // Routine to set-up the plot
+        // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        var layout = {
+          width: 800,
+          title: 'Spatial Plot: Plan view',
+          xaxis: {
+            title: {
+                text: 'time (s)'
+            }
+          },
+          yaxis: {
+            title: {
+                text: 'precip (mm hr-1)'
+            }
+          },
+          showlegend: false
+        };
+    
+        // https://plotly.com/javascript/line-and-scatter/
+        var trace1 = {
+          x: out1,
+          y: out2,
+          mode: 'line',
+          type: 'scatter',
+          name: 'Precipitation'
+        }; 
+        
+        // -------------------------------------------------------------------------------
+      
+        // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        // Do the plot
+        // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        // https://plotly.com/javascript/line-and-scatter/
+        var data=[trace1]; //,trace1a,trace2];
+        
+        Plotly.newPlot('myDiv', data, layout, {showSendToCloud: true});
+    
+    
+    }
+  </script>
+  
+  
+</body>
+  
+</html>
+

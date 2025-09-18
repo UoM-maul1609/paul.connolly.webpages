@@ -1,0 +1,175 @@
+@charset "utf-8";
+/* CSS Document */
+body {
+	position: relative;
+	font-size: 62.5%;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	margin: 0;
+	padding: 0;
+}
+#page-warning-notice {
+	border: 1px solid red;
+	background-color: yellow;
+	padding: 5px;
+	font-size: 1.4em;
+	font-weight: bold;
+	display: none;
+}
+
+/*** 
+ *** Containers
+ ***/
+#climate-sim.page-sim,
+#climate-sim.page-info {
+	 margin: 0 auto;
+}
+#climate-sim.page-sim {
+	padding: 20px 0;
+}
+#climate-sim.page-info {
+	max-width: 1000px;
+	padding: 20px;
+}
+
+/*** 
+ *** Collapsable sections
+ ***/
+.more-info {
+	display: inline;
+	clear: left;
+	background-color: #F2F2F2;
+	border-radius: 10px;
+	color: #777;
+	padding: 3px 10px;
+	cursor: pointer;
+	position: relative;
+}
+.collapsable {
+	border: 2px solid #999;
+	background-color: #FAFAFA;
+	border-radius: 10px;
+	padding: 5px;
+	margin-top: 8px;
+}
+
+
+/*** 
+ *** Back Link
+ ***/
+.cs-page-back {
+	position: relative;
+	text-align: center;
+	margin: 20px auto;
+	width: 170px;
+}
+.cs-page-back .page-link {
+	display: block;
+	padding: 2px 4px 2px 2px;
+	background-color: #79c9ec;
+	height: 24px;
+	width: 200px;
+}
+.cs-page-back .page-link:before {
+	top: 0px;
+	content: '';
+	height: 0;
+	width: 0;
+	position: absolute;
+	border:  14px solid transparent;
+	border-right-color: #79c9ec;
+	margin-left: -38px;
+}
+
+.cs-page-back .page-link:hover {
+	background-color: #3989B5;
+}
+.cs-page-back .page-link:hover:before {
+	border-right-color: #3989B5 ;
+}
+
+.cs-page-back .page-link a {
+	color: #FFF;
+	font-size: 1.8em;
+	text-decoration: none;
+}
+.cs-page-back .page-link a:hover {
+	text-decoration: none;
+}
+
+/***
+ *** RE-USEABLE UTILITY STYLES
+ ***/
+ 
+.fmenu {
+    margin: 0;
+    padding: 0;
+    display: block;
+	clear: left;
+	overflow: auto;
+}
+.fmenu li {
+	display: inline-block;
+	float: left;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+
+/***
+ *** FOOTER
+ ***/
+footer {
+	clear: both;
+	margin-bottom: 20px 0;
+	border-top: 1px solid #ccc;
+}
+footer .logo {
+	float: right;
+	padding: 10px 10px 0 0;
+}
+
+footer ul.menu1,
+footer ul.menu2 li,
+footer ul.menu1 li a,
+footer ul.menu1 li a:hover,
+footer ul.menu1 li a:active,
+footer ul.menu1 li a:visited  {
+	font-size: 1.1em;
+	color: #666;
+}
+footer ul.menu2,
+footer ul.menu2 li,
+footer ul.menu2 li a,
+footer ul.menu2 li a:hover,
+footer ul.menu2 li a:active,
+footer ul.menu2 li a:visited {
+	font-size: 1em;
+	color: #BBB;
+}
+
+footer ul.fmenu {
+	padding-top: 10px;
+	margin-left: 10px;
+	overflow: auto;
+	
+}
+
+footer ul.fmenu li,
+footer ul.fmenu li a,
+footer ul.fmenu li a:hover,
+footer ul.fmenu li a:active,
+footer ul.fmenu li a:visited {
+	text-decoration: none;
+}
+footer ul.fmenu li a:hover {
+	text-decoration: underline;
+}
+
+footer ul.fmenu li:after {
+	content: "|";
+	margin: 0 5px;
+}
+footer ul.fmenu li:last-child:after {
+	content: "";
+}

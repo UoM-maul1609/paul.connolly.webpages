@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Dr Paul Connolly - teaching materials for EART30351 </title>
+<!-- Copyright (c) 2009-2013 The MathJax Consortium -->
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+<meta name="description" content="Course on Meteorology and Atmospheric Physics">
+<META NAME="ROBOTS" CONTENT="INDEX, NOFOLLOW">
+<!--<meta name="keywords" content="HTML,CSS,XML,JavaScript">-->
+<meta name="author" content="Paul Connolly">
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+    tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]}
+  });
+</script>
+<script type="text/javascript" src="../../MathJax/MathJax.js"></script>
+
+<style>
+h1 {text-align:center}
+h2 {
+  font-weight: bold;
+  background-color: #DDDDDD;
+  padding: .2em .5em;
+  margin-top: 1.5em;
+  border-top: 3px solid #666666;
+  border-bottom: 2px solid #999999;
+}
+</style>
+</head>
+<body>
+
+<noscript>
+<div style="color:#CC0000; text-align:center">
+<b>Warning: <a href="http://www.mathjax.org/">MathJax</a>
+requires JavaScript to process the mathematics on this page.<br />
+If your browser supports JavaScript, be sure it is enabled.</b>
+</div>
+<hr>
+</noscript>
+<h1>Dr Paul Connolly - teaching materials for EART30351</h1>
+
+<p><b><font color="red"><u>Interested in doing a PhD in Atmospheric Science?</u></font> Please see <a href="http://www.liv.ac.uk/studentships-earth-atmosphere-ocean/studentships/atmospheric/" target="_blank">this</a> webpage for a list of available projects.</b></p>
+<h2>Module EART30351 Meteorology and Atmospheric Physics</h2>
+
+<table style="width:90%">
+  <tr>
+    <td>
+    <a href="http://personalpages.manchester.ac.uk/staff/geraint.vaughan/Teaching/EART30351.doc" target="_blank">Syllabus and module description</a>
+    </td>
+    <td>
+    <a href="http://personalpages.manchester.ac.uk/staff/geraint.vaughan/Teaching/EA30351_timetable.xls" target="_blank">Timetable </a>
+    </td>
+    <td>
+    <a href="http://personalpages.manchester.ac.uk/staff/geraint.vaughan/Teaching/teaching.htm" target="_blank">Geraint's web page</a>
+    </td>
+  </tr>
+
+  <tr>
+  <td>
+  <a href="eart30351_student.pdf" target=_blank"">Course notes for Paul's part of the course</a>
+  </td>
+  <td>
+  <a href="https://video.manchester.ac.uk/lectures" target=_blank"">University Podcast service (I refuse to listen to my own voice!)</a>
+  </td>
+  </tr>
+</table>
+<hr>
+
+<table style="width:90%; font-size: 10pt">
+  <tr>
+    <td>
+    <b>Lecture&nbsp;1:</b>
+    </td> 
+    <td>
+    Basic thermodynamic concepts
+    </td>
+    <td>
+    <ul>
+    <li><a href="eart30351_lecture01.ppt" target="_blank">Slides</a></li>
+    </ul>
+    </td>
+    <td>
+    <iframe id="Cloud_form" width="240" height="135" name="main" title="Why do clouds form?"  align="right" src="//www.youtube.com/embed/QC2x_RRnk8E?feature=player_detailpage"  frameborder="0" allowfullscreen> Why do clouds form?</iframe>   
+    </td>
+    <td>
+    <!--http://gmao.gsfc.nasa.gov/animations/aerosols_geos5.mov -->
+    <!--<div style="color:#555; font-size: 10px; display:block; padding-bottom:5px" align="right">NASA Global aerosol.</div>-->
+    <iframe id="NASA_aerosol" width="240" height="135" name="main" title="Global Aerosol NASA"  align="right" src="//www.youtube.com/embed/WKP-X_puQak?feature=player_detailpage"  frameborder="0" allowfullscreen> Global Aerosol NASA</iframe>   
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+    <b>Lecture&nbsp;2:</b>
+    </td>
+    <td>
+    Aerosol particles and Kelvin's equation
+    </td>
+    <td>
+    <ul>
+    <li><a href="eart30351_lecture02.ppt" target="_blank">Slides</a> </li>
+    
+    <li><a href="Koehler%20curves.ppt" target="_blank">Info. on Koehler equations</a> </li>
+    
+    <li><a href="http://www.nature.com/ngeo/journal/v6/n6/full/ngeo1809.html" target="_blank">Our Nature Geoscience paper on how organic vapours affect clouds.</a></li>
+    </ul>
+    </td>
+    <td>
+    <iframe id="Rain_form" width="240" height="135" name="main" title="Droplets and aerosol"  align="right" src="//www.youtube.com/embed/87v_9Bud7vw?feature=player_detailpage"  frameborder="0" allowfullscreen> Droplets and aerosol</iframe>   
+    </td>
+    <td>
+  </tr>
+   
+  <tr>
+    <td>
+    <b>Lecture&nbsp;3:</b>
+    </td> 
+    <td>
+    Growth of droplets 
+    </td>
+    <td>
+    <ul>
+    <li><a href="eart30351_lecture03.ppt" target="_blank">Slides</a></li>
+    </ul>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+    <b>Lecture&nbsp;4:</b>
+    </td>
+    <td>
+    Size distributions / geoengineering earth's climate 
+    </td>
+    <td>
+    <ul>
+      <li><a href="eart30351_lecture04.ppt" target="_blank">Slides</a></li>
+
+      <li><a href="http://personalpages.manchester.ac.uk/staff/paul.connolly/teaching/climatesim/index.html" target="_blank">Climate sim</a></li>
+
+      <li><a href="RSTA20140056.pdf" target="_blank">Our Phil Trans paper on cloud brightening</a></li>
+
+      <!--<li><a href="RSTA_372_2031_Thumbnails.tif">Cover page</a></li>-->
+    </ul>
+    <td>
+    <iframe id="NASA_co2" width="240" height="135" name="main" title="Global CO2 NASA"  align="right" src="//www.youtube.com/embed/x1SgmFa0r04?feature=player_detailpage"  frameborder="0" allowfullscreen> Global CO2 NASA</iframe>   
+    </td>
+  </tr>
+  
+  <tr> 
+    <td>
+    <b>Lecture&nbsp;5:</b> 
+    </td>
+    <td>
+    Ice nucleation 
+    </td>
+    <td>
+    <ul>
+      <li><a href="eart30351_lecture05.ppt" target="_blank">Slides</a> </li>
+   
+      <li><a href="ice_mineral_paper.pdf" target="_blank">The paper I am submitting on ice nucleation this week</a></li>
+    </ul>
+    </td>
+   </tr>
+
+   <tr>
+     <td>
+     <b>Lecture&nbsp;6:</b> 
+     </td>
+     <td>
+     Ice crystals 
+     </td>
+     <td>
+     <ul> 
+       <li><a href="eart30351_lecture06.ppt" target="_blank">Slides</a></li>
+       <li><a href="icecrystals.ppt" target="_blank">Real ice crystals in the atmosphere</a></li>
+     </ul>
+     </td>
+     <td>
+     <iframe  id="soapy_ice" width="240" height="135" align="right" src="//www.youtube.com/embed/czmQ2_ymaOo?feature=player_detailpage" frameborder="0" allowfullscreen></iframe>
+     </td>
+   </td>
+
+   <tr>
+     <td>
+     <b>Lecture&nbsp;7:</b> 
+     </td>
+     <td>
+     Supersaturation in clouds 1
+     </td>
+     <td>
+     <ul>
+       <li><a href="eart30351_lecture07.ppt" target="_blank">Slides</a></li>
+       <li><a href="http://130.88.66.117/~mccikpc2/practical01.html" target="_blank">For fun: investigate ice nucleation (username: inuit; password: braunfels)</a></li>
+     </ul>
+     </td>
+     <td><div style="color:#555; font-size: 10px; display:block; padding-bottom:5px" align="right" >Experiment showing Bergeron-Findeison process.</div>
+<iframe style="display:inline" id="B-F1" width="240" height="135" align="right" name="main" title="B-F1" src="http://www.youtube.com/embed/-UXpJ3KRO_s?feature=player_detailpage"  frameborder="0" allowfullscreen> Bergeron-Findeison</iframe> 
+     </td>
+     </tr>
+     <tr><td></td><td></td><td></td>
+     <td>
+     <div style="color:#555; font-size: 10px; display:block; padding-bottom:5px" align="right" >Thunderstorm in Australia</div>
+<iframe style="display:inline" id="Thunderstorm" width="240" height="135" align="right" name="main" title="Thunderstorm" src="http://www.youtube.com/embed/dknfK0R9jSA?feature=player_detailpage"  frameborder="0" allowfullscreen> Thunderstorm</iframe> 
+     </td>   
+   </tr>
+
+   <tr>
+     <td>
+     <b>Lecture&nbsp;8:</b> 
+     </td>
+     <td>
+     Supersaturation in clouds 2
+     </td>
+     <td>
+     <ul>
+     <li><a href="eart30351_lecture08.ppt" target="_blank">Slides</a></li>
+     </ul>
+     </td>
+     
+   </tr>
+
+
+   <tr>
+     <td>
+     <b>Lecture&nbsp;9:</b> 
+     </td>
+     <td>
+     Precipitation processes 
+     </td>
+     <td>
+     <ul>
+     <li><a href="eart30351_lecture09.ppt" target="_blank">Slides</a></li>
+     </ul>
+     </td>
+
+
+     <td>
+     <div style="color:#555; font-size: 10px; display:block; padding-bottom:5px" align="right" >Rain drop break-up </div>
+<iframe style="display:inline" id="Rain" width="240" height="135" align="right" name="main" title="Rain" src="http://www.youtube.com/embed/3lxOFufnQZg?feature=player_detailpage"  frameborder="0" allowfullscreen> Rain</iframe> 
+     </td>     
+
+     </tr>
+     <tr><td></td><td></td><td></td>
+     <td>
+     <div style="color:#555; font-size: 10px; display:block; padding-bottom:5px" align="right" >Tank experiment (courtesy of Dr Westbrook, Reading)</div>
+<iframe style="display:inline" id="Tank" width="240" height="135" align="right" name="main" title="Tank" src="http://www.youtube.com/embed/lAACTET61QY?feature=player_detailpage"  frameborder="0" allowfullscreen> Tank</iframe> 
+     </td>
+
+   </tr>
+
+   <tr>
+     <td>
+     <b>Lecture&nbsp;10:</b> 
+     </td>
+     <td>
+     Practice questions
+     </td>
+     <td>
+     <ul>
+     <li><a href="eart30351_practice_questions_2015.ppt" target="_blank">Slides</a></li>
+     </ul>
+     </td>
+
+
+     <td>
+     <div style="color:#555; font-size: 10px; display:block; padding-bottom:5px" align="right" >Drop thruster! </div>
+<iframe style="display:inline" id="Rain" width="240" height="135" align="right" name="main" title="Rain" src="http://www.youtube.com/embed/itpuAR89Q4Q?feature=player_detailpage"  frameborder="0" allowfullscreen> Rain</iframe> 
+     </td>     
+     
+
+</table>
+
+
+<hr>
+
+<p>Just for fun: <a href="http://personalpages.manchester.ac.uk/staff/paul.connolly/teaching/practicals/shallow_water_equations.html" target="_blank">notes on a shallow water model able to simulate various atmospheric phenomena.</a></p>
+
+
+<p>Please note, I will update the slides as I go along with the lastest findings from my research.</p>
+
+
+
+<h2>Useful links</h2>
+<table>
+  <tr>
+<td><div style="color:#555; font-size: 10px; display:block; padding-bottom:5px" >Global surface winds updated 3 hourly.</div>
+<iframe style="display:inline" id="GLOBAL_winds1" width="480" height="270" name="main" title="Global winds1" src="http://earth.nullschool.net/#current/wind/surface/level/orthographic=2.90,53.88,1024"  frameborder="0" allowfullscreen> Global Winds</iframe> 
+</td>
+<td>
+<div style="color:#555; font-size: 10px; display:block; padding-bottom:5px" >Global winds @500 hPa updated 3 hourly.</div>
+<iframe style="display:inline" id="GLOBAL_winds2" width="480" height="270" name="main" title="Global winds2" src="http://earth.nullschool.net/#current/wind/isobaric/500hPa/orthographic=2.90,53.88,1024"  frameborder="0" allowfullscreen> Global Winds</iframe> 
+</td>
+<td>
+<!--<div style="color:#555; font-size: 10px; display:block; padding-bottom:5px" >Mean sea level pressure updated 3 hourly.</div>
+<iframe style="display:inline" id="GLOBAL_winds3" width="480" height="270" name="main" title="Global winds3" src="http://earth.nullschool.net/#2014/08/30/0900Z/wind/surface/level/overlay=mean_sea_level_pressure/orthographic=2.90,53.88,1024"  frameborder="0" allowfullscreen> Global Winds</iframe> -->
+</td>
+  </tr>
+</table>
+
+
+<br>
+
+<table style="width:60%">
+  <tr>
+    <td>
+    <a href="http://data.cas.manchester.ac.uk/micc/micc.htm" target="_blank">Manchester Ice Cloud Chamber </a>
+    </td>
+    <td>
+    Our cloud chamber for conducting research into cloud processes
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+    <a href="http://www.wetter3.de/" target="_blank">Wetter3 </a>
+    </td>
+    <td>
+    site for GFS model and surface charts
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+    <a href="http://www.weatheronline.co.uk/" target="_blank">Weatheronline </a>
+    </td>
+    <td>
+    wealth of weather information; check out expert charts
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+    <a href="http://www.metoffice.gov.uk/" target="_blank">Met Office </a>
+    </td>
+    <td>
+    again wealth of information on their newly-revamped site
+    </td>
+  </tr>
+
+
+  <tr>
+    <td>
+    <a href="http://www.metoffice.gov.uk/weather/uk/radar/" target="_blank">Met Office weather radar</a>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+    <a href="http://www.metoffice.gov.uk/science/specialist/cwinde/profiler/index.html" target="_blank">European Wind Profiler Network</a>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+    <a href="http://www.mstrf.eclipse.co.uk/" target="_blank">NERC MST radar real-time measurements</a>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+    <a href="http://www.netweather.tv/" target="_blank">Netweather.tv </a><a>
+    </td>
+    <td>
+    another comprehensive site for current weather </a><a>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+    <a href="http://manunicast.seaes.manchester.ac.uk/" target="_blank">ManUniCast</a>
+    </td>
+    <td>
+    our own model 
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+    <a href="http://www.cas.manchester.ac.uk/restools/whitworth/data/index.html" target="_blank">Whitworth Observatory</a>
+    </td>
+    <td>
+    Our own observatory here in Manchester 
+    </td>
+  </tr>
+  <tr>
+    <td>
+    <a href="http://www.eumetrain.org/eport.html" target="_blank">EUMETRAIN</a>
+    </td>
+    <td>
+    overlay met. fields on satellite images (via eport)
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+    <a href="http://www.sat24.com/en/eu" target="_blank">Satellite pictures</a>
+    </td>
+    <td>
+    from SAT24.com
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+    <a href="http://weather.uwyo.edu/upperair/sounding.html" target="_blank">Skew-T radiosonde profiles</a>
+    </td>
+    <td>
+    from the University of Wyoming
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+    <a href="http://www.met.ie/latest/valentia.asp" target="_blank">Latest Tephigram from Valentia Observatory in Ireland</a>
+    </td>
+    <td>
+    from Met Eireann 
+    </td>
+  </tr>
+
+  
+  <tr>
+    <td>
+    <a href="http://www.met.reading.ac.uk/radar/realtime/velocity.html" target="_blank">Chilbolton doppler radar</a>
+    </td>
+    <td>
+    Real-time measurements 
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+    <a href="http://www.atmos.illinois.edu/~snodgrss/Midlatitude_cyclone.html" target="_blank">Eric Snodgrass webpage </a>
+    </td>
+    <td>
+    Useful information on Mid-latitude cyclones
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+    <a href="https://www.dropbox.com/sh/f1sft5maug0yqej/DABsLqkAoB">Slides from the 2013 INUIT Summer School</a>
+    </td>
+  </tr>
+
+</table>
+
+<!--<object data="Addition_Lecture_1_CnWfronts_(open_in_your_Explorer).swf"></object> -->
+
+<h2>Some past MPhys projects </h2>
+<p><a href="http://personalpages.manchester.ac.uk/staff/paul.connolly/projects/mphys_projects/capacitance01.html" target="_blank">The capacitance of ice crystals </a>&nbsp;&nbsp;use a Monte-Carlo method to estimate the capacitance of realistic ice crystals</p>
+
+<p><a href="http://personalpages.manchester.ac.uk/staff/paul.connolly/projects/mphys_projects/diffusion01.html" target="_blank">Diffusion of material through an aerosol particle </a>&nbsp;&nbsp;Fick's law does not describe diffusion of some compounds, the Maxwell-Stefan theory does. Investigate the effects this has in this project.</p>
+
+<p><a href="http://personalpages.manchester.ac.uk/staff/paul.connolly/projects/mphys_projects/ice_classification01.html" target="_blank">Automated classification of ice crystal images </a>&nbsp;&nbsp;There is a wealth of ice crystal image data that we have taken on various field projects. Devise a method of automatically determining their shape in this project</p>
+
+<p><a href="http://personalpages.manchester.ac.uk/staff/paul.connolly/projects/mphys_projects/practicals/shallow_water_equations_on_sphere.html" target="_blank">Saturn's hexagon </a>&nbsp;&nbsp;write a shallow water model in polar coordinates to attempt to simulate Saturn's hexagon: a planetary-scale wave that has the appearance of a regular hexagon.</p>
+
+<h2>Ideas for future MPhys projects</h2>
+<p><a href="http://personalpages.manchester.ac.uk/staff/paul.connolly/teaching/practicals/solar_system.html" target="_blank">A simulation of the solar system in MATLAB </a>&nbsp;&nbsp;use accurate ODE solvers to simulate dynamics of planetary orbits</p>
+
+
+<h2>Other fun stuff</h2>
+<p><a href="http://personalpages.manchester.ac.uk/staff/paul.connolly/teaching/practicals/gravitation.html" target="_blank"> Gravitational field strengths </a> &nbsp;&nbsp;Calculate the gravitational field strength of different shaped objects</p>
+
+<p><a href="http://personalpages.manchester.ac.uk/staff/paul.connolly/teaching/practicals/gaussian_plume_modelling.html" target="_blank"> Gaussian Plume Model in MATLAB </a> &nbsp;&nbsp;Understand how vertical stability affects the dispersion of pollution from a stack.</p>
+
+
+<br>
+<br>
+
+            <p><img src="/staff/paul.connolly/common/bar.png" width=600
+            height=22></p>
+
+<footer>
+            <table width="100%"><tr><td align="left">
+            <i>Return to <a href="http://www.manchester.ac.uk/research/paul.connolly/">Paul's home page</a> |
+            <a href="http://www.cas.manchester.ac.uk/">Centre for Atmospheric Science</a> | <a
+            href="http://www.seaes.manchester.ac.uk/">School of Earth Atmospheric and Environmental Sciences</a>
+            | <a href="http://www.manchester.ac.uk/">The University of
+            Manchester</a></i></td><td align="right"><i>This page is
+            maintained by <a
+            href="mailto:p.connolly@manchester.ac.uk">Paul Connolly</a></i></td></tr></table>
+		
+</footer>
+
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- default -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-8260571040605089"
+     data-ad-slot="8018166452"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+</body></html>

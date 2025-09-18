@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html> <!-- xmlget.html -->
+  <head>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <title>Shallow Water Model Simulation</title>
+  </head>
+  <body>
+    <h1>Atmospheric Simulation: Rossby Waves</h1>
+        Here you will do a 4-day simulation of westerly flow over a bell-shaped mountain.
+        <ul>
+        <li> Air flow follows lines of constant pressure - how does the mountain affect the path of air?
+        <li> Vorticity measures the rotation of the air. What do you notice about the rotation of the air as it approaches the mountain?
+        <li> What happens as the air comes off the mountain?
+        <li> How does the change in earth's rotation with latitude affect the Rossby wave?
+        </ul>
+        <!--<div id="tester" style="width:600px;height:250px;"></div>
+        <div id="myDiv" ></div> -->
+        <div id="myDiv2" ></div>
+        <div id="test2" ></div> 
+        <br>
+        Choose whether to plot pressure or vorticity<br>
+        <input id='pressure' type="radio" name="plot" value="pressure" checked> Pressure<br>
+        <input id='vorticity' type="radio" name="plot" value="vorticity"> Vorticity<br>
+        <br>
+        Choose whether to have latitude dependence of planet's rotation<br>
+        <input id='latitude' type="radio" name="simulation" value="latitude" checked> Latitude dependence<br>
+        <input id='nolatitude' type="radio" name="simulation" value="none"> No latitude dependence<br>
+        <br>
+        <input id='mybutton1' type="button" value="Run Model" onclick="runModel()"><br>
+        <input id='mybutton2' type="button" value="Reset" hidden="hidden" onclick="window.location.reload()"><br>
+        
+        <!--<script>
+            TESTER = document.getElementById('tester');
+            Plotly.plot( TESTER, [{
+            x: [1, 2, 3, 4, 5],
+            y: [1, 2, 4, 8, 16] }], {
+            margin: { t: 0 } } );
+        </script>
+        
+        <script>
+            var size = 100, x = new Array(size), y = new Array(size), z = new Array(size), i, j;
+
+            for(var i = 0; i < size; i++) {
+                x[i] = y[i] = -2 * Math.PI + 4 * Math.PI * i / size;
+                z[i] = new Array(size);
+            }
+
+            for(var i = 0; i < size; i++) {
+                for(j = 0; j < size; j++) {
+                    var r2 = x[i]*x[i] + y[j]*y[j];
+                    z[i][j] = Math.sin(x[i]) * Math.cos(y[j]) * Math.sin(r2) / Math.log(r2+1);
+                }
+            }
+
+            var data = [ {
+                    z: z,
+                    x: x,
+                    y: y,
+                    type: 'contour'
+                }
+            ];
+
+            var layout = {
+              title: 'Simple Contour Plot'
+            }
+
+            Plotly.newPlot('myDiv', data, layout, {showSendToCloud: true});
+        </script>-->
+        
+        
+        <script>
+            function runModel() {
+            document.getElementById('mybutton1').style.display = "none";
+            document.getElementById('mybutton2').style.display = "block";
+            
+            /* SHALLOW WATER MODEL
+            Copyright (c) 2019 by Paul Connolly
+            
+            Copying and distribution of this file, with or without modification, 
+            are permitted in any medium without royalty provided the copyright 
+            notice and this notice are preserved. This file is offered as-is, 
+            without any warranty.
+            
+            This model integrates the shallow water equations in conservative form
+            in a channel using the Lax-Wendroff method. It can be used to 
+            illustrate a number of meteorological phenomena
+            */
+            const UNIFORM_WESTERLY=1;
+            const ZONAL_JET=2;
+            const REANALYSIS=3;
+            const GAUSSIAN_BLOB=4;
+            const STEP=5;
+            const CYCLONE_IN_WESTERLY=6;
+            const SHARP_SHEAR=7;
+            const EQUATORIAL_EASTERLY=8;
+            const SINUSOIDAL=9;
+
+            // Possible orographies
+            const FLAT=0;
+            const SLOPE=1;
+            const GAUSSIAN_MOUNTAIN=2;
+            const EARTH_OROGRAPHY=3;
+            const SEA_MOUNT=4;
+
+            // ------------------------------------------------------------------
+            // SECTION 1: Configuration
+            const g    = 9.81;                // Acceleration due to gravity (m/s2)
+            const f    = 1.e-4;                // Coriolis parameter (s-1)
+            var beta  //1.6e-11;             // Meridional gradient of f (s-1m-1)
+
+            if(document.getElementById('latitude').checked) {
+                beta=1.6e-11;
+            } else {
+                beta=0.;
+            }
+            
+            const dt_mins              = 1.;   // Timestep (minutes)
+            const output_interval_mins = 60.;  // Time between outputs (minutes)
+            const forecast_length_days = 4;   // Total simulation length (days)
+
+            var orography = GAUSSIAN_MOUNTAIN;
+            var initial_conditions = UNIFORM_WESTERLY;
+            const initially_geostrophic = true;   // Can be "true" or "false"
+            const add_random_height_noise = false; // Can be "true" or "false"
+
+            // If you change the number of gridpoints then orography=EARTH_OROGRAPHY
+            // or initial_conditions=REANALYSIS won't work
+            const nx=254; // Number of zonal gridpoints
+            const ny=50;  // Number of meridional gridpoints
+
+            const dx=100.0e3; // Zonal grid spacing (m)
+            const dy=dx;      // Meridional grid spacing
+            
+            // Specify the range of heights to plot in metres
+            const plot_height_range = [9500., 10500.];
+
+            // ------------------------------------------------------------------
+            // SECTION 2: Act on the configuration information
+            const dt = dt_mins*60.0; // Timestep (s)
+            const output_interval = output_interval_mins*60.0; // Time between outputs (s)
+            const forecast_length = forecast_length_days*24.0*3600.0; // Forecast length (s)
+            const nt = Math.floor(forecast_length/dt)+1; // Number of timesteps
+            const timesteps_between_outputs = Math.floor(output_interval/dt);
+            const noutput = Math.ceil(nt/timesteps_between_outputs); // Number of output frames
+
+            // Zonal distance coordinate (m)
+            var i = 0;
+            var j = 0;
+            var x = new Array(nx+1);
+            for (i=0;i<=nx;i++) {
+                x[i]=dx*i
+            }
+            // Meridional distance coordinate (m)
+            var y = new Array(ny+1);
+            for (i=0;i<=ny;i++) {
+                y[i]=dy*i
+            }
+            
+            //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            // Create the orography field "H"
+            var H = new Array(nx)
+            for (i=0;i<nx;i++) {
+                H[i] = new Array(ny)
+            }
+            switch (orography) {
+                case FLAT:
+                    for (j=0;j<ny;j++) {
+                        for (i=0;i<nx;i++) {
+                            H[i][j]=0.;
+                        }
+                    }
+                    break;
+                case SLOPE:
+                    for (j=0;j<ny;j++) {
+                        for (i=0;i<nx;i++) {
+                            H[i][j]=9000.*2.*Math.abs((mean(x)-x[i])/max(x));
+                        }
+                    }
+                    break;
+                
+                case GAUSSIAN_MOUNTAIN:
+                    var std_mountain_x = 5.*dx; // Std. dev. of mountain in x direction (m)
+                    var std_mountain_y = 5.*dy; // Std. dev. of mountain in y direction (m)
+                   
+                    for (j=0;j<ny;j++) {
+                        for (i=0;i<nx;i++) {
+                           H[i][j] = 4000.*Math.exp(-0.5*Math.pow((x[i]-mean(x))/std_mountain_x,2) 
+                                  -0.5*Math.pow((y[j]-mean(y))/std_mountain_y,2));
+                        }
+                    }
+                    break;
+                
+                case SEA_MOUNT:
+                   var std_mountain = 40.0*dy; // Standard deviation of mountain (m)
+                   
+                   for (j=0;j<ny;j++) {
+                        for (i=0;i<nx;i++) {
+                          H[i][j] = 9250.*Math.exp(-(pow(x[i]-mean(x),2)+pow(y[j]-0.5*mean(y),2))/
+                            (2.*Math.pow(std_mountain,2.)));
+                        }
+                    }
+                    break;
+                
+                case EARTH_OROGRAPHY:
+                    alert("Not coded");
+                    exit();
+                default:
+                    alert("Not coded");
+                    exit();
+            }
+            //----------------------------------------------------------------------------
+            
+            
+            
+            //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            // Create the initial height field 
+            var height = new Array(nx)
+            for (i=0;i<nx;i++) {
+                height[i] = new Array(ny)
+            }
+            var mean_wind_speed = 20.;
+            var std_blob = 8.0*dy;
+            switch (initial_conditions) {
+                case UNIFORM_WESTERLY:
+                    
+                    for (j=0;j<ny;j++) {
+                        for (i=0;i<nx;i++) {
+                            height[i][j]=10000.-(mean_wind_speed*f/g)*(y[j]-mean(y));
+                        }
+                    }
+                    break;
+                case SINUSOIDAL:
+                    for (j=0;j<ny;j++) {
+                        for (i=0;i<nx;i++) {
+                            height[i][j]=10000.-350.*Math.cos(y[j]/max(y)*4.*Math.PI);
+                        }
+                    }
+                    break;
+                
+                case EQUATORIAL_EASTERLY:
+                    for (j=0;j<ny;j++) {
+                        for (i=0;i<nx;i++) {
+                            height[i][j]=10000.-50.*Math.cos((y[j]-mean(y))/max(y)*4.*Math.PI);
+                        }
+                    }
+                    break;
+                
+                case ZONAL_JET:
+                    for (j=0;j<ny;j++) {
+                        for (i=0;i<nx;i++) {
+                            height[i][j]=10000.-Math.tanh(20.0*(y[j]-mean(y))/max(y))*400.;
+                        }
+                    }
+                    break;
+                
+                case GAUSSIAN_BLOB:
+                    std_blob = 8.0*dy; // standard deviation of blob (m)
+                    for (j=0;j<ny;j++) {
+                        for (i=0;i<nx;i++) {
+                            height[i][j]=9750. + 1000.*Math.exp(-(
+                                Math.pow(x[i]-0.25*mean(x),2)+Math.pow(y[j]-mean(y),2)) /
+                                    (2.*Math.pow(std_blob,2)) );
+                        }
+                    }
+                    
+                    break;
+                
+                case STEP:
+                    for (j=0;j<ny;j++) {
+                        for (i=0;i<nx;i++) {
+                            if(x[i]<max(x)/5. && y[j]>max(y)/10. && y[j]<max(y)*0.9) {
+                                height[i][j]=10500.;
+                            } else {
+                                height[i][j]=9750.;
+                            }
+                        }
+                    }
+                    break;
+                
+                case CYCLONE_IN_WESTERLY:
+                    mean_wind_speed = 20; // m/s
+                    std_blob = 7.0*dy; // standard deviation of blob (m)
+                    
+                    for (j=0;j<ny;j++) {
+                        for (i=0;i<nx;i++) {
+                            height[i][j] = 10250. - (mean_wind_speed*f/g)*Math.pow(y[j]-mean(y),2) /
+                                max(y) - 1000.*Math.exp(-(0.25*Math.pow(x[i]-1.5*mean(x),2)) /
+                                    (2.*Math.pow(std_blob,2)));
+                        }
+                    }
+                    
+                    break;
+                
+                case SHARP_SHEAR:
+                    mean_wind_speed = 50. // m/s
+                    for (j=0;j<ny;j++) {
+                        for (i=0;i<nx;i++) {
+                            height[i][j] = (mean_wind_speed*f/g)*Math.abs(y[j]-mean(y));
+                        }
+                    }
+                    
+                    for (j=0;j<ny;j++) {
+                        for (i=0;i<nx;i++) {
+                            height[i][j] = 10000. + height[i][j]-mean(mean(height));
+                        }
+                    }
+                    break;
+                
+                case REANALYSIS:
+                    alert("Not coded");
+                    exit();
+                default:
+                    alert("Not coded");
+                    exit();
+            }
+            //----------------------------------------------------------------------------
+            
+            
+             
+            // Coriolis parameter as a matrix of values varying in y only
+            var F = new Array(nx);
+            for (i=0;i<nx;i++) {
+                F[i] = new Array(ny);
+            }
+            for (j=0;j<ny;j++) {
+                for (i=0;i<nx;i++) {
+                    F[i][j] = f+beta*(y[j]-mean(y));
+                }
+            }
+            
+            // initialise wind to rest
+            var u = new Array(nx);
+            var v = new Array(nx);
+            var vel2 = new Array(nx);
+            var h = new Array(nx);
+            var vort = new Array(nx);
+            for (i=0;i<nx;i++) {
+                u[i] = new Array(ny);
+                v[i] = new Array(ny);
+                vel2[i] = new Array(ny);
+                h[i] = new Array(ny);
+                vort[i] = new Array(ny);
+            }
+            for (j=0;j<ny;j++) {
+                for (i=0;i<nx;i++) {
+                    u[i][j] = 0.;
+                    v[i][j] = 0.;
+                    vel2[i][j] = 0.;
+                }
+            }
+            
+            // we may need to add small-amplitude random noise in order to initialize
+            // instability
+            if(add_random_height_noise) {
+                for (j=0;j<ny;j++) {
+                    for (i=0;i<nx;i++) {
+                        height[i][j] = height[i][j]+1.0*(Math.random())*(dx/1.0e5)*
+                            Math.abs(F[i][j]/1.e-4);
+                    }
+                }
+            }
+        
+            if(initially_geostrophic) {
+                // Centred spatial differences to compute geostrophic wind
+                for (i=0;i<nx;i++) {
+                    for(j=1;j<ny-1;j++) {
+                        u[i][j] = -(0.5*g/(F[i][j]*dy)) * (height[i][j+1]-height[i][j-1]);
+                    }
+                }
+                for (i=1;i<nx-1;i++) {
+                    for(j=0;j<ny;j++) {
+                        v[i][j] = (0.5*g/(F[i][j]*dx)) * (height[i+1][j]-height[i-1][j]);
+                    }
+                }
+                
+                // zonal wind is periodic so set u(1) and u(end) as dummy points that
+                // replicate u(end-1) and u(2) respectively
+                for (j=0;j<ny;j++) {
+                    u[0][j]=u[nx-2][j]
+                    u[nx-1][j]=u[2][j]
+                }
+                // Meridional wind must be zero at the north and south edges of the 
+                // channel                
+                for (i=0;i<nx;i++) {
+                    v[i][0]=0.;
+                    v[i][ny-1]=0.;
+                }
+                const max_wind = 200.;
+                // don't allow the initial wind speed to exceed 200 m/s anywhere
+                for (i=0;i<nx;i++) {
+                    for(j=0;j<ny;j++) {
+                        u[i][j] = u[i][j] > max_wind ? max_wind : u[i][j];
+                        u[i][j] = u[i][j] < -max_wind ? -max_wind : u[i][j];
+                        v[i][j] = v[i][j] > max_wind ? max_wind : v[i][j];
+                        v[i][j] = v[i][j] < -max_wind ? -max_wind : v[i][j];
+                    }
+                }
+            }
+            
+            // Define h as the depth of the fluid (whereas "height" is the height of 
+            // the upper surface)
+            for (j=0;j<ny;j++) {
+                for (i=0;i<nx;i++) {
+                    h[i][j] = height[i][j] - H[i][j];
+                }
+            }
+            
+            // initialise the 3D arrays where the output data will be stored
+            var u_save = new Array(nx);
+            var v_save = new Array(nx);
+            var h_save = new Array(nx);
+            var t_save = new Array(noutput);
+            for (i=0;i<nx;i++) {
+                u_save[i] = new Array(ny);
+                v_save[i] = new Array(ny);
+                h_save[i] = new Array(ny);
+                for (j=0;j<ny;j++) {
+                    u_save[i][j] = new Array(noutput);
+                    v_save[i][j] = new Array(noutput);
+                    h_save[i][j] = new Array(noutput);                
+                }
+            }
+            // index to stored data
+            var i_save = 0;
+            
+            
+            
+            var u_accel = new Array(nx-2);
+            var v_accel = new Array(nx-2);
+            /*var unew = new Array(nx-2);
+            var vnew = new Array(nx-2);
+            var h_new = new Array(nx-2);*/
+            for (i=0;i<nx-2;i++) {
+                u_accel[i] = new Array(ny-2);
+                v_accel[i] = new Array(ny-2);
+                /*unew[i] = new Array(ny-2);
+                vnew[i] = new Array(ny-2);
+                h_new[i] = new Array(ny-2);*/
+            }    
+            /*for (j=0;j<ny-2;j++) {
+                for (i=0;i<nx-2;i++) {
+                    unew[i][j]=u[i+1][j+1];
+                    vnew[i][j]=v[i+1][j+1];
+                    h_new[i][j]=h[i+1][j+1];
+                }
+            }*/
+            
+            // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            // SECTION 3: Main loop
+            var n=0;
+            var max_u=0.;
+            var text;
+            for (n=0;n<nt;n++) {
+                // every fixed number of timesteps we store the fields
+                if((n % timesteps_between_outputs)==0) {
+                
+                    for (j=0;j<ny;j++) {
+                        for (i=0;i<nx;i++) {
+                            vel2[i][j]=u[i][j]*u[i][j]+v[i][j]*v[i][j];
+
+                            u_save[i][j][i_save] = u[i][j];
+                            v_save[i][j][i_save] = v[i][j];
+                            h_save[i][j][i_save] = h[i][j];
+                        }
+                    }
+                    t_save[i_save] = n*dt;
+                    i_save += 1;
+                    max_u=Math.sqrt(max(max(vel2)));
+                    text='Time = ' + n*dt/3600. + ' hours (max ' + 
+                        forecast_length_days*24. + '); max(|u|) = ' + max_u
+                }
+                
+                // compute the accelerations
+                for (i=0;i<nx-2;i++) {
+                    for (j=0;j<ny-2;j++) {
+                        u_accel[i][j] = F[i+1][j+1]*v[i+1][j+1]
+                            -(g/(2.*dx))*(H[i+2][j+1]-H[i][j+1]);
+                            
+                        v_accel[i][j] = -F[i+1][j+1]*u[i+1][j+1]
+                            -(g/(2.*dy))*(H[i+1][j+2]-H[i+1][j]);
+                    }
+                }
+                
+                
+                // Call the Lax-Wendroff scheme to move forward one timestep
+                var values=lax_wendroff(dx,dy,dt,g,u,v,h,u_accel,v_accel,nx,ny);
+                var unew=values[0];
+                var vnew=values[1];
+                var h_new=values[2]; 
+                
+                
+                // Update the wind and height fields, taking case to enforce boundary 
+                // conditions
+                for (i=0;i<nx-2;i++) {
+                    for (j=0;j<ny-2;j++) {
+                        u[i+1][j+1]=unew[i][j];                        
+                        v[i+1][j+1]=vnew[i][j];                        
+                        h[i+1][j+1]=h_new[i][j];                        
+                    }
+                }
+                
+                for (j=0;j<ny-2;j++) {
+                    u[0][j+1] = unew[nx-3][j];
+                    u[nx-1][j+1] = unew[0][j];
+                    v[0][j+1] = vnew[nx-3][j];
+                    v[nx-1][j+1] = vnew[0][j];
+                    h[0][j+1] = h_new[nx-3][j];
+                    h[nx-1][j+1] = h_new[0][j];
+                }
+                for (i=0;i<nx-2;i++) {
+                    u[i+1][0] = unew[i][ny-3];
+                    u[i+1][ny-1] = unew[i][0];
+                    v[i+1][0] = vnew[i][ny-3];
+                    v[i+1][ny-1] = vnew[i][0];
+                }
+                for (i=0;i<nx;i++) {
+                    v[i][0]=0.;
+                    v[i][ny-1]=0.;                    
+                }
+            }
+            
+            
+            var x_1000km=x;
+            var y_1000km=y;
+            for (i=0;i<nx;i++) {
+                x_1000km[i]=x[i]/1.e6;
+            }
+            for (j=0;j<ny;j++) {
+                y_1000km[j]=y[j]/1.e6;
+            }
+            
+            
+            document.getElementById('test2').innerHTML=text
+            //document.getElementById('test2').innerHTML=max(max(v))
+           
+            
+            
+            
+            
+            // Doing the plot+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            if(document.getElementById('pressure').checked) {
+                var doPressure=1;
+            } else {
+                var doPressure=0;
+            }
+            var plotCounter=0;
+            var data;
+            if(doPressure) {
+                var layout = {
+                  title: 'Pressure Plot: Plan view',
+                  xaxis: {
+                    title: {
+                        text: 'x (1000 km)'
+                    }
+                  },
+                  yaxis: {
+                    title: {
+                        text: 'y (1000 km)'
+                    }
+                  }
+                }
+            }
+            else {
+                var layout = {
+                  title: 'Vorticity Plot: Plan view',
+                  xaxis: {
+                    title: {
+                        text: 'x (1000 km)'
+                    }
+                  },
+                  yaxis: {
+                    title: {
+                        text: 'y (1000 km)'
+                    }
+                  }
+                }
+            }
+            compute();
+            
+            Plotly.plot('myDiv2', data, layout, {showSendToCloud: true});
+            requestAnimationFrame(update);         
+            
+            
+            function compute() {
+                
+                for (i=0;i<nx;i++) {
+                    for (j=0;j<ny;j++) {
+                        h[i][j]=h_save[i][j][plotCounter]/1000.*9.81*10;                      
+                    }
+                }    
+
+                var z1 = transpose(h);
+                
+                for (i=0;i<nx;i++) {
+                    for (j=0;j<ny;j++) {
+                        h[i][j]=0.;                      
+                    }
+                }    
+                for (i=1;i<nx-1;i++) {
+                    for (j=1;j<ny-1;j++) {
+                        h[i][j]=(v_save[i+1][j][plotCounter]-v_save[i-1][j][plotCounter])/(2*dx)*1e6-
+                            (u_save[i][j+1][plotCounter]-u_save[i][j-1][plotCounter])/(2*dy)*1e6;                      
+                    }
+                }    
+                for (j=1;j<ny-1;j++) {
+                    h[0][j]=h[nx-2][j];             
+                    h[nx-1][j]=h[1][j];             
+                }
+                var z2 = transpose(h);
+
+
+
+                if(doPressure) {
+                    data = [ {
+                        z: z1,
+                        x: x_1000km,
+                        y: y_1000km,
+                        type: 'contour',
+                        colorscale: 'RdBu',
+                        autocontour: false,
+                        contours:{
+                            start: plot_height_range[0]/1000.*9.81*10 ,
+                            end: plot_height_range[1]/1000.*9.81*10,
+                            size: 50./1000.*9.81*10,
+                        },
+                      colorbar:{
+                        title: 'Pressure (hPa)',
+                        titleside: 'right',
+                        titlefont: {
+                          size: 14,
+                          family: 'Arial, sans-serif'
+                        }
+                      }
+                        
+                        }];  
+                
+                } else {
+                    data = [ {
+                        z: z2,
+                        x: x_1000km,
+                        y: y_1000km,
+                        type: 'contour',
+                        colorscale: 'RdBu',
+                        autocontour: false,
+                        contours:{
+                            start: -300 ,
+                            end: 300,
+                            size: 10,
+                        },
+                      colorbar:{
+                        title: 'Vorticity 10^{-6} (/s)',
+                        titleside: 'right',
+                        titlefont: {
+                          size: 14,
+                          family: 'Arial, sans-serif'
+                        }
+                      }
+                        /*autocontour: false,
+                        contours:{
+                            start: plot_height_range[0]/1000. ,
+                            end: plot_height_range[1]/1000.,
+                            size: 50./1000.
+                        }*/
+                        }];  
+                }
+                plotCounter += 1;
+                if(plotCounter>=noutput) {
+                    plotCounter = 0;
+                }      
+            }
+
+            function update () {
+              compute();
+
+              Plotly.animate('myDiv2', {
+                data: data
+              }, {
+                transition: {
+                  duration: 0
+                },
+                frame: {
+                  duration: 100,
+                  redraw: true
+                }
+              });
+
+              requestAnimationFrame(update);
+            }
+        
+            //----------------------------------------------------------------------------
+            
+            }
+            
+            
+            
+            
+            
+            // this function performs one timestep of the Lax-Wendroff scheme
+            // applied to the shallow water equations
+            function lax_wendroff(dx,dy,dt,g,u,v,h,u_tend,v_tend,nx,ny) {
+                var i=0;
+                var j=0;
+                var unew = new Array(nx-2);
+                var vnew = new Array(nx-2);
+                var uh_new = new Array(nx-2);
+                var vh_new = new Array(nx-2);
+                var h_new = new Array(nx-2);
+                for (i=0;i<nx-2;i++) {
+                    unew[i] = new Array(ny-2);
+                    vnew[i] = new Array(ny-2);
+                    uh_new[i] = new Array(ny-2);
+                    vh_new[i] = new Array(ny-2);
+                    h_new[i] = new Array(ny-2);
+                }    
+                var uh = new Array(nx);
+                var vh = new Array(nx);
+                var Ux = new Array(nx);
+                var Uy = new Array(nx);
+                var Vy = new Array(nx);
+                for (i=0;i<nx;i++) {
+                    uh[i] = new Array(ny);
+                    vh[i] = new Array(ny);
+                    Ux[i] = new Array(ny);
+                    Uy[i] = new Array(ny);
+                    Vy[i] = new Array(ny);
+                }    
+                var h_mid_xt = new Array(nx-1);
+                var h_mid_yt = new Array(nx);
+                var uh_mid_xt = new Array(nx-1);
+                var Ux_mid_xt = new Array(nx-1);
+                var uh_mid_yt = new Array(nx);
+                var vh_mid_xt = new Array(nx-1);
+                var Vx_mid_xt = new Array(nx-1);
+                var vh_mid_yt = new Array(nx);
+                var Uy_mid_yt = new Array(nx);
+                var Vy_mid_yt = new Array(nx);
+                for (i=0;i<nx-1;i++) {
+                    h_mid_xt[i] = new Array(ny);
+                    uh_mid_xt[i] = new Array(ny);
+                    Ux_mid_xt[i] = new Array(ny);
+                    vh_mid_xt[i] = new Array(ny);
+                    Vx_mid_xt[i] = new Array(ny);
+                }    
+                for (i=0;i<nx;i++) {
+                    h_mid_yt[i] = new Array(ny-1);
+                    uh_mid_yt[i] = new Array(ny-1);
+                    vh_mid_yt[i] = new Array(ny-1);
+                    Uy_mid_yt[i] = new Array(ny-1);
+                    Vy_mid_yt[i] = new Array(ny-1);
+                }    
+                
+
+                // First work out mid-point values in time and space
+                for (i=0;i<nx;i++) {
+                    for (j=0;j<ny;j++) {
+                        uh[i][j] = u[i][j]*h[i][j];
+                        vh[i][j] = v[i][j]*h[i][j];
+                    }
+                }             
+                for (i=0;i<nx-1;i++) {
+                    for (j=0;j<ny;j++) {
+                        h_mid_xt[i][j] = 0.5*(h[i+1][j]+h[i][j]) 
+                            -(0.5*dt/dx)*(uh[i+1][j]-uh[i][j]);
+                    }
+                }             
+                for (i=0;i<nx;i++) {
+                    for (j=0;j<ny-1;j++) {
+                        h_mid_yt[i][j] = 0.5*(h[i][j+1]+h[i][j]) 
+                            -(0.5*dt/dy)*(vh[i][j+1]-vh[i][j]);
+                    }
+                }             
+                
+
+
+                for (i=0;i<nx;i++) {
+                    for (j=0;j<ny;j++) {
+                        Ux[i][j] = uh[i][j]*u[i][j]+0.5*g*Math.pow(h[i][j],2);
+                        Uy[i][j] = uh[i][j]*v[i][j];
+                    }
+                }             
+                for (i=0;i<nx-1;i++) {
+                    for (j=0;j<ny;j++) {
+                        uh_mid_xt[i][j] = 0.5*(uh[i+1][j]+uh[i][j]) 
+                            -(0.5*dt/dx)*(Ux[i+1][j]-Ux[i][j]);
+                            
+                        Ux_mid_xt[i][j]=uh_mid_xt[i][j]*uh_mid_xt[i][j]/h_mid_xt[i][j] +
+                            0.5*g*h_mid_xt[i][j]*h_mid_xt[i][j];
+                    }
+                }             
+                for (i=0;i<nx;i++) {
+                    for (j=0;j<ny-1;j++) {
+                        uh_mid_yt[i][j] = 0.5*(uh[i][j+1]+uh[i][j]) 
+                            -(0.5*dt/dy)*(Uy[i][j+1]-Uy[i][j]);
+                    }
+                }             
+                
+                
+                var Vx=Uy;
+                for (i=0;i<nx;i++) {
+                    for (j=0;j<ny;j++) {
+                        Vy[i][j] = vh[i][j]*v[i][j]+0.5*g*Math.pow(h[i][j],2);
+                    }
+                }  
+                for (i=0;i<nx-1;i++) {
+                    for (j=0;j<ny;j++) {
+                        vh_mid_xt[i][j] = 0.5*(vh[i+1][j]+vh[i][j]) 
+                            -(0.5*dt/dx)*(Vx[i+1][j]-Vx[i][j]);
+
+                        Vx_mid_xt[i][j]=uh_mid_xt[i][j]*vh_mid_xt[i][j]/h_mid_xt[i][j];
+                    }
+                }             
+                for (i=0;i<nx;i++) {
+                    for (j=0;j<ny-1;j++) {
+                        vh_mid_yt[i][j] = 0.5*(vh[i][j+1]+vh[i][j]) 
+                            -(0.5*dt/dy)*(Vy[i][j+1]-Vy[i][j]);
+                            
+                        Uy_mid_yt[i][j]=uh_mid_yt[i][j]*vh_mid_yt[i][j]/h_mid_yt[i][j];
+                        
+                        Vy_mid_yt[i][j]=vh_mid_yt[i][j]*vh_mid_yt[i][j]/h_mid_yt[i][j] +
+                            0.5*g*h_mid_yt[i][j]*h_mid_yt[i][j];
+
+                    }
+                }             
+                
+                // Now use the mid-point values to predict the values at the next 
+                // timestep
+                
+                
+                
+                for (i=0;i<nx-2;i++) {
+                    for (j=0;j<ny-2;j++) {
+                        h_new[i][j] = h[i+1][j+1]-
+                            (dt/dx)*(uh_mid_xt[i+1][j+1]-uh_mid_xt[i][j+1]) - 
+                            (dt/dy)*(vh_mid_yt[i+1][j+1]-vh_mid_yt[i+1][j])  
+                            
+                        uh_new[i][j] = uh[i+1][j+1]-
+                            (dt/dx)*(Ux_mid_xt[i+1][j+1]-Ux_mid_xt[i][j+1]) - 
+                            (dt/dy)*(Uy_mid_yt[i+1][j+1]-Uy_mid_yt[i+1][j]) +
+                            dt*u_tend[i][j]*0.5*(h[i+1][j+1]+h_new[i][j]);
+                            
+                            
+                        vh_new[i][j] = vh[i+1][j+1]-
+                            (dt/dx)*(Vx_mid_xt[i+1][j+1]-Vx_mid_xt[i][j+1]) - 
+                            (dt/dy)*(Vy_mid_yt[i+1][j+1]-Vy_mid_yt[i+1][j]) +
+                            dt*v_tend[i][j]*0.5*(h[i+1][j+1]+h_new[i][j]);
+                        
+                        
+                        unew[i][j] = uh_new[i][j]/h_new[i][j];
+                        vnew[i][j] = vh_new[i][j]/h_new[i][j];
+                    }
+                }             
+                
+                
+                
+                
+                
+                return [unew,vnew,h_new];
+                
+            }
+            /* https://stackoverflow.com/questions/8816729/javascript-equivalent-for-inverse-normal-function-eg-excels-normsinv-or-nor/55837025#55837025
+            */
+            function NormSInv(p) {
+                var a1 = -39.6968302866538, a2 = 220.946098424521, a3 = -275.928510446969;
+                var a4 = 138.357751867269, a5 = -30.6647980661472, a6 = 2.50662827745924;
+                var b1 = -54.4760987982241, b2 = 161.585836858041, b3 = -155.698979859887;
+                var b4 = 66.8013118877197, b5 = -13.2806815528857, c1 = -7.78489400243029E-03;
+                var c2 = -0.322396458041136, c3 = -2.40075827716184, c4 = -2.54973253934373;
+                var c5 = 4.37466414146497, c6 = 2.93816398269878, d1 = 7.78469570904146E-03;
+                var d2 = 0.32246712907004, d3 = 2.445134137143, d4 = 3.75440866190742;
+                var p_low = 0.02425, p_high = 1 - p_low;
+                var q, r;
+                var retVal;
+
+                if ((p < 0) || (p > 1))
+                {
+                    alert("NormSInv: Argument out of range.");
+                    retVal = 0;
+                }
+                else if (p < p_low)
+                {
+                    q = Math.sqrt(-2 * Math.log(p));
+                    retVal = (((((c1 * q + c2) * q + c3) * q + c4) * q + c5) * q + c6) / ((((d1 * q + d2) * q + d3) * q + d4) * q + 1);
+                }
+                else if (p <= p_high)
+                {
+                    q = p - 0.5;
+                    r = q * q;
+                    retVal = (((((a1 * r + a2) * r + a3) * r + a4) * r + a5) * r + a6) * q / (((((b1 * r + b2) * r + b3) * r + b4) * r + b5) * r + 1);
+                }
+                else
+                {
+                    q = Math.sqrt(-2 * Math.log(1 - p));
+                    retVal = -(((((c1 * q + c2) * q + c3) * q + c4) * q + c5) * q + c6) / ((((d1 * q + d2) * q + d3) * q + d4) * q + 1);
+                }
+
+                return retVal;
+            }            
+            // transpose the matrix
+            // https://stackoverflow.com/questions/17428587/transposing-a-2d-array-in-javascript
+            function transpose(matrix) {
+              return matrix[0].map((col, i) => matrix.map(row => row[i]));
+            }
+
+            
+            
+            // calculate the mean
+            function mean(elems) {
+                var i=0;
+                var sum=0;
+                for (i=0;i<elems.length;i++) {
+                    sum += elems[i];
+                }
+                return sum / elems.length;
+            }
+            // calculate the max
+            function max(elems) {
+                var i=0;
+                var val=elems[0];
+                for (i=0;i<elems.length;i++) {
+                    val = val > elems[i] ? val : elems[i];
+                }
+                return val;
+            }
+        </script>
+        
+  </body>
+</html>

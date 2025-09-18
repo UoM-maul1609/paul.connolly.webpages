@@ -1,0 +1,225 @@
+<!DOCTYPE HTML>
+<html><!-- InstanceBegin template="/Templates/PageTemplate.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+<meta name="description" content="Gaussian plume model simulation in MATLAB / Python">
+<META NAME="ROBOTS" CONTENT="INDEX, NOFOLLOW">
+<!--<meta name="keywords" content="HTML,CSS,XML,JavaScript">-->
+<meta name="author" content="Paul Connolly">
+
+
+<link rel="stylesheet" type="text/css" href="css/ui-strong/jquery-ui-1.10.3.custom.min.css" />
+<link rel="stylesheet" type="text/css" href="css/import.css" />
+<!-- InstanceBeginEditable name="styles" -->
+<link rel="stylesheet" type="text/css" href="js/utils/scrolltotop/scrolltotop.css" />
+<!-- InstanceEndEditable -->
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>Gaussian Plume Model</title>
+<!-- InstanceEndEditable -->
+<!-- InstanceBeginEditable name="head" -->
+<!--<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+	jax: ["input/TeX","output/HTML-CSS"],
+	tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+    },
+	menuSettings: {
+		zoom: "Click",
+		zscale: "150%"
+	},
+	styles: {
+		".MathJax_Display": {
+			"font-size" : "125%",
+			"padding-left" : "1em"
+		}
+	}
+});
+</script>-->
+<!--<script type="text/javascript"
+  src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>-->
+<script type="text/javascript"
+  src="../../MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- InstanceEndEditable -->
+<!-- InstanceParam name="page-type" type="text" value="page-info" -->
+</head>
+
+<body>
+<!-- InstanceBeginEditable name="warnings" -->
+<!-- InstanceEndEditable -->
+<div id="climate-sim" class="page-info">
+<!-- InstanceBeginEditable name="main" -->
+<!--<div class="cs-page-back">
+	<span class="page-link"><a href="index.html">Back to Climate Sim</a></span>
+</div>-->
+<div class="text-page text-block">
+
+<h1>Gaussian Plume Model in MATLAB / Python</h1>
+<dl>
+<dt><a name="overview"></a><dfn>Overview</dfn></dt>
+<dd>
+<p>This page describes a Gaussian Plume Models in both MATLAB and Python. Gaussian plume models are used heavily in <i>air quality modelling</i> and <i>environmental consultancy</i>. The model can be used to illustrate the following phenomena:
+<ul>
+<li>Effect of wind fluctuations / speed on pollutant concentrations </li>
+<li>Effect of vertical stability on mixing and concentrations at the ground </li>
+<li>Effects of multiple stacks emitting pollutants </li>
+<li>Demonstration of an annual cycle in stability on concentrations at the ground </li>
+<li>The effect of humidity on particulate matter </li>
+<li>The effect of aerosol chemistry on particulate matter </li>
+<li>Short and long term excedences. </li>
+</ul>
+
+<div class="more-info">More info...</div>
+<div class="collapsable">
+    <p align="center"><font size="2" color="#008000" face="Century"> 
+    The governing equations describing the movement of pollutants in the atmosphere is the <i>advection-diffusion</i> equation:
+    \[
+    \frac{\partial C}{\partial t} + \frac{\partial uC}{\partial x}+ \frac{\partial vC}{\partial y}+ \frac{\partial wC}{\partial z}= K_x\frac{\partial ^2 C}{\partial x^2}+K_y\frac{\partial ^2 C}{\partial y^2}+K_z\frac{\partial ^2 C}{\partial z^2}
+    \]
+    Here, \(u,v,w\) are the 3 components of the wind; \(x,y,z\) are directions in 3-d space; \(C\) is the concentration of pollutant; \(K_x,K_y,K_z\) are eddy diffusivities that are used to describe the effects of turbulence in smearing out the pollutant.
+<br>
+<br>
+    By making the assumption that the flow is steady and that the advective term along wind is much greater than the eddy diffusion along wind there is an analytical solution: the so called <i>gaussian plume model</i> solution, which is described by the following equation:
+    \[
+    C(x,y,z)=\frac{Q}{2\pi u \sigma _y \sigma _z}\exp\left(-\frac{y^2}{2\sigma _y^2} \right)\left[\exp\left(-\frac{(z-H)^2}{2\sigma _z^2}\right) +\exp\left(-\frac{(z+H)^2}{2\sigma _z^2} \right) \right]
+    \]
+    Here, \(Q\) is the mass emitted from the stack per unit time and \(H\) is the height of the stack. The \(\sigma\) values depend on the eddy diffusivities in a complex way.
+    </font></p>
+</div>
+
+
+</p>
+
+</dd>
+
+<dt><a name="instructions"></a><dfn>Instructions</dfn></dt>
+<dd>
+<p> Download the files for either MATLAB or Python to a directory on your computer. They should <u>all</u> be downloaded to your working directory.
+
+</p>
+
+</dd>
+
+<dd>
+
+<p>
+<table style="width:100%;font-size:1.0em">
+  <tr>
+  <td> <b>MATLAB Files:</b></td><td><b>Python Files:</b></td>
+  </tr>
+  <tr>
+  <td>
+   <ul>
+   <li><a href="material/gaussian_plume_modelling/gaussian_plume_model.m">gaussian_plume_model.m</a> </li>
+   <li><a href="material/gaussian_plume_modelling/gauss_func.m">gauss_func.m </a> </li>
+   <li><a href="material/gaussian_plume_modelling/calc_sigmas.m">calc_sigmas.m</a> </li>
+   <li><a href="material/gaussian_plume_modelling/smooth.m">smooth.m</a> </li>
+   <li><a href="material/gaussian_plume_modelling/overlay_on_map.m">overlay_on_map.m </a> </li>
+   <li><a href="material/gaussian_plume_modelling/map_green_lane.mat">map_green_lane.mat </a> </li>
+   </ul>
+  </td>
+  <td>
+   <ul>
+   <li><a href="material/gaussian_plume_modelling/gaussian_plume_model.py">gaussian_plume_model.py</a> </li>
+   <li><a href="material/gaussian_plume_modelling/gauss_func.py">gauss_func.py </a> </li>
+   <li><a href="material/gaussian_plume_modelling/calc_sigmas.py">calc_sigmas.py</a> </li>
+   <li><a href="material/gaussian_plume_modelling/overlay_on_map.py">overlay_on_map.py </a> </li>
+   <li><a href="material/gaussian_plume_modelling/map_green_lane.mat">map_green_lane.mat </a> </li>
+   </ul>
+  </td>
+  </tr>
+  
+</table>
+</p>
+</dd>
+
+
+
+<dl>
+<dt><a name="examples"></a><dfn>Examples</dfn></dt>
+<dd>
+
+<p align="center"> <img src="material/gaussian_plume_modelling/gaussian_plume_stability_yz_slice.png" style="background-color:red alt="Smiley face" width="900"> </p>
+<p align="center"><font size="2" color="#008000" face="Century"> Above shows how vertical stability in the atmosphere alters the dispersion of the pollutant (the stack is 50 m high and centred on \(y=0\)).</font></p>
+
+<hr>
+
+<p align="center"> <img src="material/gaussian_plume_modelling/gaussian_plume_annual_overlays_aerosol.png" style="background-color:red alt="Smiley face" width="900"> </p>
+<p align="center"><font size="2" color="#008000" face="Century"> The above shows overlays of the model field onto a map. Different assumptions are made to calculate the particulate matter loading in the air.</font></p>
+
+</dd>
+
+<dl>
+<dt><a name="equations"></a><dfn>Gaussian Plume Model</dfn></dt>
+<dd>
+The Gaussian Plume Model does not explicitly model the turbulent motions that are responsible for smearing the pollutant out, it only models the effects that turbulence would have via the eddy diffusivity term. In order to consider turbulent motions we must consider the dynamics of the fluid flow. 
+
+</dd>
+
+
+<dt><a name="instructions2"></a><dfn>Running the model</dfn></dt>
+<dd>
+<p> You should have downloaded the files to your working directory. This exercise guides you through setting up and running the model for different scenarios. We will consider:
+<ul>
+<li>Differing wind fluctuations </li>
+<li>Vertical stability of the atmosphere </li>
+<li>Multiple stacks emitting pollutants </li>
+<li>An annual cycle in vertical stability </li>
+<li>The effect of humidity on particulate matter </li>
+<li>The effect of aerosol chemistry on particulate matter </li>
+</ul>
+
+Download the practical sheet here and work through it:
+<ul>
+<li> <a href="material/gaussian_plume_modelling/gp_notes.pdf">gp_notes.pdf</a> </li>
+</ul>
+
+</p>
+
+</dd>
+
+
+
+
+<!-- InstanceEndEditable -->
+<footer>
+        <div class="logo">
+            <a href="http://www.manchester.ac.uk">
+                <img src="assets/logos/TAB_col_white_background.png" width="107" height="45" alt="University of Manchester">
+            </a>
+        </div>
+    	<!--<ul class="fmenu menu1">
+        	<li><a href="about.html">About</a></li>
+            <li><a href="credits.html">Credits</a></li>
+        </ul>-->
+        <ul class="fmenu menu2">
+            <li><a href="http://www.manchester.ac.uk/aboutus/documents/disclaimer/">Disclaimer</a></li>
+            <li><a href="http://www.manchester.ac.uk/aboutus/documents/privacy/">Privacy</a></li>
+            <li><a href="http://www.manchester.ac.uk/aboutus/documents/copyright/">Copyright notice</a></li>
+            <li><a href="http://www.manchester.ac.uk/aboutus/documents/accessibility/">Accessibility</a></li>
+            <li><a href="http://www.manchester.ac.uk/aboutus/documents/foi/">Freedom of information</a></li>
+            <li><a href="http://www.manchester.ac.uk/aboutus/governance/charitable-status/">Charitable status</a></li>
+            <li>Royal Charter Number: RC000797</li>
+        </ul>
+		
+    </footer>
+</div>
+<!-- InstanceBeginEditable name="scripts" -->
+
+<script language="javascript" type="text/javascript" src="js/jquery/jquery-1.10.2.min.js" ></script>
+<script type="text/javascript">
+jQuery(document).ready(function() {
+  $(".collapsable").hide();
+  $(".more-info").click(function() {
+  		$(this).next(".collapsable").slideToggle(500);
+  });
+});
+</script>
+
+<script type="text/javascript" src="js/utils/scrolltotop/scrolltotop.js"></script>
+<!-- InstanceEndEditable -->
+</body>
+<!-- InstanceEnd --></html>

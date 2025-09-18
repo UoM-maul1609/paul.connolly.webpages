@@ -1,0 +1,181 @@
+function [u_new, v_new, h_new, Temp_new] = MPDATA(dx, dy, dt, X,Y,g, u, v, h,Temp)
+                      
+% perform one time-step of MPDATA with periodic zonal boundary and ...
+% v(:,[1 end])=0.;
+% the prognostics to advect (as well as h)
+hu=u.*h;
+hv=v.*h;
+
+% 1. Interpolate u to the face values
+[r,c]=size(u);
+% zonal wind - periodic b.c.
+up05(1:r-1,:)=0.5.*(u(1:end-1,:)+u(2:end,:));
+up05(r,:)=0.5.*(u(end,:)+u(1,:));
+um05(2:r,:)=0.5.*(u(1:end-1,:)+u(2:end,:));
+um05(1,:)=0.5.*(u(end,:)+u(1,:));
+% meridional wind - free b.c.
+vp05(:,1:c-1)=0.5.*(v(:,1:end-1)+v(:,2:end));
+vp05(:,c)=vp05(:,c-1); %0.5.*(v(:,end)+v(:,1));
+vm05(:,2:c)=0.5.*(v(:,1:end-1)+v(:,2:end));
+vm05(:,1)=vm05(:,2); %0.5.*(v(:,end)+v(:,1));
+
+up05h=up05;um05h=um05;vp05h=vp05;vm05h=vm05;
+up05hu=up05;um05hu=um05;vp05hu=vp05;vm05hu=vm05;
+up05hv=up05;um05hv=um05;vp05hv=vp05;vm05hv=vm05;
+up05t=up05;um05t=um05;vp05t=vp05;vm05t=vm05;
+
+iord=1;
+for k=1:iord % order of MPDATA
+    % 2. Calculate phi_ip1, phi_m1
+    % h field
+    [h_ip1,h_im1,h_jp1,h_jm1]=calc_phi01(h);
+    % hu field
+    [hu_ip1,hu_im1,hu_jp1,hu_jm1]=calc_phi01(hu);
+    % hv field
+    [hv_ip1,hv_im1,hv_jp1,hv_jm1]=calc_phi01(hv);
+    % Temp field
+    [t_ip1,t_im1,t_jp1,t_jm1]=calc_phi01(Temp);
+
+    % 3. Calculate fluxes
+    % h-fluxes
+    [Fhx1,Fhx2,Fhy1,Fhy2]=calc_flux01(dt,dx,dy,up05h,um05h,vp05h,vm05h,h,...
+        h_ip1,h_im1,h_jp1,h_jm1);
+    % hu-fluxes
+    [Fhux1,Fhux2,Fhuy1,Fhuy2]=calc_flux01(dt,dx,dy,up05hu,um05hu,vp05hu,vm05hu,hu,...
+        hu_ip1,hu_im1,hu_jp1,hu_jm1);
+    % hv-fluxes
+    [Fhvx1,Fhvx2,Fhvy1,Fhvy2]=calc_flux01(dt,dx,dy,up05hv,um05hv,vp05hv,vm05hv,hv,...
+        hv_ip1,hv_im1,hv_jp1,hv_jm1);
+    % Temp-fluxes
+    [Ftx1,Ftx2,Fty1,Fty2]=calc_flux01(dt,dx,dy,up05t,um05t,vp05t,vm05t,Temp,...
+        t_ip1,t_im1,t_jp1,t_jm1);
+
+    % 4. perform update
+    h_new=h-(Fhx1-Fhx2+Fhy1-Fhy2);
+    u_new=hu-(Fhux1-Fhux2+Fhuy1-Fhuy2);
+    v_new=hv-(Fhvx1-Fhvx2+Fhvy1-Fhvy2);
+    Temp_new=Temp-(Ftx1-Ftx2+Fty1-Fty2);
+
+    h_new(:,[1 end])=h(:,[1 end]);
+    % 5. add in extra terms using finite differences
+
+    % 6. calculate u's and v's
+    u_new=u_new./h_new;
+    v_new=v_new./h_new;
+
+    
+    % set for next iteration of the anti-diffusive velocities.
+    h=h_new;
+    hu=h_new.*u_new;
+    hv=h_new.*v_new;
+    Temp=Temp_new;
+    
+    if(k==iord) 
+        break
+    end
+    % Now define anti-diffusive velocities for next iteration
+    % we need up05,um05, vp05, vm05
+    [up05h,um05h,vp05h,vm05h]=anti_diff(up05h,um05h,vp05h,vm05h,h,dx,dx,dt);
+    [up05hu,um05hu,vp05hu,vm05hu]=anti_diff(up05hu,um05hu,vp05hu,vm05hu,hu,dx,dx,dt);
+    [up05hv,um05hv,vp05hv,vm05hv]=anti_diff(up05hv,um05hv,vp05hv,vm05hv,hv,dx,dx,dt);
+    [up05t,um05t,vp05t,vm05t]=anti_diff(up05t,um05t,vp05t,vm05t,Temp,dx,dx,dt);
+    
+end
+
+function [phi_ip1,phi_im1,phi_jp1,phi_jm1]=calc_phi01(phi)
+[r,c]=size(phi);
+% i's periodic
+phi_ip1(1:r-1,:)=phi(2:r,:);
+phi_ip1(r,:)=phi(1,:);
+phi_im1(2:r,:)=phi(1:r-1,:);
+phi_im1(1,:)=phi(end,:);
+% j's free
+phi_jp1(:,1:c-1)=phi(:,2:c);
+phi_jp1(:,c)=phi(:,c-1)+diff(phi(:,c-2:c-1),[],2);
+phi_jm1(:,2:c)=phi(:,1:c-1);
+phi_jm1(:,1)=phi(:,2)-diff(phi(:,2:3),[],2);
+
+function [Fx1,Fx2,Fy1,Fy2]=calc_flux01(dt,dx,dy,up05,um05,vp05,vm05,phi,...
+    phi_ip1,phi_im1,phi_jp1,phi_jm1)
+% 3. Calculate fluxes
+Fx1=((up05+abs(up05)).*phi+(up05-abs(up05)).*phi_ip1).*dt./2./dx;
+Fx2=((um05+abs(um05)).*phi_im1+(um05-abs(um05)).*phi).*dt./2./dx;
+Fy1=((vp05+abs(vp05)).*phi+(vp05-abs(vp05)).*phi_jp1).*dt./2./dy;
+Fy2=((vm05+abs(vm05)).*phi_jm1+(vm05-abs(vm05)).*phi).*dt./2./dy;
+
+function [up05h,um05h,vp05h,vm05h]=anti_diff(up05,um05,vp05,vm05,h,dx,dy,dt)
+
+eps=1e-15;
+[r,c]=size(h);
+hp1(1:r-1,:)=h(2:r,:);
+hp1(r,:)=h(1,:);
+
+% Equation 14
+u_ip1_jp05(1:r-1,:)=...
+    0.25.*(vp05(2:end,:)+vp05(1:end-1,:)+vm05(2:end,:)+vm05(1:end-1,:));
+u_ip1_jp05(r,:)=...
+    0.25.*(vp05(1,:)+vp05(end,:)+vm05(1,:)+vm05(end,:));
+
+% various phis, with B.C.s
+h_ip1_jp1=zeros(r,c);
+h_ip1_jp1(1:r-1,1:c-1)=h(2:end,2:end);
+h_ip1_jp1(r,1:c-1)=h(1,2:end);
+h_ip1_jp1(:,c)=h_ip1_jp1(:,c-1);
+
+h_i_jp1=zeros(r,c);
+h_i_jp1(1:r,1:c-1)=h(:,2:end);
+h_i_jp1(:,c)=h_i_jp1(:,c-1);
+
+h_ip1_jm1=zeros(r,c);
+h_ip1_jm1(1:r-1,2:c)=h(2:end,1:end-1);
+h_ip1_jm1(r,2:c)=h(1,1:end-1);
+h_ip1_jm1(:,1)=h_ip1_jm1(:,2);
+
+h_i_jm1=zeros(r,c);
+h_i_jm1(1:r,2:c)=h(:,1:end-1);
+h_i_jm1(1:r,1)=h(:,2);
+
+up05h=(abs(up05).*dx-dt.*(up05).^2).*(hp1-h)./(hp1+h+eps)./dx - ...
+    -0.5.*dt.*up05.*u_ip1_jp05.* ...
+    (h_ip1_jp1+h_i_jp1-h_ip1_jm1-h_i_jm1)./ ...
+    ((h_ip1_jp1+h_i_jp1+h_ip1_jm1+h_i_jm1+eps).*dy);
+um05h=zeros(r,c);
+um05h(2:end,:)=up05h(1:end-1,:);
+um05h(1,:)=up05h(end,:);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+hp1(:,1:c-1)=h(:,2:c);
+hp1(:,c)=h(:,c-1);
+
+% Equation 14
+u_ip1_jp05(:,1:c-1)=...
+    0.25.*(up05(:,2:end)+up05(:,1:end-1)+um05(:,2:end)+um05(:,1:end-1));
+u_ip1_jp05(:,c)=u_ip1_jp05(:,c-1);
+
+% various phis, with B.C.s
+% h_ip1_jp1=zeros(r,c);
+% h_ip1_jp1(1:r-1,1:c-1)=h(2:end,2:end);
+% h_ip1_jp1(r,1:c-1)=h(1,2:end);
+% h_ip1_jp1(:,c)=h_ip1_jp1(:,c-1);
+
+h_i_jp1=zeros(r,c);
+h_i_jp1(1:r-1,1:c)=h(2:end,:);
+h_i_jp1(r,:)=h(1,:);
+
+h_ip1_jm1=zeros(r,c);
+h_ip1_jm1(2:r,1:c-1)=h(1:end-1,2:end);
+h_ip1_jm1(1,1:c-1)=h(end,2:end);
+h_ip1_jm1(:,c)=h_ip1_jm1(:,c-1);
+
+h_i_jm1=zeros(r,c);
+h_i_jm1(2:r,1:c)=h(1:end-1,:);
+h_i_jm1(1,:)=h(end,:);
+
+vp05h=(abs(vp05).*dy-dt.*(vp05).^2).*(hp1-h)./(hp1+h+eps)./dy - ...
+    -0.5.*dt.*vp05.*u_ip1_jp05.* ...
+    (h_ip1_jp1+h_i_jp1-h_ip1_jm1-h_i_jm1)./ ...
+    ((h_ip1_jp1+h_i_jp1+h_ip1_jm1+h_i_jm1+eps).*dx);
+vm05h=zeros(r,c);
+vm05h(:,2:end)=vp05h(:,1:end-1);
+vm05h(:,1)=vm05h(:,2);
+

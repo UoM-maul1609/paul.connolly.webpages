@@ -1,0 +1,282 @@
+@charset "utf-8";
+/* CSS Document */
+
+#cs-canvas-container {
+	margin: 0 auto 20px auto;
+}
+
+svg#cs-canvas {
+	max-width: 1000px;
+	max-height: 1000px;
+	overflow: hidden;
+}
+
+
+/*** 
+ *** Caption box
+ ***/
+#cs-commentary {
+	font-family: Arial,Helvetica,Verdana,sans-serif;
+	color: #333;
+	line-height: 150%;
+	background-color: #FAFAFA;
+	margin: 1em 0;
+	padding: 0.5em;
+	text-align: center;
+	font-size: 1.4em;
+	min-height: 2em;
+}
+@media only print, only screen and (max-width: 980px) { 
+	#cs-commentary {
+		font-size: 1.8em;
+	}
+}
+
+#cs-commentary p {
+	margin: 0;
+}
+#cs-commentary p.instruction {
+	border: 2px solid #2C4359;
+	background-color: #D0E6EA;
+	border-radius: 10px;
+	padding: 2px;
+}
+
+/*** 
+ *** Controls
+ ***/
+#cs-controls {
+	font-size: 1.4em;
+	margin-left: 20px;
+	padding: 5px 0;
+	background-color: #FAFAFA;
+}
+#cs-controls .cs-control {
+	width: 60px;
+}
+
+#cs-canvas-container,
+#cs-controls,
+#cs-controls .cs-control  {
+	float: left;
+	text-align: center;
+}
+#cs-controls .cs-slider {
+	margin: 0 auto;
+	float: none;
+}
+#cs-controls .cs-output {
+	font-size: 0.85em;
+	margin-bottom: 10px;
+}
+#cs-controls .cs-label {
+	font-weight: bold;
+	margin: 10px 0;
+}
+#cs-controls #cs-control-ch4 .cs-label,
+#cs-controls #cs-control-co2 .cs-label {
+	font-size: 1.4em;
+}
+#cs-controls #cs-control-cloud .cs-label,
+#cs-controls #cs-control-albedo .cs-label {
+	font-size: 0.85em;
+}
+a.cs-info {
+	background-color: #FFd167;
+	color: #000;
+	text-decoration: none;
+	font-weight: bold;
+	font-size: 14px;
+	text-align: center;
+	display: block;
+	margin: 0 auto;
+	padding-top: 2px;
+	width: 20px;
+	height: 20px;
+	border-radius: 20px;
+	border: 2px solid #cba145;
+	float: none;
+}
+
+@media only print, only screen and (max-width: 980px) { 
+	#cs-canvas-container,
+	#cs-controls,
+	#cs-controls .cs-control  {
+		float: none;
+	}
+	#cs-controls {
+		margin: 0 auto;
+		padding: 0 5px 20px 0;
+	}
+	#cs-controls .cs-control {
+		margin-top: 10px;
+		width: 100%;
+		height: 50px;
+	}
+	#cs-controls .ui-slider-handle {
+		top: -.65em;
+		margin-left: -.9em;
+		width: 2em;
+		height: 2em;
+	}
+	#cs-controls .cs-label,
+	#cs-controls .cs-slider {
+		float: left;
+	}
+	#cs-controls .cs-label {
+		margin: 12px 20px 0 0;
+		width: 80px;
+		text-align: right;
+		font-size: 1.8em;
+	}
+	#cs-controls .cs-slider {
+		margin-top: 5px;
+	}
+	
+	#cs-controls .cs-output {
+		margin-bottom: 8px;
+		font-size: 1.2em;
+	}
+	
+	#cs-controls #cs-control-ch4 .cs-label,
+	#cs-controls #cs-control-co2 .cs-label {
+		font-size: 1.8em;
+	}
+	#cs-controls #cs-control-cloud .cs-label,
+	#cs-controls #cs-control-albedo .cs-label {
+		font-size: 1.2em;
+	}
+	#cs-controls .cs-info {
+		float: right;
+		margin-top: -10px;
+	}
+	a.cs-info {
+		width: 40px;
+		height: 32px;
+		border-radius: 40px;
+		padding-top: 8px;
+		font-size: 18px;
+	}
+}
+
+/*** 
+ *** SVG responsive styles
+ ***/
+#cs-canvas svg {
+	width: 100%;
+}
+
+svg {
+	max-height: 100%;
+}
+
+/***
+ *** Thermometer
+ ***/
+
+#cs-surfacetemp {
+	float: left;
+	margin: 0 10px;
+	width: 70px;
+}
+#cs-surfacetemp .cs-valueC,
+#cs-surfacetemp .cs-valueK,
+#cs-surfacetemp .cs-label {
+	display: block;
+	text-align: center;
+}
+#cs-surfacetemp .cs-valueC {
+	font-size: 1.5em;
+	font-weight: bold;
+	
+}
+#cs-surfacetemp .cs-valueK {
+	font-size: 1em;
+	color: #999;
+	text-align: center;
+	margin: 5px 0;
+}
+#cs-surfacetemp .cs-label {
+	font-weight: bold;
+	margin-bottom: 5px;
+	font-size: 1em;
+}
+
+
+
+/* Thermometer column and text */
+#cs-surfacetemp .cs-thermometer {
+	position:relative;
+	display:block;
+	margin: 0px 15px 50px 15px;
+	width:22px;
+	height:150px;
+	font:bold 14px/152px helvetica, arial, sans-serif;
+	text-indent: 36px;
+	border-radius:22px 22px 0 0;
+	border:5px solid #4a1c03;
+	border-bottom:none;
+	box-shadow:inset 0 0 0 4px #fff;
+	color: #4a1c03;
+}
+/* Thermometer Bulb */
+#cs-surfacetemp .cs-thermometer .cs-bulb {
+	content:' ';
+	width:44px;
+	height:44px;
+	display:block;
+	position:absolute;
+	bottom:-46px;
+	left:-16px;
+	z-index:-1;
+	/* Place the bulb under the column */
+	border-radius:44px;
+	border:5px solid #4a1c03;
+	box-shadow:inset 0 0 0 4px #fff;
+	background-color: #db3f02;
+}
+
+
+/* This piece here connects the column with the bulb */
+#cs-surfacetemp .cs-thermometer .cs-connectbulb {
+	content:' ';
+	width:14px;
+	height:7px;
+	display:block;
+	position:absolute;
+	bottom:-3px;
+	left:4px;
+	background-color:#db3f02;
+}
+#cs-surfacetemp .cs-thermometer .cs-reading {
+	display: block;
+	position:absolute;
+	bottom:0px;
+	left: 4px;
+	width: 14px;
+	height: 50%;
+	border-radius: 10px;
+	background-color: #db3f02;
+	
+}
+
+
+
+@media only print, only screen and (max-width: 980px) { 
+	#cs-surfacetemp {
+		width: 120px;
+	}
+	#cs-surfacetemp .cs-valueC {
+		font-size: 2.5em;
+	}
+	#cs-surfacetemp .cs-valueK {
+		font-size: 2em;
+	}
+	#cs-surfacetemp .cs-label {
+		font-size: 1.6em;
+	}
+	#cs-surfacetemp .cs-thermometer {
+		margin-left: 45px;
+	}
+}
+

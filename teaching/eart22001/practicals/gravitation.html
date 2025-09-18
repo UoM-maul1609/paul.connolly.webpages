@@ -1,0 +1,336 @@
+<!DOCTYPE HTML>
+<html><!-- InstanceBegin template="/Templates/PageTemplate.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="css/ui-strong/jquery-ui-1.10.3.custom.min.css" />
+<link rel="stylesheet" type="text/css" href="css/import.css" />
+<!-- InstanceBeginEditable name="styles" -->
+<link rel="stylesheet" type="text/css" href="js/utils/scrolltotop/scrolltotop.css" />
+<!-- InstanceEndEditable -->
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>Gravitational field strength</title>
+<!-- InstanceEndEditable -->
+<!-- InstanceBeginEditable name="head" -->
+<!--<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+	jax: ["input/TeX","output/HTML-CSS"],
+	tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+    },
+	menuSettings: {
+		zoom: "Click",
+		zscale: "150%"
+	},
+	styles: {
+		".MathJax_Display": {
+			"font-size" : "125%",
+			"padding-left" : "1em"
+		}
+	}
+});
+</script>-->
+<!--<script type="text/javascript"
+  src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>-->
+<script type="text/javascript"
+  src="../../MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- InstanceEndEditable -->
+<!-- InstanceParam name="page-type" type="text" value="page-info" -->
+</head>
+
+<body>
+<!-- InstanceBeginEditable name="warnings" -->
+<!-- InstanceEndEditable -->
+<div id="climate-sim" class="page-info">
+<!-- InstanceBeginEditable name="main" -->
+<!--<div class="cs-page-back">
+	<span class="page-link"><a href="index.html">Back to Climate Sim</a></span>
+</div>-->
+<div class="text-page text-block">
+<h1>Gravitational field strength for a sphere</h1>
+<dl>
+<dt><a name="gravitation"></a><dfn>Setting up the problem</dfn></dt>
+<dd>
+<p>The aim of this worksheet is to set up and solve an integral to calculate the gravitational field strength on the surface of an earth-like planet</p>
+
+<p><em>Newton's Law of Universal Gravitation</em> describes the force between two point masses, \(m_1\) and \(m_1\) separated by the vector \(\vec{r}_{1,2}\).</p>
+     <p>\[
+     \vec{F}=G\frac{m_1 m_2}{r_{1,2}^3} \vec{r}_{1,2}  
+     \]</p>
+<p>In order to calculate the gravitational field strength of a planet we can apply this law to infinitesimal mass elements of a sphere. The gravitation field strength is then the sum of all contributions from each mass element. In otherwords we treat each small element of a sphere as point masses and integrate up their contribution to the gravitational force.</p>
+
+<div class="more-info">Some further definitions...</div>
+<div class="collapsable">
+
+<p>Let us define the mass of the sphere equal to that of earth, \(m_e=6.0\times 10^{24}\) kg, and the radius equal to the radius of earth, \(R_e=6.4\times 10^6\) m. The density of this sphere is then:</p>
+
+    <p>
+    \[
+    \rho=\frac{m_e}{\frac{4}{3}\pi R_e^3} \cong 5.46 \times 10^3\,{kg} \, {m}^{-3}
+    \]
+    </p>
+</div>
+</dd>
+
+<dl>
+<dt><a name="spherical"></a><dfn>Spherical coordinate system</dfn></dt>
+<dd>
+<p>We use spherical coordinates to solve this problem because the problem's boundary is a sphere. This makes it easier to define the limits in any integrals we set up.
+
+<p> We also need to define distances between objects that aren't necessarily at the origin. This is most easily done in Cartesian coordinates (x, y and z); hence, it is useful to know how to convert between spherical and cartesian coordinates.</p>
+
+<div class="more-info">More info on spherical coordinates...</div>
+<div class="collapsable">
+    <p> Conversions from spherical to Cartesian coordinates are:
+     <p>\[
+     x=r\sin\theta\sin\phi
+     \]</p>
+     <p>\[
+     y=r\sin\theta\cos\phi
+     \]</p>
+     <p>\[
+     z=r\cos\theta
+     \]</p>
+    </p>
+    where \(r\) is an objects distance from the origin, \(\theta\) is the angle made between the line joining the origin to the point and the z-axis and \(\phi\) is the angle made with the x-axis and the projection of the line joining the origin to the point onto the x-y plane.
+
+    <p align="center"> <img src="pictures/spherical01.PNG" alt="Smiley face" width="340"> </p>
+    <p align="center"><font size="2" color="#008000" face="Century"> Schematic of the spherical coordinate system giving x, y and z as functions of \(r\), \(\phi\) and \(\theta\). </font></p>
+</div>
+</dd>
+
+<dl>
+<dt><a name="volume"></a><dfn>The volume and mass elements</dfn></dt>
+<dd>
+<p>We assume that the density of the sphere is constant and equal to the ratio of the mass of earth to the volume of earth. In this case a mass element is the density, \(\rho\), multiplied by the volume element, \(dV\).</p>
+
+<div class="more-info">More info on volume element...</div>
+<div class="collapsable">
+     <p> The volume element in spherical coordinates is</p>
+     <p>\[
+     dV=r^2\sin\theta d\theta d \phi d r
+     \]</p>
+    <p align="center"> <img src="pictures/sphcoordel.gif" alt="Smiley face" width="350"> </p>
+    <p align="center"><font size="2" color="#008000" face="Century"> The derivation of the volume element in spherical coordinates.</font></p>
+     <p> A mass element is this volume element multiplied by the density, which is a constant for this problem.</p>
+     <p>\[
+     dm=\rho r^2\sin\theta d\theta d \phi d r
+     \]</p>
+</div>
+
+</dd>
+
+<dt><a name="vectors1"></a><dfn>Element of force on an mass \(m_1\) at distance \(R_1\) from the centre of sphere</dfn></dt>
+<dd>
+	<p>This problem can be simplified by recognising that the magnitude of the force on an object only depends on the distance from the centre. We therefore choose the position of the object to lie at distance \(R_1\) along the z-axis. </p>
+<div class="more-info">More on the element of force...</div>
+<div class="collapsable">
+    <p> The force due to a mass element is therefore:
+    </p>
+ 
+    <p>\[ 
+        dF=\frac{Gm_1\rho r^2\sin\theta }{r^2\sin^2\theta\cos^2\phi +r^2\sin^2\theta\sin^2\phi+\left(R_1-r\cos\theta \right)^2} \,d\theta d\phi dr
+    \]</p>
+     <p> where the denominator has been derived using Pythagoras' theorem: \(r_{1,2}^2=\left(X-x\right)^2 +\left(Y-y\right)^2 +\left(Z-z\right)^2 \)</p>
+
+     <p> This may be simplified, using the trig identity \(1\equiv \sin^2\phi+\cos^2\phi\) expanding the bracket in the denominator and applying the trig identity again, to:</p>
+    <p>\[ 
+        dF=\frac{Gm_1\rho r^2\sin\theta}{r^2+R_1^2-2R_1r\cos\theta} \,d\theta d\phi dr
+    \]</p>
+
+</div>
+</dd>
+
+<dt><a name="vectors2"></a><dfn>Element of force in z-direction </dfn></dt>
+<dd>
+	<p>The gravitational field strength due to a sphere acts downwards towards the centre. Thus, because of symmetry we may neglect other forces (they cancel each other exactly). For our mass, \(m_1\) we therefore need to calculate the force in the z-direction. We therefore need to resolve the full force into a component that points only along the z-axis and integrate that up. </p>
+<div class="more-info">More on the element of force in the z-direction...</div>
+<div class="collapsable">
+    <p>It turns out this is equal to</p>
+    <p>\[
+        dF_z=\frac{Gm_1\rho r^2\sin\theta\left(R_1-r\cos\theta\right)}{\left(r^2+R_1^2-2R_1r\cos\theta \right)^{3/2}} \,d\theta d\phi dr
+    \]</p>
+    <p align="center"> <img src="pictures/resultant_vector02.PNG" alt="Smiley face" width="1500"> </p>
+    <p align="center"><font size="2" color="#008000" face="Century"> The force in the z-direction between two point masses can be determined by multiplying the magnitude of the force by the ratio of distance between the point masses in the z-direction and the vector joining the two masses.</font></p>
+</div>
+ 
+</dd>
+<dt><a name="integration"></a><dfn>Integrating the elements up</dfn></dt>
+<dd>
+	<p>Once we have written down the force elements we just need to integrate them all up. We need to evaluate the following triple integral:</p>
+    <p>\[
+        F_z=Gm_1\rho \int _0^{2\pi} \int _0^{R_e} \int _0 ^\pi \frac{r^2\sin\theta\left(R_1-r\cos\theta\right)}{\left(r^2+R_1^2-2R_1r\cos\theta \right)^{3/2}} \,d\theta d\phi dr
+    \]</p>
+<div class="more-info">The integration...</div>
+<div class="collapsable">
+        <p>First we may easily integrate wrt \(\phi\) by multiplying the integrand by \(2\pi\)</p>
+    <p>\[
+        F_z=2\pi G m_1\rho \int _0^{R_e} \int _0 ^\pi \frac{r^2\sin\theta\left(R_1-r\cos\theta\right)}{\left(r^2+R_1^2-2R_1r\cos\theta \right)^{3/2}} \,d\theta dr
+    \]</p>
+         
+        <p>Secondly we integrate wrt \(\theta\). This part is tricky. We make the substitution \(u=r^2+R_1^2-2R_1r\cos\theta\) and differentiate to get \(du = 2R_1r\sin\theta d\theta\). The numerator of the integrand becomes \(\frac{r}{4R_1^2}\left( 2R_1^2+u-r^2-R_1^2\right) du\), so the integral becomes:</p>
+        
+        <p>\[
+           I=\frac{r}{4R_1^2}\int \frac{1}{u^{1/2}}+\frac{\left(R_1^2-r^2\right)}{u^{3/2}} du
+        \]</p>
+        <p>which equals</p>
+        <p>\[
+            \begin{eqnarray}
+            I&=&\frac{r}{4R_1^2}\left[2u^{1/2}-2\left(R_1^2-r^2\right)u^{-1/2} \right]_{\left(R_1-r\right)^2}^{\left(R_1+r\right)^2}\\
+             &=&\frac{r}{2R_1^2}\left[\left( R_1+r \right)-\left( R_1-r \right)-\frac{\left(R_1-r\right)\left(R_1+r \right)}{R_1+r}+\frac{\left(R_1-r\right)\left(R_1+r \right)}{R_1-r} \right]\\
+             &=&\frac{2r^2}{R_1^2}
+            \end{eqnarray}
+        \]</p>
+
+        <p>We then insert \(I\) into the remaining integral over \(r\):</p>
+        <p>\[
+        \begin{eqnarray}
+        F_z&=&2\pi G m_1\rho \int _0^{R_e} \frac{2r^2}{R_1^2} dr\\
+           &=&m_1 \times \frac{4}{3}\pi \rho R_e^3 \times \frac{G}{R_1^2}
+        \end{eqnarray}
+        \]</p>
+        
+</div>
+
+   <p> which yields:</p>
+    <p>\[
+        F_z=m_1 \times \frac{4}{3}\pi \rho R_e^3 \times \frac{G}{R_1^2}
+    \]</p>
+    <p>the factor \(\frac{4\pi\rho R_e^3}{3}\) is the mass of the planet, \(m_e=6.0\times 10^{24}\) kg. If \(R_1=R_e\) (i.e. the mass is on the surface) then \(\frac{Gm_e}{R_e^2}\) is the gravitational field strength, usually referred to as \(g\), which agrees well with the measured value. </p>
+
+    <p>Substituting \(R_e=6.4\times 10^4\) m; \(m_e=6.0\times 10^{24}\) kg and \(G=6.67\times 10^{-11}\) m<sup>3</sup> kg<sup>-1</sup> s<sup>-2 </sup> yields \(g=9.8\) m s<sup>-2</sup>.
+    </p>
+</dd>
+
+
+
+<dt><a name="matlab1"></a><dfn>MATLAB scripts part 1</dfn></dt>
+<dd>
+    <p>There is a MATLAB script here that solve this problem approximately:
+       <ul>
+          <li><a href="material/gravitation/gravity_sampling01.m" >gravity_sampling01.m </a> </li>
+       </ul>
+       Download it to MATLAB and take a look at the code, reading the comments as you go through. For more information on running it click on the tab below.
+    </p>
+
+<div class="more-info">MATLAB gravity script...</div>
+<div class="collapsable">
+    <p> First call the program using:<br>
+       <code>[forcex,forcey,forcez,mag_force]=gravity_sampling01([0 0 6.4e6]) </code>
+       <br>
+       <br>
+       This will set up lots of mass elements within a sphere, radius equal to that of earth, and calculate the force on a unit mass at position <code>[0 0 6.4e6]</code> in (x,y,z) coordinates. You should find it equals about 9.63 N (which is approximately equal to earth's gravity). The output is the force in the x-direction, the y-direction and the z-direction and also the magnitude of the force. 
+       <br><br>
+       Next, on line 5, change the shape variable to read:<br>
+       <code>shape='ellipse';</code>
+       <br><br>
+       and un comment line 36 so it sets the position of the point mass to a point on the semi-minor equator of the ellipsoid. Run the model using:<br>
+       <code>[forcex,forcey,forcez,mag_force]=gravity_sampling01([0 0 6.4e6]) </code>
+       <br>
+       <br>
+       The above will calculate the force of gravity due to a planet that is an ellipse with aspect ratio 2, with the same volume as earth and the same mass around the equator . Was it more or less than that of spherical earth?
+       <br><br>
+       Try un commenting line 37 so it sets the position of the point mass to a point on the semi-major equator of the ellipsoid. Run the model using:<br>
+       <code>[forcex,forcey,forcez,mag_force]=gravity_sampling01([0 0 6.4e6]) </code>
+       <br>
+       <br>
+       How does the value of gravity change? Can you explain your results.
+       <br><br>
+       Next, on line 5, change the shape variable to read:<br>
+       <code>shape='cylinder';</code>
+       <br><br>
+       and un comment line 48 so it sets the position of the point mass to a point on the top of the cylinder. Run the model using:<br>
+       <code>[forcex,forcey,forcez,mag_force]=gravity_sampling01([0 0 6.4e6]) </code>
+       <br>
+       <br>
+       What is your value of gravity now?
+       <br><br>
+       try uncommenting line 49 so it sets the position of the point mass to a point on the side of the cylinder on its radius. Run the model using:<br>
+       <code>[forcex,forcey,forcez,mag_force]=gravity_sampling01([0 0 6.4e6]) </code>
+       <br>
+       <br>
+       What is your value of gravity now? Can you explain your results?
+       <br>
+       <br>
+       What do you think the force at (0,0,0) is? i.e. the net force at the centre of the world? Run the model to confirm your guess (how should the model be called?)
+    </p>        
+</div>
+
+</dd>
+
+
+<dt><a name="matlab2"></a><dfn>MATLAB scripts part 2</dfn></dt>
+<dd>
+    <p>There is another MATLAB script here that is used in conjunction with the first script:
+       <ul>
+          <li><a href="material/gravitation/batch_gravity_sampling01.m" >batch_gravity_sampling01.m </a> </li>
+       </ul>
+       This script moves the point mass around to map out the gravity field due to different shapes. 
+       <br><br>
+       Download it to MATLAB and take a look at the code, reading the comments as you go through. For more information on running it click on the tab below.
+    </p>
+
+<div class="more-info">MATLAB batch script...</div>
+<div class="collapsable">
+    <p> First, make sure that lines 25, 36, 37, 48, 49 and 56 of <code>gravity_sampling01.m</code> are commented <br><br>
+        Secondly, set the variable <code>plot_flag</code> on line 7 of <code>gravity_sampling01.m</code> to <code>false</code> <br><br>
+        Thirdly, set the variable <code>n_points</code> on line 9 of <code>gravity_sampling01.m</code> to <code>50</code> and save the file <br><br>
+        Run the code <code>batch_gravity_sampling01.m</code> by making sure your both scripts are in your working directory and typing <br><br>
+       <code>batch_gravity_sampling01 </code>
+       <br>
+       <br>
+       The program will take a while to run, it will calculate the gravity field for a sphere, ellipsoid, cylinder and cube that have the same volume as earth. When the program has finished running it will plot out a 2-d slice of the gravity fields, with streamlines depicting them
+    </p>        
+    <p align="center"> <img src="material/gravitation/gravity_fields01.png" alt="Smiley face" width="3000"> </p>
+    <p align="center"><font size="2" color="#008000" face="Century"> Plots of the gravity fields for a sphere, ellipsoid (aspect ratio 2), cylinder (aspect ratio 2) and cube each with the same volume and mass as earth. </font></p>
+
+     <p>Question: can you explain what an observer would feel (in terms of his / her weight) as they move around the surface of each object? <br> <br>
+     What would an observer feel at the centre of the earth? </p>
+</div>
+
+</dd>
+
+
+
+
+<!-- InstanceEndEditable -->
+<footer>
+        <div class="logo">
+            <a href="http://www.manchester.ac.uk">
+                <img src="assets/logos/TAB_col_white_background.png" width="107" height="45" alt="University of Manchester">
+            </a>
+        </div>
+    	<!--<ul class="fmenu menu1">
+        	<li><a href="about.html">About</a></li>
+            <li><a href="credits.html">Credits</a></li>
+        </ul>-->
+        <ul class="fmenu menu2">
+            <li><a href="http://www.manchester.ac.uk/aboutus/documents/disclaimer/">Disclaimer</a></li>
+            <li><a href="http://www.manchester.ac.uk/aboutus/documents/privacy/">Privacy</a></li>
+            <li><a href="http://www.manchester.ac.uk/aboutus/documents/copyright/">Copyright notice</a></li>
+            <li><a href="http://www.manchester.ac.uk/aboutus/documents/accessibility/">Accessibility</a></li>
+            <li><a href="http://www.manchester.ac.uk/aboutus/documents/foi/">Freedom of information</a></li>
+            <li><a href="http://www.manchester.ac.uk/aboutus/governance/charitable-status/">Charitable status</a></li>
+            <li>Royal Charter Number: RC000797</li>
+        </ul>
+		
+    </footer>
+</div>
+<!-- InstanceBeginEditable name="scripts" -->
+
+<script language="javascript" type="text/javascript" src="js/jquery/jquery-1.10.2.min.js" ></script>
+<script type="text/javascript">
+jQuery(document).ready(function() {
+  $(".collapsable").hide();
+  $(".more-info").click(function() {
+  		$(this).next(".collapsable").slideToggle(500);
+  });
+});
+</script>
+
+<script type="text/javascript" src="js/utils/scrolltotop/scrolltotop.js"></script>
+<!-- InstanceEndEditable -->
+</body>
+<!-- InstanceEnd --></html>

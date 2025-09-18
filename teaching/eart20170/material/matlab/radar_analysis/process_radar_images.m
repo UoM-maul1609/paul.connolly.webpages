@@ -1,0 +1,132 @@
+function DAT=process_radar_images(filename,varargin)
+flag=0;
+[A,B]=imread(filename);
+A=double(A);
+B=double(B);
+% A(find(A(:)==8 ))=NaN;
+
+LONG=linspace(-12.06298828125,4.19677734375,740);
+LAT=linspace(48.73445537176822,59.41154816642368,834);
+[XLONG,XLAT]=meshgrid(LONG,LAT);
+%[XX,YY]=m_ll2xy(XLONG,XLAT);
+
+A1=A;
+load colormap1.mat
+ll=14+1;
+try
+    ind=find(B(:,1)==B11(ll,1) & B(:,2)==B11(ll,2) & B(:,3)==B11(ll,3))-1;
+    A1(find(A1(:)==ind(1)))=NaN;
+catch
+end
+% A1(find(A1(:)==1))=NaN;
+ll=6+1;
+try
+    ind=find(B(:,1)==B11(ll,1) & B(:,2)==B11(ll,2) & B(:,3)==B11(ll,3))-1;
+    A1(find(A1(:)==ind))=mean([0.04 0.1]);
+catch 
+end
+
+ll=10+1;
+try
+    ind=find(B(:,1)==B11(ll,1) & B(:,2)==B11(ll,2) & B(:,3)==B11(ll,3))-1;
+    A1(find(A1(:)==ind))=mean([0.1 0.3]);
+catch
+end
+ll=3+1;
+
+try
+    ind=find(B(:,1)==B11(ll,1) & B(:,2)==B11(ll,2) & B(:,3)==B11(ll,3))-1;
+    A1(find(A1(:)==ind))=mean([0.3 1]);
+catch
+end
+
+ll=4+1;
+try
+    ind=find(B(:,1)==B11(ll,1) & B(:,2)==B11(ll,2) & B(:,3)==B11(ll,3))-1;
+    A1(find(A1(:)==ind))=mean([1 3]);
+catch
+end
+
+ll=5+1;
+try
+    ind=find(B(:,1)==B11(ll,1) & B(:,2)==B11(ll,2) & B(:,3)==B11(ll,3))-1;
+    A1(find(A1(:)==ind))=mean([3 5]);
+catch
+end
+
+ll=8+1;
+try
+    ind=find(B(:,1)==B11(ll,1) & B(:,2)==B11(ll,2) & B(:,3)==B11(ll,3))-1;
+    A1(find(A1(:)==ind))=mean([5 10]);
+catch
+end
+
+ll=13+1;
+try
+    ind=find(B(:,1)==B11(ll,1) & B(:,2)==B11(ll,2) & B(:,3)==B11(ll,3))-1;
+    A1(find(A1(:)==ind))=mean([10 15]);
+catch
+end
+
+ll=2+1;
+try
+    ind=find(B(:,1)==B11(ll,1) & B(:,2)==B11(ll,2) & B(:,3)==B11(ll,3))-1;
+    A1(find(A1(:)==ind))=mean([15 20]);
+catch
+end
+
+ll=12+1;
+try
+    ind=find(B(:,1)==B11(ll,1) & B(:,2)==B11(ll,2) & B(:,3)==B11(ll,3))-1;
+    A1(find(A1(:)==ind))=mean([20 25]);
+catch
+end
+
+ll=1+1;
+try
+    ind=find(B(:,1)==B11(ll,1) & B(:,2)==B11(ll,2) & B(:,3)==B11(ll,3))-1;
+    A1(find(A1(:)==ind))=mean([25 30]);
+catch
+end
+ll=9+1;
+
+try
+    ind=find(B(:,1)==B11(ll,1) & B(:,2)==B11(ll,2) & B(:,3)==B11(ll,3))-1;
+    A1(find(A1(:)==ind))=mean([30 40]);
+catch
+end
+
+ll=0+1;
+try
+    ind=find(B(:,1)==B11(ll,1) & B(:,2)==B11(ll,2) & B(:,3)==B11(ll,3))-1;
+    A1(find(A1(:)==ind))=mean([40 50]);
+catch
+end
+ll=11+1;
+try
+    ind=find(B(:,1)==B11(ll,1) & B(:,2)==B11(ll,2) & B(:,3)==B11(ll,3))-1;
+    A1(find(A1(:)==ind))=mean([50]);
+catch
+end
+ll=7+1;
+try
+    ind=find(B(:,1)==B11(ll,1) & B(:,2)==B11(ll,2) & B(:,3)==B11(ll,3))-1;
+    A1(find(A1(:)==ind))=NaN;
+catch
+end
+%mean([51]);
+if(flag==1)
+    DAT.A=A;
+    DAT.B=B;
+end
+if(nargin==2)
+    DAT=varargin{1};
+    [r,c,p]=size(DAT.A1);
+    DAT.A1(:,:,p+1)=A1(end:-1:1,:);
+else
+    DAT.A1=A1(end:-1:1,:);
+    DAT.XLONG=XLONG;
+    DAT.XLAT=XLAT;
+    DAT.MAP=[jet(50);0.5.*ones(1,3)];
+    DAT.m=[mean([0.04 0.1]) 51];
+end

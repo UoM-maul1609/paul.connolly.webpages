@@ -1,0 +1,740 @@
+<!DOCTYPE HTML>
+<html><!-- InstanceBegin template="/Templates/PageTemplate.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="css/ui-strong/jquery-ui-1.10.3.custom.min.css" />
+<link rel="stylesheet" type="text/css" href="css/import.css" />
+<!-- InstanceBeginEditable name="styles" -->
+<link rel="stylesheet" type="text/css" href="js/utils/scrolltotop/scrolltotop.css" />
+<!-- InstanceEndEditable -->
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>The interaction between planets in the solar system</title>
+<!-- InstanceEndEditable -->
+<!-- InstanceBeginEditable name="head" -->
+<!--<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+	jax: ["input/TeX","output/HTML-CSS"],
+	tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+    },
+	menuSettings: {
+		zoom: "Click",
+		zscale: "150%"
+	},
+	styles: {
+		".MathJax_Display": {
+			"font-size" : "125%",
+			"padding-left" : "1em"
+		}
+	}
+});
+</script>-->
+<!--<script type="text/javascript"
+  src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>-->
+<script type="text/javascript"
+  src="../../MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- InstanceEndEditable -->
+<!-- InstanceParam name="page-type" type="text" value="page-info" -->
+</head>
+
+<body>
+<!-- InstanceBeginEditable name="warnings" -->
+<!-- InstanceEndEditable -->
+<div id="climate-sim" class="page-info">
+<!-- InstanceBeginEditable name="main" -->
+<!--<div class="cs-page-back">
+	<span class="page-link"><a href="index.html">Back to Climate Sim</a></span>
+</div>-->
+<div class="text-page text-block">
+<h1>Solar system simulation in MATLAB</h1>
+
+<dl>
+<dt><a name="overview"></a><dfn>Overview</dfn></dt>
+<dd>
+	<p>In this exercise you will set-up a simulation of the solar system in MATLAB and use Fourier Methods to analyse the output. If you are interested in making this part of your project please get in touch with <a href="mailto:p.connolly@manchester.ac.uk">me</a>. For example you may be interested in researching the effects of tidal forces on the sun or the dynamics of binary star systems or the effects of black holes on solar systems.</p>
+
+<p>The following files can be downloaded and put into your working directory in MATLAB:</p>
+    <ul>
+    <li><a href="material/solar_system/run_solar_system.m">run_solar_system.m</a> </li>
+    <li><a href="material/solar_system/solve_solar_system.m">solve_solar_system.m</a> </li>
+    <li><a href="material/solar_system/animate_solar_system.m">animate_solar_system.m</a> </li>
+    <li><a href="material/solar_system/plot_solar_system_one.m">plot_solar_system_one.m</a> </li>
+    <li><a href="material/solar_system/fourier_solar_system_one.m">fourier_solar_system_one.m</a> </li>
+    <li><a href="material/solar_system/fourier_solar_system_two.m">fourier_solar_system_two.m</a> </li>
+    <li><a href="material/solar_system/fourier_solar_system_suns_motion.m">fourier_solar_system_suns_motion.m</a> </li>
+    </ul>
+
+<p>Download the practical sheet here and work through it:
+<ul>
+<li> <a href="material/solar_system/solar_system_notes.pdf">solar_system_notes.pdf</a> </li>
+</ul>
+</p>
+
+</dd>
+
+
+<p align="center"> <img src="material/solar_system/solar_system02.gif" style="background-color:red alt="Smiley face" width="700"> </p>
+
+<p align="center"><font size="2" color="#008000" face="Century"> The above animation shows a computer simulation in MATLAB of the 8 planets and pluto orbiting around the sun.</font></p>
+
+
+
+<dl>
+<dt><a name="gravitation"></a><dfn>Newton's Law of Gravitation</dfn></dt>
+<dd>
+<p>In order to simulate the orbits of the planets, we make use of Newton's Law of Gravitation and treat each body as point masses. This enables us to calculate the force on each body in each dimension.
+
+<div class="more-info">More info on Newton's Law of gravitation...</div>
+<div class="collapsable">
+This states that the force between two masses, \(m_i\) and \(m_j\), separated by vector \(\vec{r_{i,j}}\) is</p>
+
+  <p>
+  \[
+     \vec{F}_{i,j}=-G\frac{m_i m_j}{r_{i,j}^3}\vec{r_{i,j}}
+  \]
+  </p>
+
+<p>Our coordinate system is cartesian based (i.e. \(x,y,z\)) so we must write down Newton's Law of gravitation using this system. The vector \(\vec{r_{i,j}}\) can be written down in column form as:</p>
+
+  <p>
+  \[
+      \vec{r_{i,j}}=\left(\begin{array}{c} x_j-x_i \\y_j-y_i \\z_j-z_i \end{array} \right)
+  \]
+  </p>
+<p>and thus its magnitude is</p>
+  <p>
+  \[
+      |\vec{r_{i,j}}|=\sqrt{\left(x_j-x_i\right)^2 +\left(y_j-y_i\right)^2 +\left(z_j-z_i\right)^2}
+  \]
+  </p>
+
+
+Hence, the components of the force in the \(x, y\) and \(z\) direction are:
+  <p>
+  \[
+      \left(\begin{array}{c}
+      Fx_{i,j}\\
+      Fy_{i,j}\\
+      Fz_{i,j}
+      \end{array}\right)
+=-G\frac{m_i m_j}{\left({\left(x_j-x_i\right)^2 +\left(y_j-y_i\right)^2 +\left(z_j-z_i\right)^2}\right)^{3/2}}
+      \left(\begin{array}{c} x_j-x_i \\y_j-y_i \\z_j-z_i \end{array} \right)  
+  \]
+  </p>
+</div>
+</dd>
+
+<dl>
+<dt><a name="motion"></a><dfn>Newton's 2nd Law of Motion</dfn></dt>
+<dd>
+<p>For the motion of the planets we apply Newton's 2nd Law of motion, which states that the force applied to a mass is equal to its acceleration multiplied by its mass. Hence, Newton's Second Law of Motion enables us to use the force calculated from Newton's Law of Gravitation to the motion that the bodies take in space. </p>
+
+<div class="more-info">More info on Newton's 2nd Law...</div>
+<div class="collapsable">
+     <p> Newton's 2nd Law states for net force, \(\vec{F}\), applied to object mass, \(m\) causing the object to accelerate with acceleration, \(a\)</p>
+     <p>\[
+     \vec{F}=m\vec{a}
+     \]</p>
+
+     <p>Hence, to solve for the motion of each object (i.e. find the \(x_i,y_i,z_i\) positions with time) we must solve three differential equations for each dimension:</p>
+     <p>\[
+     \begin{eqnarray}
+     Fx_{i,j} &=& m_i\frac{d^2 x_i}{dt^2}\\
+     Fy_{i,j} &=& m_i\frac{d^2 y_i}{dt^2}\\
+     Fz_{i,j} &=& m_i\frac{d^2 z_i}{dt^2}
+     \end{eqnarray}
+     \]</p>
+     <p>
+     MATLAB can solve differential equations using a variety of methods, but the one we choose for this exercise is <code>ODE113</code>. However, this method can only solve 1st order differential equations (those having a first order derivative). Clearly the equations to solve are 2nd order differential equation, but we can turn them into 1st order differential equations by specifying another 3 equations for the 3 components of velocity, \(vx_{i}, vy_{i}, vz_{i}\), which give us the following 6 equations to solve for each body in the solar system:
+     </p>
+     <p>\[
+     \begin{eqnarray}
+     Fx_{i,j} &=& m_i\frac{d vx_i}{dt}\\
+     Fy_{i,j} &=& m_i\frac{d vy_i}{dt}\\
+     Fz_{i,j} &=& m_i\frac{d vz_i}{dt}\\
+     vx_i &=& \frac{d x_i}{dt}\\
+     vy_i &=& \frac{d y_i}{dt}\\
+     vz_i &=& \frac{d z_i}{dt}
+     \end{eqnarray}
+     \]</p>
+     <p>
+</div>
+
+</dd>
+
+<dt><a name="code1"></a><dfn>MATLAB code to simulate planetary orbits </dfn></dt>
+<dd>
+	<p>Take a look at the <code>solve_solar_system.m</code> file, taking care to read the comments and follow roughly what the code does. </p>
+<div class="more-info">More info on solve_solar_system.m...</div>
+<div class="collapsable">
+   <p>
+   You run the code by making sure the <code>solve_solar_system.m</code> file is in your working directory typing:<br><br>
+   <code>
+   [t,y,bodies]=solve_solar_system;<br>
+   </code>
+   <br>
+   <br>
+   The output is as follows:
+   <ul>
+   <li><code>t</code> is the time in seconds for the simulation </li>
+   <li><code>bodies</code> is a cell of strings that contains the names of each of the bodies simulated. </li>
+   <li>y is a matrix that contains the x, y and z position and the corresponding velocities for all bodies in the <code>bodies</code> cell. </li>
+   </ul>
+   The first 6 columns in the <code>y</code> matrix are the x, y and z positions and the ux, uy and uz velocities of the sun. Then it repeats, mercury, venus and so on.
+   <br>
+   <br>
+   Hence, you can plot the position of earth relative to the sun in the following way:<br><br>
+   <code>
+   dist=y(:,[1:3]+3*6)-y(:,[1:3]); % this is the distance between x, y and z<br>
+   dist_mod=sqrt(sum(dist.^2,2));  % this is the magnitude of the vector (sqrt of sum of squares of x, y and z)<br>
+   plot(t,dist_mod);<br>
+   </code>
+
+   </p>
+</div>
+
+<p>There is another m-file called <code>animate_solar_system.m</code>. After running <code>solve_solar_system.m</code> you can then run this m-file to see an animation of the solar system.</p>
+
+<div class="more-info">More info on animate_solar_system.m...</div>
+<div class="collapsable">
+   <p>
+   Type:<br>
+   <code>
+   animate_solar_system
+   </code>
+   <br>
+   If you wish to break out of the animation at any time, go to the MATLAB command prompt and type <code>Ctrl-X</code>.
+   </p>
+</div>
+<p>The data generated lend naturally to Fourier analysis because they are periodic. We will now cover some fundamentals of Fourier analysis</p>
+
+ <!--Scenarios: everthing orbits sun; interacting planets; stolen by a star; Tattooine; Black hole cometh -->
+</dd>
+
+<dt><a name="analysis1"></a><dfn>Fourier series</dfn></dt>
+<dd>
+<p>The Fourier series is a powerful concept in the analysis of waves. Fourier methods are used in many different situations, such as in seismology, many topics in physics, spectroscopy and acoustics. </p>
+
+<p>Harmonic waves are those that are described by trigonometric functions: sines and cosines. We know how to deal with these functions mathematically, but other functions such as square waves, or saw-tooth waves (so called aharmonic functions) are more problematic. However, it turns out that we can build up any periodic function by adding lots of sines and cosine functions together. </p>
+
+<p>Lets say for example we have a periodic wave that looks like a saw-tooth pattern. The animation below shows that starting with a sine wave of the same period and adding sine waves of higher frequencies (and lower amplitudes) we may eventually build up something similar to a saw-tooth wave.</p>
+
+<p align="center"> <img src="material/solar_system/Periodic_identity_function.gif" style="background-color:red alt="Smiley face" width="600"> </p>
+
+<p align="center"><font size="2" color="#008000" face="Century"> Another example is given here, this time a saw-tooth wave is represented by the first 5 harmonic functions (source: Wikipedia).</font></p>
+
+
+<p>Similarly see the representation of a square wave below. We can build up a square wave by adding sine functions of different amplitudes together. </p>
+
+
+<p align="center"> <img src="material/solar_system/Fourier_series_and_transform.gif" style="background-color:red alt="Smiley face" width="300"> </p>
+
+<p align="center"><font size="2" color="#008000" face="Century"> The above animation shows the approximation of a square wave by the sum of 6 harmonic functions (source: Wikipedia).</font></p>
+
+
+
+
+<div class="more-info">Advanced info...</div>
+<div class="collapsable">
+<p> The basis of how Fourier methods work are the following results</p>
+<p>
+\begin{eqnarray}
+\int _{-\frac{\tau}{2}}^\frac{\tau}{2} \sin\left(\frac{2\pi mt}{\tau}\right)\sin\left(\frac{2\pi nt}{\tau}\right) dt&=&\frac{\tau}{2}\delta _{m,n}\\
+\int _{-\frac{\tau}{2}}^\frac{\tau}{2} \cos\left(\frac{2\pi mt}{\tau}\right)\cos\left(\frac{2\pi nt}{\tau}\right) dt&=&\frac{\tau}{2}\delta _{m,n}\\
+\int _{-\frac{\tau}{2}}^\frac{\tau}{2} \sin\left(\frac{2\pi mt}{\tau}\right)\cos\left(\frac{2\pi nt}{\tau}\right) dt&=&0\\
+\int _{-\frac{\tau}{2}}^\frac{\tau}{2} \sin\left(\frac{2\pi mt}{\tau}\right) dt&=&0\\
+\int _{-\frac{\tau}{2}}^\frac{\tau}{2} \cos\left(\frac{2\pi mt}{\tau}\right) dt&=&0
+\end{eqnarray}
+</p>
+<p>Where \(\tau\) is the period of the wave being represented, \(\delta _{m,n}\) is equal to unity when \(m=n\) and zero otherwise. The above integrals state that the product of two waves, when integrated over one full period, is equal to zero unless they have the same frequency and phase. They also say that the integral of a harmonic wave over a full period is equal to zero. It is this property that enables Fourier methods to work.</p>
+
+<p>It turns out that any periodic function can be described using an infinite sum of harmonic (i.e. sines and cosines) function as follows:</p>
+
+    <p>
+    \[
+      f\left(t\right)=\frac{a_0}{2}+\sum a_n\cos\left(\frac{2\pi nt}{\tau} \right)+\sum b_n\sin\left(\frac{2\pi nt}{\tau}\right)
+    \]
+    </p>
+<p>This is known as a Fourier series. The coefficients, \(a_0,a_n\) and \(b_n\), are known as Fourier coefficients and are dependent on the function being approximated, \(f\left(t\right)\). However, if we now make use of the mathematical results above we may determine formulae for these coefficients. </p>
+
+<p>Firstly, we integrate both sides of the Fourier series over the interval \(-\frac{\tau}{2}\) to \(\frac{\tau}{2}\)</p>
+    <p>
+    \[
+      \begin{eqnarray}
+      \int _{-\frac{\tau}{2}}^\frac{\tau}{2} f\left(t\right) dt&=&\int _{-\frac{\tau}{2}}^\frac{\tau}{2} \frac{a_0}{2} dt+\int _{-\frac{\tau}{2}}^\frac{\tau}{2} \sum a_n\cos\left(\frac{2\pi nt}{\tau} \right)+\sum b_n\sin\left(\frac{2\pi nt}{\tau}\right) dt\\
+      \int _{-\frac{\tau}{2}}^\frac{\tau}{2} f\left(t\right) dt&=& a_0\times \frac{\tau}{2}
+      \end{eqnarray}
+    \]
+    </p>
+ <p>where the sums within the integral on the first line are zero through the mathematical results above. We arrive at the result:</p>
+   <p>
+   \[
+   a_0=\frac{2}{\tau}\int _{-\frac{\tau}{2}}^\frac{\tau}{2} f\left(t\right) dt
+    \]
+   </p>
+
+   <p>Similarly we can derive an expression for the \(a_n\) coefficient by multiplying the Fourier series by \(cos\left(nt\right)\) and integrating both sides over one period:</p>
+    <p>
+    \[
+      \begin{eqnarray}
+      \int _{-\frac{\tau}{2}}^\frac{\tau}{2} f\left(t\right)\cos\left(\frac{2\pi nt}{\tau}\right) dt&=&\int _{-\frac{\tau}{2}}^\frac{\tau}{2} \frac{a_0}{2}\cos\left(\frac{2\pi nt}{\tau}\right) dt+\int _{-\frac{\tau}{2}}^\frac{\tau}{2} \sum a_n\cos\left(\frac{2\pi nt}{\tau} \right)\cos\left(\frac{2\pi nt}{\tau}\right)+\sum b_n\sin\left(\frac{2\pi nt}{\tau}\right)\cos\left(\frac{2\pi nt}{\tau}\right) dt\\
+      \int _{-\frac{\tau}{2}}^\frac{\tau}{2} f\left(t\right)\cos\left(\frac{2\pi nt}{\tau}\right) dt&=&a_n\times \frac{\tau}{2}
+      \end{eqnarray}
+    \]
+    </p>
+   <p> This enables us to define the \(a_n\) coefficients as:</p>
+   <p>
+   \[
+    a_n  = \frac{2}{\tau} \int _{-\frac{\tau}{2}}^\frac{\tau}{2} f\left(t\right)\cos\left(\frac{2\pi nt}{\tau}\right) dt
+   \]
+   </p>
+   <p>Multiplying the Fourier series by \(sin\left(\frac{2\pi nt}{\tau}\right)\) and integrating over one period yields the \(b_n\) coefficients:</p>
+   <p>
+   \[
+    b_n  = \frac{2}{\tau} \int _{-\frac{\tau}{2}}^\frac{\tau}{2} f\left(t\right)\sin\left(\frac{2\pi nt}{\tau}\right) dt
+   \]
+   </p>
+   
+   <p> Therefore, we can describe any periodic function as an infinite sum of harmonic functions with the amplitudes given by the integrals above. This is useful as it enables us to define the frequencies that are present in an oscillation. </p>
+
+</div>
+</dd>
+<dt><a name="analysis2"></a><dfn>Fourier Transform</dfn></dt>
+<dd>
+   <p>The \(a_n\) and \(b_n\) coefficients in the Fourier series tell us the frequencies of harmonic oscillations that are present in a time-series; however, the frequencies are integer multiples of the frequency of the original wave. In general we need a representation that can have a continuum of frequency values. This is called the Fourier Transform.
+<br><br>
+MATLAB has functions <code>fft</code> and <code>ifft</code> that enable us to do these Fourier Transforms.</p>
+
+<div class="more-info">Information on what the Fourier Transform is...</div>
+<div class="collapsable">
+   <p>Lenard Euler derived a formula relating sines, cosines, the exponential constant and an imaginary number equal to the square-root of -1, \(i\)</p>
+   <p>
+   \[
+   \exp\left(i x\right)=\cos\left( x\right)+i\sin\left(x \right)
+   \]
+   </p>
+   Hence, we can generalise the Fourier series using the following integral:
+
+   <p> 
+   \[
+    \mathcal{F}\left(\nu \right)=\int _{-\infty}^\infty f\left(t\right)\exp\left(-i2\pi\nu t \right) dt
+   \]
+   </p>
+   This is known as the Fourier Transform. \(\mathcal{F}\left(\nu \right)\) is a complex number whose real part contains the amplitudes of the cosine harmonic functions representing the function \(f\left(t\right)\) and the imaginary part contains the amplitudes of the sinusoidal harmonic functions. The frequency, \(\nu\), can take on any value in the Fourier transform, rather than be integer multiples of the frequency of the initial wave.</p>
+
+   <p>Since \(\mathcal{F}\left(\nu\right)\) contains the amplitudes of the harmonic oscillations we may also define the inverse Fourier transform, which gets us back to the original function:
+   <p>
+   \[
+   f\left(t\right)=\int _{-\infty}^\infty \mathcal{F}\left(\nu \right)\exp\left(i2\pi\nu t \right) d\nu
+   \]
+   </p>
+</p>
+</div>
+</dd>
+
+
+<dt><a name="analysis3"></a><dfn>Fast Fourier Transforms in MATLAB</dfn></dt>
+<dd>
+MATLAB has functions for calculating Fourier Transforms and inverse Fourier Transforms. The algorithm they use is called the Fast Fourier Transform. The function in MATLAB are:
+<ul>
+<li><code>fft</code> - Fast Fourier Transform </li>
+<li><code>ifft</code> - inverse Fast Fourier Transform </li>
+</ul>
+<div class="more-info">Examples using FFT and IFFT in MATLAB...</div>
+<div class="collapsable">
+   <p>
+   Let us experiment with Fourier transforms in MATLAB. First of all try the following code segment, which will generate some times and a harmonic oscillation with frequency 1 Hz:<br><br>
+   <code>
+   tsamp=0.0001;<br>
+   tf=0:tsamp:100;<br>
+   nu=1;<br>
+   f=10.*sin(2.*pi.*tf.*nu);<br>
+   figure('name','Time-series of harmonic wave');<br>
+   plot(tf,f)<br>
+   </code>
+
+   <br>
+   Next, perform the Fourier transform and plot it out:   <br><br>
+
+   <code>
+   F=fft(f);<br>
+   L=length(f);<br>
+   freq=1./tsamp.*linspace(0,1,L);<br>
+   figure('name','FFT of harmonic wave');<br>
+   plot(freq,2.*abs(F)./L);<br>
+   set(gca,'xscale','log');<br>
+   </code>
+   <br>
+   Note, that you will find two peaks at an amplitude of 10. The one at 1 Hz frequency is the true frequency and the one at a frequency of 10<sup>4</sup> is due to aliasing. It is an artifact and should be ignored because the <code>fft</code> will not work for frequencies equal to about the sampling frequency (i.e. <code>1./tsamp</code>).
+
+   <br> <br>
+   Next we plot out the original function, then do the inverse Fourier transform to show they are equal.<br><br>
+   <code>
+   finv=ifft(F);<br>
+   figure('name','Original harmonic wave and ifft');<br>
+   plot(tf,f);hold on;<br>
+   plot(tf,finv,'r');<br>
+   </code>
+   You should see that both curves are equal to each other.
+   </p>
+
+
+   <p>Next try the same, but adding two harmonic waves together, one with a frequency of 1 Hz and amplitude of 10, and the other with frequency of 10 Hz and amplitude of 5.<br><br>
+   <code>
+   tsamp=0.0001;<br>
+   tf=0:tsamp:100;<br>
+   nu1=1;<br>
+   nu2=10;<br>
+   f=10.*sin(2.*pi.*tf.*nu1)+5.*sin(2.*pi.*tf.*nu2);<br>
+   figure('name','Time-series of two harmonic waves');<br>
+   plot(tf,f)<br>
+   </code>
+
+   <br>
+   Next, perform the Fourier transform and plot it out:   <br><br>
+
+   <code>
+   F=fft(f);<br>
+   L=length(f);<br>
+   freq=1./tsamp.*linspace(0,1,L);<br>
+   figure('name','FFT of sum of two harmonic waves');<br>
+   plot(freq,2.*abs(F)./L);<br>
+   set(gca,'xscale','log');<br>
+   </code>
+   <br>
+   <br>
+   You should see that the resulting Fourier transform has a peak at 1 Hz of amplitude 10 and a peak at 10 Hz at an amplitude of 5.
+   </p></div>
+</dd>
+
+
+
+
+
+
+
+
+
+
+<dt><a name="data"></a><dfn>Initialisation data for the solar system (for fun - if you like to hack around)</dfn></dt>
+<dd>
+<p>If you would like to initialize the model with different data the positions and velocities (Ephemeris data) of the planets at different times can be retrieved by email from the <a href="mailto:horizons@ssd.jpl.nasa.gov?Subject=Job&body=!$$SOF%0AEMAIL_ADDR=''%0ASTART_TIME = '2014-Sep-30 00:00:00'%0ASTOP_TIME = '2014-Sep-30 00:00:01'%0ATABLE_TYPE = 'Vector'%0AREF_PLANE = 'Ecliptic'%0ACENTER = '@010'%0ACOMMAND='999'%0A!$$EOF"> JPL Horizons system </a>. Click on the link to send an email, you will need to do it for each planet in turn. </p>
+
+<div class="more-info">Click here to see the contents of the email you send to JPL...</div>
+<div class="collapsable">
+<p>You should see that the email has the subject <code>Job</code> and that the message body is
+<code>
+<br>!$$SOF<br>
+EMAIL_ADDR=''<br>
+START_TIME = '2014-Sep-30 00:00:00'<br>
+STOP_TIME = '2014-Sep-30 00:00:01'<br>
+TABLE_TYPE = 'Vector'<br>
+REF_PLANE = 'Ecliptic'<br>
+CENTER = '@010'<br>
+COMMAND='999'<br>
+!$$EOF
+</code>
+</p>
+
+<p>This means get the position and velocity on the 2014-Sep-30 at 12 o'clock midnight in a coordinate system where the sun is centred on (0,0,0). i.e. the centre of the coordinates is the object 010, which refers to the sun. The value of <code>COMMAND</code> is set to 999 which means get the data for Pluto. Mercury is 199, Venus is 299 and so on... 
+</p>
+</div>
+
+<p>When you send the email, click on the tab below to see the reply you will get from the JPL Horizons system.  </p>
+<div class="more-info">Click here to see the reply email...</div>
+<div class="collapsable">
+<code>
+ Automated mail xmit by MAIL_REQUEST, PID=   14032 Mon Sep 29 16:07:43 2014
+<br>
+++++++++++++++++++++++++++++++++ (part 1 of 1)  +++++++++++++++++++++++++++++++
+<br>
+<br>
+*******************************************************************************
+<br>
+ Revised: Dec 30, 2013             134340 Pluto                             999
+ <br>
+ <br>
+ Fit to all available observations (PLU043/DE431)
+<br>
+<br>
+ ICRF/J2000.0 helio. ecliptic osc. elements (AU, DAYS, DEG, period=Julian yrs):
+<br>
+<br>
+ EPOCH= 2456656.5 ! 2013-Dec-30.00 (CT)
+<br>
+  EC= 2.479750960904014E-01 QR= 2.950229731448114E+01 IN= 1.733434183305855E+01
+<br>
+  OM= 1.101908708982876E+02 W = 1.121892886119843E+02 Tp=  2447571.800166774075
+<br>
+  A = 3.923047915182824E+01 AD= 4.895866098917534E+01 PR= 8.974987331741650E+04
+<br>
+<br>
+ PHYSICAL DATA (updated 2013-Nov-19, Mc= Charon mass, radius is IAU 2009):
+<br>
+  Mass Pluto (10^22 kg) = 1.307+-0.018    Density Pluto:
+<br>
+  GM (planet) km^3/s^2  = 872.4             (R = 1195 km)       = 1.83 g/cm^3
+<br>
+  Mass ratio (Mc/Mp)    = 0.117           Radius of Pluto, Rp   = 1195 km
+<br>
+  Surface gravity       = 61.1 cm/s^2     Geometric albedo      = 0.3 
+<br>
+  Sidereal orbit period = 249.58932 yr    Mean orbit velocity   = 4.656 km/s
+<br>
+  Escape velocity (km/s)= 1.21
+<br>
+*******************************************************************************
+<br>
+<br>
+<br>
+<br>
+<br>
+*******************************************************************************
+<br>
+Ephemeris / MAIL_REQUEST Mon Sep 29 16:07:43 2014 Pasadena, USA  / Horizons    
+<br>
+*******************************************************************************
+<br>
+Target body name: Pluto (999)                     {source: PLU043}
+<br>
+Center body name: Sun (10)                        {source: DE-0431LE-0431}
+<br>
+Center-site name: BODY CENTER
+<br>
+*******************************************************************************
+<br>
+Start time      : A.D. 2014-Sep-30 00:00:00.0000 CT 
+<br>
+Stop  time      : A.D. 2014-Sep-30 00:00:01.0000 CT 
+<br>
+Step-size       : 60 minutes
+<br>
+*******************************************************************************
+<br>
+Center geodetic : 0.00000000,0.00000000,0.0000000 {E-lon(deg),Lat(deg),Alt(km)}
+<br>
+Center cylindric: 0.00000000,0.00000000,0.0000000 {E-lon(deg),Dxy(km),Dz(km)}
+<br>
+Center radii    : 696000.0 x 696000.0 x 696000.0 k{Equator, meridian, pole}    
+<br>
+Output units    : KM-S                                                         
+<br>
+Output format   : 03
+<br>
+Reference frame : ICRF/J2000.0                                                 
+<br>
+Output type     : GEOMETRIC cartesian states
+<br>
+Coordinate systm: Ecliptic and Mean Equinox of Reference Epoch                 
+<br>
+*******************************************************************************
+<br>
+JDCT 
+<br>
+   X     Y     Z
+<br>
+   VX    VY    VZ
+<br>
+   LT    RG    RR
+<br>
+*******************************************************************************
+<br>
+$$SOE
+<br>
+2456930.500000000 = A.D. 2014-Sep-30 00:00:00.0000 (CT)
+<br>
+   1.063301456466383E+09 -4.775737235886205E+09  2.033982415147326E+08
+<br>
+   5.404835952771680E+00  5.598716109091834E-02 -1.594326579818693E+00
+<br>
+   1.633430609314200E+04  4.896901773387416E+09  1.052769074493617E+00
+<br>
+$$EOE
+<br>
+*******************************************************************************
+<br>
+Coordinate system description:
+<br>
+<br>
+<br>
+  Ecliptic and Mean Equinox of Reference Epoch
+<br>
+<br>
+<br>
+    Reference epoch: J2000.0
+<br>
+    xy-plane: plane of the Earth's orbit at the reference epoch
+<br>
+    x-axis  : out along ascending node of instantaneous plane of the Earth's
+<br>
+              orbit and the Earth's mean equator at the reference epoch
+<br>
+    z-axis  : perpendicular to the xy-plane in the directional (+ or -) sense
+<br>
+              of Earth's north pole at the reference epoch.
+<br>
+<br>
+<br>
+Symbol meaning  
+<br>
+<br>
+<br>
+    JDCT     Epoch Julian Date, Coordinate Time
+<br>
+      X      x-component of position vector (km)                               
+<br>
+      Y      y-component of position vector (km)                               
+<br>
+      Z      z-component of position vector (km)                               
+<br>
+      VX     x-component of velocity vector (km/sec)                           
+<br>
+      VY     y-component of velocity vector (km/sec)                           
+<br>
+      VZ     z-component of velocity vector (km/sec)                           
+<br>
+      LT     One-way down-leg Newtonian light-time (sec)                       
+<br>
+      RG     Range; distance from coordinate center (km)                       
+<br>
+      RR     Range-rate; radial velocity wrt coord. center (km/sec)            
+<br>
+<br>
+<br>
+Geometric states/elements have no aberration corrections applied.
+<br>
+<br>
+<br>
+ Computations by ...
+<br>
+     Solar System Dynamics Group, Horizons On-Line Ephemeris System
+<br>
+     4800 Oak Grove Drive, Jet Propulsion Laboratory
+<br>
+     Pasadena, CA  91109   USA
+<br>
+     Information: http://ssd.jpl.nasa.gov/
+<br>
+     Connect    : telnet://ssd.jpl.nasa.gov:6775  (via browser)
+<br>
+                  telnet ssd.jpl.nasa.gov 6775    (via command-line)
+<br>
+     Author     : Jon.Giorgini@jpl.nasa.gov
+<br>
+*******************************************************************************
+</code>
+</div>
+
+<p>Note that the MATLAB file <code>solve_solar_system.m</code> above already has the 3d position and velocity data for all the planets. You may want to use initialisation data for a different date, in which case generate the Ephemeris data for all planets (as described above) and put the numbers \(\left(X,Y,Z, VX,VY,VZ\right)\), in the <code>solve_solar_system.m</code> file (lines 101 to 119). The first element of each array is the Sun, the second Mercury, then Venus and so on.</p>
+</dd>
+
+<!------------------>
+
+
+
+
+
+
+
+
+
+
+<!--<dt><a name="code2"></a><dfn>Analysing the output using the Fourier Transform</dfn></dt>
+<dd>
+	<p>First of all run the <code>batch_solar_system02.m</code> script. This script calls the <code>solar_system02.m</code> script for two scenarios: the first is with all planets interacting and the second is with the planets only interacting with the sun. It will take a while to complete. </p>
+
+<p>When finished your data will be in the MATLAB base memory. You can save your data to a mat-file if you wish: </p><br>
+<code>
+save my_solar_system_run.mat t y bodies t1 y1 bodies1;
+</code>
+<br>
+
+<div class="more-info">Fourier analysis of the planetary orbits...</div>
+<div class="collapsable">
+    <p>The file <code>fourier_solar_system01b.m</code> performs a Fourier analysis of the orbits for with and without interactions with other planets. The quantity being analysed is the distance of the planet to the sun. </p>
+
+<p>Type the following command</p>
+<code>
+fourier_solar_system01b;
+</code>
+<p>to see the results of this analysis. The plots generated are time period of the oscillation vs amplitude. You should see that the peak of the fourier analysis corresponds to the time period of the planets orbit (i.e. one year in the case of earth).</p>
+
+<p>However, for the case with interactions there are extra wobbles in the planet's orbits. See if you can identify what these are</p>.
+</div>
+
+<br>
+<br>
+
+<div class="more-info">Fourier analysis of the sun's velocity...</div>
+<div class="collapsable">
+    <p>There is a hypothesis that the 11 year solar cycle is driven by the influence of the planets on the sun. Here we do a Fourier analysis of the sun's velocity to see what periods are present. </p>
+
+<p>Type the following command</p>
+<code>
+fourier_solar_system01c;
+</code>
+<p>Inspect the Fourier transform graph and try to identify what influences the motion of the sun.</p>
+
+
+</div>
+</dd>-->
+
+
+</dl>
+</div>
+<!-- InstanceEndEditable -->
+<footer>
+        <div class="logo">
+            <a href="http://www.manchester.ac.uk">
+                <img src="assets/logos/TAB_col_white_background.png" width="107" height="45" alt="University of Manchester">
+            </a>
+        </div>
+    	<!--<ul class="fmenu menu1">
+        	<li><a href="about.html">About</a></li>
+            <li><a href="credits.html">Credits</a></li>
+        </ul>-->
+        <ul class="fmenu menu2">
+            <li><a href="http://www.manchester.ac.uk/aboutus/documents/disclaimer/">Disclaimer</a></li>
+            <li><a href="http://www.manchester.ac.uk/aboutus/documents/privacy/">Privacy</a></li>
+            <li><a href="http://www.manchester.ac.uk/aboutus/documents/copyright/">Copyright notice</a></li>
+            <li><a href="http://www.manchester.ac.uk/aboutus/documents/accessibility/">Accessibility</a></li>
+            <li><a href="http://www.manchester.ac.uk/aboutus/documents/foi/">Freedom of information</a></li>
+            <li><a href="http://www.manchester.ac.uk/aboutus/governance/charitable-status/">Charitable status</a></li>
+            <li>Royal Charter Number: RC000797</li>
+        </ul>
+		
+    </footer>
+</div>
+
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- default -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-8260571040605089"
+     data-ad-slot="8018166452"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+<!-- InstanceBeginEditable name="scripts" -->
+
+<script language="javascript" type="text/javascript" src="js/jquery/jquery-1.10.2.min.js" ></script>
+<script type="text/javascript">
+jQuery(document).ready(function() {
+  $(".collapsable").hide();
+  $(".more-info").click(function() {
+  		$(this).next(".collapsable").slideToggle(500);
+  });
+});
+</script>
+
+<script type="text/javascript" src="js/utils/scrolltotop/scrolltotop.js"></script>
+<!-- InstanceEndEditable -->
+</body>
+<!-- InstanceEnd --></html>
