@@ -1,0 +1,334 @@
+<!DOCTYPE HTML>
+<html><!-- InstanceBegin template="/Templates/PageTemplate.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="css/ui-strong/jquery-ui-1.10.3.custom.min.css" />
+<link rel="stylesheet" type="text/css" href="css/import.css" />
+<!-- InstanceBeginEditable name="styles" -->
+<link rel="stylesheet" type="text/css" href="js/utils/scrolltotop/scrolltotop.css" />
+<!-- InstanceEndEditable -->
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>Tutorial on climate modelling</title>
+<!-- InstanceEndEditable -->
+<!-- InstanceBeginEditable name="head" -->
+<!--<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+	jax: ["input/TeX","output/HTML-CSS"],
+	tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+    },
+	menuSettings: {
+		zoom: "Click",
+		zscale: "150%"
+	},
+	styles: {
+		".MathJax_Display": {
+			"font-size" : "125%",
+			"padding-left" : "1em"
+		}
+	}
+});
+</script>-->
+<!--<script type="text/javascript"
+  src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>-->
+<script type="text/javascript"
+  src="../../MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- InstanceEndEditable -->
+<!-- InstanceParam name="page-type" type="text" value="page-info" -->
+</head>
+
+<body>
+<!-- InstanceBeginEditable name="warnings" -->
+<!-- InstanceEndEditable -->
+<div id="climate-sim" class="page-info">
+<!-- InstanceBeginEditable name="main" -->
+<!--<div class="cs-page-back">
+	<span class="page-link"><a href="index.html">Back to Climate Sim</a></span>
+</div>-->
+<div class="text-page text-block">
+<h1>Tutorials: Scientific Writing; A Basic Climate Model and Presentation.</h1>
+
+<dl>
+<dt><a name="overview"></a><dfn>Overview</dfn></dt>
+<dd>
+        <p>In these tutorials you will be assessed on three pieces of work. 
+        <ol>
+            <li>The first is on a piece of written work; </li>
+            <li>The second on your understanding of a basic climate model</li>
+            <li>The presentation of your findings as a group</li>
+        </ol>
+       </p>
+
+</dd>
+<dl>
+<dt><a name="tutorials"></a><dfn>First assignment: Scientific Writing</dfn></dt>
+<dd>
+
+<p> The purpose of the first 2 tutorials is for us all to get to know each other a bit more, by learning about what you are interested in scientifically. The topic you choose is unimportant, but it is best if you choose something you are genuinely interested in so that you are enthusiastic about it, which will give you a better chance of getting a good mark.</p>
+
+<div class="more-info">Tutorial 1: What are you interested in?</div>
+<div class="collapsable">
+  <p> In this tutorial we will discuss how you will prepare a short writing assessment. You should do the following:
+      <ul>
+        <li> Decide on a topic and let me know</li>
+        <li> In the week, prepare a page of A4, not including references and figures on a science topic of your chosing.</li> 
+        <li> The assignment should introduce the topic, say why it is interesting / important and briefly discuss any jey discussion points, controversies or unsolved aspects</li>
+        <li> This should be emailed to me by 14:00 the day prior to the next tutorial, there will be a 10% penalty for late submission.</li>
+      </ul>
+
+  </p>
+</div>
+
+<br>
+<br>  
+<div class="more-info">Tutorial 2: Explanation of area and feedback.</div>
+<div class="collapsable">
+  <p> In this tutorial we will discuss your writing assignments. You will briefly explain it to me and the rest of your group and I will give you some feedback. In the week you should:
+      <ul>
+        <li> Improve your report based on my feedback.</li>
+        <li> This should be emailed to me by 14:00 the day prior to the next tutorial, there will be a further 10% penalty for late submission.</li>
+      </ul>
+
+  </p>
+</div>
+
+<br>
+<br>  
+
+</dd>
+<dl>
+<dt><a name="tutorials"></a><dfn>Climate Modelling Tutorials</dfn></dt>
+<dd>
+
+	<p>In the exercise you will set up and test a simple climate model that considers solar radiation, greenhouse gases and clouds. For an overview of how the model works visit <a href="http://personalpages.manchester.ac.uk/staff/paul.connolly/teaching/climatesim/index.html">this webpage</a>.</p>
+
+<p>MATLAB is available on the University clusters. Do not worry if you are unsure how to use it: by week 4 you will have been introduced to it in the <i>data analysis</i> course.The following MATLAB files can be downloaded and put into your working directory in MATLAB:</p>
+    <ul>
+    <li><a href="material/tutorial_on_climate_modelling/albedo01.m">albedo01.m</a> </li>
+    <li><a href="material/tutorial_on_climate_modelling/batch_albedo01.m">batch_albedo01.m</a> </li>
+    <li><a href="material/tutorial_on_climate_modelling/albedo01a.m">albedo01a.m</a> </li>
+    <li><a href="material/tutorial_on_climate_modelling/batch_albedo01a.m">batch_albedo01a.m</a> </li>
+    <li><a href="material/tutorial_on_climate_modelling/albedo02.m">albedo02.m</a> </li>
+    </ul>
+
+<p>Once downloaded, open up the files and look at the code. Try to understand what each part of the code does, with reference to the climatesim page. To run the <code>albedo01.m</code> type <code>batch_albedo01</code> on the MATLAB command line. </p>
+
+<p>If you really prefer not to use MATLAB a simpler version of the climate model has been written in Excel:</p>
+    <ul>
+    <li><a href="material/tutorial_on_climate_modelling/basic_climate_model01.xlsx">basic_climate_model01.xlsx</a> </li>
+    </ul>
+
+<p>Once downloaded, open up the file and look sheet 1 and 2. Sheet 1 is a basic climate model with one type of clouds, whereas sheet 2 is similar but containing a fraction of clouds that have been <i>geoengineered</i>. Try to understand what each part of the Excel file does, with reference to the <a href="http://personalpages.manchester.ac.uk/staff/paul.connolly/teaching/climatesim/index.html">climatesim</a> page. The idea is you change some of the variables in the file and use the results to generate plots. </p>
+
+
+<div class="more-info">Tutorial 3: carbon dioxide concentrations #1.</div>
+<div class="collapsable">
+  <p><b><u>MATLAB users</u></b></p>
+  <p>Now type <code>batch_albedo01a</code> in MATLAB and you will get two figures: one of the Global Temperature vs the Cloud albedo and CO<sub>2</sub> mixing ratio and the other of the Radiative Forcing vs the same variables. Print out your figures, produced in MATLAB, and write down what they show. Bring the figures and your descriptions to the next tutorial for discussion</a>
+
+  <p>
+    Take a look at the latest <a href="http://www.ipcc.ch/">IPCC report</a> (the bit on radiative forcing). Radiative forcing can be expressed as the amount of energy going into the earth-atmosphere-ocean system due to a specific component (e.g. CO2, or clouds). 
+   <ul>
+   <li>Find the figure on radiative forcing and determine how large the CO2 component is.  </li>
+<!--   <li>Now run the <code>albedo01a.m</code> MATLAB file by typing <code>batch_albedo01a</code>.  </li>-->
+<!--   <li>The code will generate two plots. One the surface temperature, and the other the difference in energy put into the system from a <i>control</i> experiment. </li>-->
+   <li>Try to understand what your two plots are showing. How can you use the plots to estimate the radiative forcing due to CO<sub>2</sub>?
+   <li> Now uncomment lines 40 to 42 of <code>batch_albedo01a.m</code>, save, and run again. </li>
+   <li> Look at what is being plotted on line 41. Save this new figure too and bring all three figures to the next tutorial.
+   <li>Your mark for the tutorial will be based on your completion / attempt of the tasks and contribution to the discussion. If you do not complete you will lose 16% of the marks for this part of the assessment.</li>
+   </ul>
+  </p>
+
+  <p><b><u>Excel warriors</u></b></p>
+  <p>You should use sheet 1 to calculate the surface temperature for a range of values of CO2 mixing ratio (decide the range yourself). Plot this out. On the same graph do the same plot but for an increase in the cloud albedo. Repeat this for a few different cloud albedo values, so you have 4 line plots of surface temperature on the y-axis against CO2 mixing ratio on the x-axis and bring it to the next tutorial for discussion</a>
+
+  <p>
+    Take a look at the latest <a href="http://www.ipcc.ch/">IPCC report</a> (the bit on radiative forcing). Radiative forcing can be expressed as the amount of energy going into the earth-atmosphere-ocean system due to a specific component (e.g. CO2, or clouds). 
+   <ul>
+   <li>Find the figure on radiative forcing and determine how large the CO2 component is.  </li>
+   <li>Using sheet 1 generate a similar plot to above but instead of plotting the surface temperature on the y-axis plot the energy going into the system (calculated in cell B37).  </li>
+   <li>Better still, generate a plot similar to plot in the above bulletpoint but instead of the energy going into the system plot the difference between the energy going in and the energy going in for preindustrial concentrations of CO2. </li>
+   <li>Try to understand what these two plots are showing. How can you use the plots to estimate the radiative forcing due to CO<sub>2</sub>? </li>
+   <li>Your mark for the tutorial will be based on your completion / attempt of the tasks and contribution to the discussion. If you do not complete you will lose 16% of the marks for this part of the assessment.</li>
+   </ul>
+  </p>
+
+</div>
+
+<br>
+<br>
+<div class="more-info">Tutorial 4: carbon dioxide concentrations #2.</div>
+<div class="collapsable">
+  <p> We will discuss your results and what they mean as part of the tutorial.</p>
+  <p><b><u>MATLAB users</u></b></p>
+  <p>
+    Take a look at chapter 12 of the <a href="http://www.ipcc.ch/report/graphics/index.php?t=Assessment%20Reports&r=AR5%20-%20WG1&f=Chapter%2012">IPCC report</a> (the bit on long-term climate change). Find the plot of global surface warming for different emissions scenarios (zero emissions and constant emissions). 
+   <ul>
+   <li>You should determine what the different emissions scenarios correspond to in terms of CO<sub>2</sub>. How do you think you can do this? (hint a ball park estimate is a 2 to 3 ppm per year increase)</li>
+   <li>Use the <code>albedo01.m</code> file to reproduce a plot of surface temperature vs year for different sets of emissions scenarios and compare it to the plots in the IPCC report (to do this you will need to know the CO2 concentration in a particular year). 
+    <br>
+    For example it has been found that the current CO<sub>2</sub> mixing ratio is well described by:
+    <p>\[
+    CO_2=1.71\times 10^{-12}\exp\left(1.5916\times 10^{-2}\times year \right)+255 
+    \]
+    </p>
+    You could then type the following into the MATLAB commandline:<br>
+    <code>  years=1960:1:2100;<br>
+            N=length(years);<br>
+<br>
+            CO2=1.71e-12.*exp(1.5916e-2.*years)+255;<br>
+            for i=1:N<br>
+             &emsp;   tsurface(i)=albedo01(0.38,0.7,CO2(i),1.75); <br>
+            end<br>
+            plot(years,tsurface)
+    </code> 
+     <br>Try to understand why you are typing this, rather that just copy and paste.
+   </li>
+
+   <li>How does the plot compare? Bring your graph of time vs global surface temperature and a similar plot from the IPCC report to the next tutorial for discussion. This is just one emission scenario, but you may want to try a different rate.</li> 
+   <li>Your mark for the tutorial will be based on your completion / attempt of the tasks and contribution to the discussion. If you do not bring these graphs and discussions to the tutorial you will lose 16% for this part of the assessment.</li>
+   </ul>
+  </p>
+
+  <p><b><u>Excel warriors</u></b></p>
+  <p>
+    Take a look at chapter 12 of the <a href="http://www.ipcc.ch/report/graphics/index.php?t=Assessment%20Reports&r=AR5%20-%20WG1&f=Chapter%2012">IPCC report</a> (the bit on long-term climate change). Find the plot of global surface warming for different emissions scenarios (zero emissions and constant emissions). 
+   <ul>
+   <li>You should determine what the different emissions scenarios correspond to in terms of CO<sub>2</sub>. How do you think you can do this? (hint a ball park estimate is a 2 to 3 ppm per year increase)
+
+    <br>
+    Actually it has been found that the current CO<sub>2</sub> mixing ratio is well described by:
+    <p>\[
+    CO_2=1.71\times 10^{-12}\exp\left(1.5916\times 10^{-2}\times year \right)+255 
+    \]
+    </p>
+   </li>
+   <li>Use sheet 1 to reproduce a plot of surface temperature vs year (using the CO<sub>2</sub> mixing ratio determined by the formula above) for different sets of emissions scenarios and compare it to the plots in the IPCC report (to do this you will need to know the CO2 concentration in a particular year). </li>
+   <li>How does the plot compare? Bring your graph of time vs global surface temperature and a similar plot from the IPCC report to the next tutorial for discussion. This is just one emission scenario, but you may want to try a different rate too.</li> 
+   <li>Your mark for the tutorial will be based on your completion / attempt of the tasks and contribution to the discussion. If you do not bring these graphs and discussions to the tutorial you will lose 16% for this part of the assessment.</li>
+   </ul>
+  </p>
+
+
+</div>
+
+<br>
+<br>
+<div class="more-info">Tutorial 5: methane concentrations #1.</div>
+<div class="collapsable">
+
+  <p>
+    Take a look at a recent (controversial) Nature letter on atmospheric methane <a href="http://www.nature.com/nature/journal/v499/n7459/full/499401a.html">here</a> by Whiteman <i>et al.</i> (you may need to be on campus  / use vpn to download it). In addition take a look at <a href="material/tutorial_on_climate_modelling/Whiteman_Arising_Tuesday_ Response.doc">this</a> communication about the Whiteman paper.
+
+   <ul>
+   <li>Bring and comments to the next tutorial. </li>
+   <li>For discussion in the tutorial: how would you use results from this paper to estimate increases in atmospheric methane due to melting permafrost? (hint: the communication on the Whiteman paper may contain the information you need). </li> 
+   <li> Your mark for the tutorial will be based on your contribution to the discussion. If you do not contribute anything you will be penalised 16% for this assessment</li>
+   </ul>
+
+  </p>
+
+</div>
+
+<br>
+<br>
+<div class="more-info">Tutorial 6: methane concentrations #2.</div>
+<div class="collapsable">
+
+  <p>
+    In tutorial 5 you will have discussed how to estimate the amount of methane released into the atmosphere via the idea proposed in the Nature letter. 
+   <ul>
+   <li>Use the MATLAB climate model or the Excel spreadsheet to estimate how this release may potentially affect the global temperature. The approach is similar to that in tutorial 4 where different values of CO<sub>2</sub> were used. Whereas for this exercise you may wnat to change just the methane, or both the CO<sub>2</sub> and the methane and plot out the results. </li>
+   <li> Discuss any assumptions behind your calculations</li>
+   <li>For discussion in the tutorial: bring any figures to the next tutorial. You will lose 16% of the marks for this </li> 
+   </ul>
+  </p>
+
+</div>
+
+<br>
+<br>
+<div class="more-info">Tutorial 7: Clouds / geoengineering.</div>
+<div class="collapsable">
+
+  <p>In the tutorial we will discuss your figures and what they mean, failure to bring the figures / contribute will result in 20% penalty for this assessment. We will also discuss the concept of the marine cloud brightening scheme of geoengineering. This MATLAB script: <a href="material/tutorial_on_climate_modelling/albedo_geo.m">albedo_geo.m</a> can be used to look at the effects of geoengineering on the global temperature, discuss how the albedo of a geoengineered planet is calculated. </p>
+  </p>
+
+  <p> Try the following:
+  <code> <br> albedo_geog=linspace(0.356,0.6,50); <br>
+         co2ppm=385:5:2*385; <br>
+         for i=1:length(albedo_geog) <br>
+         &nbsp;  for j=1:length(co2ppm) <br>
+         &nbsp;&nbsp;     tsurface(i,j)=albedo_geo(albedo_geog(i),1,co2ppm(j));<br> 
+         &nbsp;  end  <br>
+         end  <br>
+         figure  <br>
+         pcolor(co2ppm,albedo_geog,tsurface);shading flat  <br>
+  </code> <br><br>
+  You aim is to leave the tutorial with an understanding of what this means and why it has been considered as a means to mitigate rising CO<sub>2</sub>.
+  </p>
+
+  <p> For the next tutorial you will prepare a PowerPoint as a group and present it in the final tutorial.</p>
+
+</div>
+
+</dd>
+<dl>
+<dt><a name="tutorials"></a><dfn>Presentation on climate modelling (tutorial 8).</dfn></dt>
+<dd>
+<p>Final tutorial: Prepare a PowerPoint presentation of around 15 minutes to describe your findings. You may work as a group, but share out the work so each person has a chance to present something. Before the final tutorial let me know who contributed and where by email. In deciding your mark for this assessment I will consider:
+
+<ul>
+  <li>Labelling on graphs</li>
+  <li> Clarity of scientific explanations / reasoning</li>
+  <li> Introduction of the science and why it is important</li>
+  <li> How you respond as a group to any questioning</li>
+  <li> Participation in the preparation of the talk</li>
+</ul>
+</p>
+</dd>
+
+<!-- InstanceEndEditable -->
+<footer>
+        <div class="logo">
+            <a href="http://www.manchester.ac.uk">
+                <img src="assets/logos/TAB_col_white_background.png" width="107" height="45" alt="University of Manchester">
+            </a>
+        </div>
+    	<!--<ul class="fmenu menu1">
+        	<li><a href="about.html">About</a></li>
+            <li><a href="credits.html">Credits</a></li>
+        </ul>-->
+        <ul class="fmenu menu2">
+            <li><a href="http://www.manchester.ac.uk/aboutus/documents/disclaimer/">Disclaimer</a></li>
+            <li><a href="http://www.manchester.ac.uk/aboutus/documents/privacy/">Privacy</a></li>
+            <li><a href="http://www.manchester.ac.uk/aboutus/documents/copyright/">Copyright notice</a></li>
+            <li><a href="http://www.manchester.ac.uk/aboutus/documents/accessibility/">Accessibility</a></li>
+            <li><a href="http://www.manchester.ac.uk/aboutus/documents/foi/">Freedom of information</a></li>
+            <li><a href="http://www.manchester.ac.uk/aboutus/governance/charitable-status/">Charitable status</a></li>
+            <li>Royal Charter Number: RC000797</li>
+        </ul>
+		
+    </footer>
+</div>
+<!-- InstanceBeginEditable name="scripts" -->
+
+<script language="javascript" type="text/javascript" src="js/jquery/jquery-1.10.2.min.js" ></script>
+<script type="text/javascript">
+jQuery(document).ready(function() {
+  $(".collapsable").hide();
+  $(".more-info").click(function() {
+  		$(this).next(".collapsable").slideToggle(500);
+  });
+});
+</script>
+
+<script type="text/javascript" src="js/utils/scrolltotop/scrolltotop.js"></script>
+<!-- InstanceEndEditable -->
+</body>
+<!-- InstanceEnd --></html>

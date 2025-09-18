@@ -1,0 +1,166 @@
+<!DOCTYPE HTML>
+<html><!-- InstanceBegin template="/Templates/PageTemplate.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+<meta name="description" content="Clouds & Orographic Precipitation Practical">
+<META NAME="ROBOTS" CONTENT="INDEX, NOFOLLOW">
+<!--<meta name="keywords" content="HTML,CSS,XML,JavaScript">-->
+<meta name="author" content="Paul Connolly">
+
+
+<link rel="stylesheet" type="text/css" href="css/ui-strong/jquery-ui-1.10.3.custom.min.css" />
+<link rel="stylesheet" type="text/css" href="css/import.css" />
+<!-- InstanceBeginEditable name="styles" -->
+<link rel="stylesheet" type="text/css" href="js/utils/scrolltotop/scrolltotop.css" />
+<!-- InstanceEndEditable -->
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>Single Column Model</title>
+<!-- InstanceEndEditable -->
+<!-- InstanceBeginEditable name="head" -->
+<!--<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+	jax: ["input/TeX","output/HTML-CSS"],
+	tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+    },
+	menuSettings: {
+		zoom: "Click",
+		zscale: "150%"
+	},
+	styles: {
+		".MathJax_Display": {
+			"font-size" : "125%",
+			"padding-left" : "1em"
+		}
+	}
+});
+</script>-->
+<!--<script type="text/javascript"
+  src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>-->
+<script type="text/javascript"
+  src="../../../MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- InstanceEndEditable -->
+<!-- InstanceParam name="page-type" type="text" value="page-info" -->
+</head>
+
+<body>
+<!-- InstanceBeginEditable name="warnings" -->
+<!-- InstanceEndEditable -->
+<div id="climate-sim" class="page-info">
+<!-- InstanceBeginEditable name="main" -->
+<!--<div class="cs-page-back">
+	<span class="page-link"><a href="index.html">Back to Climate Sim</a></span>
+</div>-->
+<div class="text-page text-block">
+
+<h1>Clouds & Orographic Precipitation Practical</h1>
+<dl>
+<dt><a name="overview"></a><dfn>Overview</dfn></dt>
+<dd>
+<p>This page describes a practical exercise to aid in the understanding of the distribution of precipitation over a region with orographic uplift. 
+Precipitation and the availability of water can have a strong impact on Ecology over such locations. 
+
+
+The model used is a <i> single column model</i> (SCM), which models processes in a 1-dimensional column of air. At every level in the vertical the model calculates the evolution of <i>cloud microphysical processes</i>, such as:
+<ul> 
+        <li> condensation onto aerosol
+        <li> collision-coalescence of drops
+        <li> initiation of the ice phase 
+        <li> formation of precipitating particles (rain, snow)
+        <li> and many more processes
+</ul>
+
+It also calculates the transport of precipitation between vertical levels, which is a dominant transport mechanism here.
+<br>
+<br>
+This column of air is lifted over a mountain and cools, allowing more condensation to take place (recall from the parcel modelling practical: lifting, leads to cooling). 
+The extra condensation can be enough to initiate precipitation, which then falls to Earth. 
+
+
+The model can be used to illustrate the following phenomena:
+<ul>
+<li>The effect of variations in cloud drop number concentrations on precipitation </li>
+<li>The effect of varying temperatures on idealised clouds and precipitation </li>
+<li>The effect of cloud depth on precipitation. </li>
+<li>The distribution of precipitation in idealised clouds </li>
+</ul>
+
+</p>
+
+</dd>
+
+
+<dt><a name="instructions2"></a><dfn>Running the model</dfn></dt>
+<dd>
+<p> 
+The idea for the practical is that you will run the model for different scenarios. 
+
+
+
+<dl>
+<dt><a name="examples"></a><dfn>Examples</dfn></dt>
+<dd>
+
+<p align="center"> <img src="material/orographic_precipitation_modelling/scm_plot.png" style="background-color:red alt="Smiley face" width="900"> </p>
+<p align="center"><font size="2" color="#008000" face="Century"> (a) shows the cloud droplet number concentration (CDNC); (b) shows the liquid water mixing ratio, \(q_c\); 
+    (c) shows the rain water mixing ratio, \(q_r\); (d) shows the ice crystal number concentration, \(N_{ice}\). The red patch shows the location of the mountain over which the air is lifted. Height of the mountain is around 1 km.</font></p>
+
+</dd>
+
+
+
+Download the practical sheet here and work through it:
+<ul>
+<li> <a href="material/orographic_precipitation_modelling/clouds_notes.pdf">clouds_notes.pdf</a> </li>
+</ul>
+
+</p>
+
+</dd>
+
+
+
+
+<!-- InstanceEndEditable -->
+<footer>
+        <div class="logo">
+            <a href="http://www.manchester.ac.uk">
+                <img src="assets/logos/TAB_col_white_background.png" width="107" height="45" alt="University of Manchester">
+            </a>
+        </div>
+    	<!--<ul class="fmenu menu1">
+        	<li><a href="about.html">About</a></li>
+            <li><a href="credits.html">Credits</a></li>
+        </ul>-->
+        <ul class="fmenu menu2">
+            <li><a href="http://www.manchester.ac.uk/aboutus/documents/disclaimer/">Disclaimer</a></li>
+            <li><a href="http://www.manchester.ac.uk/aboutus/documents/privacy/">Privacy</a></li>
+            <li><a href="http://www.manchester.ac.uk/aboutus/documents/copyright/">Copyright notice</a></li>
+            <li><a href="http://www.manchester.ac.uk/aboutus/documents/accessibility/">Accessibility</a></li>
+            <li><a href="http://www.manchester.ac.uk/aboutus/documents/foi/">Freedom of information</a></li>
+            <li><a href="http://www.manchester.ac.uk/aboutus/governance/charitable-status/">Charitable status</a></li>
+            <li>Royal Charter Number: RC000797</li>
+        </ul>
+		
+    </footer>
+</div>
+<!-- InstanceBeginEditable name="scripts" -->
+
+<script language="javascript" type="text/javascript" src="js/jquery/jquery-1.10.2.min.js" ></script>
+<script type="text/javascript">
+jQuery(document).ready(function() {
+  $(".collapsable").hide();
+  $(".more-info").click(function() {
+  		$(this).next(".collapsable").slideToggle(500);
+  });
+});
+</script>
+
+<script type="text/javascript" src="js/utils/scrolltotop/scrolltotop.js"></script>
+<!-- InstanceEndEditable -->
+</body>
+<!-- InstanceEnd --></html>

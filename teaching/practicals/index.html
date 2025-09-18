@@ -1,0 +1,120 @@
+<!DOCTYPE HTML>
+<html><!-- InstanceBegin template="/Templates/PageTemplate.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="css/ui-strong/jquery-ui-1.10.3.custom.min.css" />
+<link rel="stylesheet" type="text/css" href="css/import.css" />
+<!-- InstanceBeginEditable name="styles" -->
+<link rel="stylesheet" type="text/css" href="css/application.css" />
+<!-- InstanceEndEditable -->
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>Earth's radiation balance</title>
+<!-- InstanceEndEditable -->
+<!-- InstanceBeginEditable name="head" -->
+<!-- InstanceEndEditable -->
+<!-- InstanceParam name="page-type" type="text" value="page-sim" -->
+</head>
+
+<body>
+<!-- InstanceBeginEditable name="warnings" -->
+<div id="page-warning-notice">This tool relies on web technologies which don't currently work well in Internet Explorer.  Whilst the tool will initially work, there are known performance and graphics issues.  We recommend you use a <em>recent</em> version of another major browser such as Chrome, Firefox, Safari or the iOS browser.</div>
+<!-- InstanceEndEditable -->
+<div id="climate-sim" class="page-sim">
+<!-- InstanceBeginEditable name="main" -->
+	<div id="cs-surfacetemp">
+    	<span class="cs-valueC">#&deg;C</span>
+        <span class="cs-valueK">#&deg;K</span>
+        <span class="cs-thermometer">
+        	<span class="cs-reading cs-alcohol"></span>
+            <span class="cs-connectbulb cs-alcohol"></span>
+            <span class="cs-bulb cs-alcohol"></span>
+    </span>
+        <div class="cs-label">Surface temperature</div>
+        <a href="info.html#temp" class="cs-info">?</a>
+    </div>
+
+    <div id="cs-canvas-container">
+        <svg id="cs-canvas" width="1000px" height="1000px" viewBox="-0.5 -0.5 1000 1000" preserveAspectRatio="none"></svg>
+        <div id="cs-commentary"></div>
+    </div>
+   
+
+    <div id="cs-controls" class="ui-strong">
+    	<div id="cs-control-ch4" class="cs-control">
+        	<div class="cs-output"></div>
+        	<div class="cs-slider"></div>
+            <div class="cs-label">CH<sub>4</sub></div>
+            <a href="info.html#ch4" class="cs-info">?</a>
+        </div>
+        <div id="cs-control-co2" class="cs-control">
+        	<div class="cs-output"></div>
+        	<div class="cs-slider"></div>
+            <div class="cs-label">CO<sub>2</sub></div>
+            <a href="info.html#co2" class="cs-info">?</a>
+        </div>
+        <div id="cs-control-cloud" class="cs-control">
+        	<div class="cs-output"></div>
+        	<div class="cs-slider"></div>
+            <div class="cs-label">Cloudy fraction</div>
+            <a href="info.html#cloud" class="cs-info">?</a>
+        </div>
+        <div id="cs-control-albedo" class="cs-control">
+        	<div class="cs-output"></div>
+        	<div class="cs-slider"></div>
+            <div class="cs-label">Cloud albedo</div>
+            <a href="info.html#albedo" class="cs-info">?</a>
+        </div>
+    </div>
+<!-- InstanceEndEditable -->
+<footer>
+        <div class="logo">
+            <a href="http://www.manchester.ac.uk">
+                <img src="assets/logos/TAB_col_white_background.png" width="107" height="45" alt="University of Manchester">
+            </a>
+        </div>
+    	<ul class="fmenu menu1">
+        	<li><a href="about.html">About</a></li>
+            <li><a href="credits.html">Credits</a></li>
+        </ul>
+        <ul class="fmenu menu2">
+            <li><a href="http://www.manchester.ac.uk/aboutus/documents/disclaimer/">Disclaimer</a></li>
+            <li><a href="http://www.manchester.ac.uk/aboutus/documents/privacy/">Privacy</a></li>
+            <li><a href="http://www.manchester.ac.uk/aboutus/documents/copyright/">Copyright notice</a></li>
+            <li><a href="http://www.manchester.ac.uk/aboutus/documents/accessibility/">Accessibility</a></li>
+            <li><a href="http://www.manchester.ac.uk/aboutus/documents/foi/">Freedom of information</a></li>
+            <li><a href="http://www.manchester.ac.uk/aboutus/governance/charitable-status/">Charitable status</a></li>
+            <li>Royal Charter Number: RC000797</li>
+        </ul>
+		
+    </footer>
+</div>
+<!-- InstanceBeginEditable name="scripts" -->
+<!-- Core javascript libraries -->
+<script language="javascript" type="text/javascript" src="js/jquery/jquery-1.10.2.min.js" ></script>
+<script language="javascript" type="text/javascript" src="js/jquery/jquery-ui-1.10.3.custom.min.js" ></script>
+<script language="javascript" type="text/javascript" src="js/jquery/jquery.ui.touch-punch.min.js" ></script>
+<script language="javascript" type="text/javascript" src="js/snap/snap.svg-min.js"></script>
+
+<!-- Application scripts -->
+<script language="javascript" type="text/javascript" src="js/config.js" ></script>
+<script language="javascript" type="text/javascript" src="js/utils/utils.js" ></script>
+<script language="javascript" type="text/javascript" src="js/utils/imageCache.js" ></script>
+<script language="javascript" type="text/javascript" src="js/sim-launcher.js" ></script>
+
+<script language="javascript" type="text/javascript" src="js/climate-sim/Arrow.js" ></script>
+<script language="javascript" type="text/javascript" src="js/climate-sim/WavyArrow.js" ></script>
+<script language="javascript" type="text/javascript" src="js/climate-sim/SolarRadiation.js" ></script>
+<script language="javascript" type="text/javascript" src="js/climate-sim/InfraredRadiation.js" ></script>
+
+<script language="javascript" type="text/javascript" src="js/climate-sim/Sun.js" ></script>
+<script language="javascript" type="text/javascript" src="js/climate-sim/CO2Source.js" ></script>
+<script language="javascript" type="text/javascript" src="js/climate-sim/IndustrialCentre.js" ></script>
+<script language="javascript" type="text/javascript" src="js/climate-sim/Cloud.js" ></script>
+<script language="javascript" type="text/javascript" src="js/climate-sim/CloudScape.js" ></script>
+<script language="javascript" type="text/javascript" src="js/climate-sim/Cow.js" ></script>
+<script language="javascript" type="text/javascript" src="js/climate-sim/CowHerd.js" ></script>
+
+<script language="javascript" type="text/javascript" src="js/snap-app.js" ></script>
+<!-- InstanceEndEditable -->
+</body>
+<!-- InstanceEnd --></html>

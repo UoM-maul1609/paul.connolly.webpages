@@ -1,0 +1,70 @@
+@charset "utf-8";
+/* CSS Document */
+
+.text-page.text-block {
+	min-height: 250px;
+}
+
+.text-block h1 {
+	font-size: 2em;
+	color: #402312;
+}
+.text-block h2 {
+	font-size: 1.4em;
+	color: #402312;
+}
+.text-block h3 {
+	font-size: 1.2em;
+}
+
+.text-block p,
+.text-block ul>li,
+.text-block dl dt,
+.text-block dl dd,
+.text-block table {
+	font-size: 1.4em;
+}
+.text-block p {
+	line-height: 1.5em;
+	margin-bottom: 1em;
+}
+.text-block >ul>li {
+	margin-bottom: 0.4em;
+}
+.text-block dl dd {
+	line-height: 1.5em;
+	margin-bottom: 40px;
+}
+.text-block dl dd p {
+	font-size: 1em;
+}
+.text-block dl dd>p {
+	margin-top: 0;
+}
+.text-block dl dt {
+	margin-top: 1em;
+	font-weight: bold;
+}
+.text-block.text-center,
+.text-block .text-center {
+	text-align: center;
+}
+
+.text-block a:link,
+.text-block a:hover,
+.text-block a:active,
+.text-block a:visited {
+	color: #024c75;
+	text-decoration: none;
+}
+.text-block a:hover {
+	text-decoration: underline;
+}
+.text-block a[target=_blank] {
+	background: url(../assets/template/external-link.png) center right no-repeat;
+	padding-right: 12px;
+}
+.text-block img {
+	max-width: 100%;
+	height: auto;
+}

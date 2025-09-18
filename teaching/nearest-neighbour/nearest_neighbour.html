@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+<meta name="description" content="Nearest Neighbour Exercise">
+<META NAME="ROBOTS" CONTENT="INDEX, NOFOLLOW">
+<!--<meta name="keywords" content="HTML,CSS,XML,JavaScript">-->
+<meta name="author" content="Paul Connolly">
+
+  
+  <title>Nearest Neighbour Exercise</title>
+
+  <script src="https://unpkg.com/mathjs@6.6.2/dist/math.min.js"></script>
+  <script src="https:////cdn.jsdelivr.net/npm/jstat@latest/dist/jstat.min.js"></script> <!-- include jStat, from the CDN or otherwise -->
+<!--   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.min.js"></script>
+  <script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-MML-AM_CHTML">
+  </script>
+  <style>
+    body {
+      font-family: sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <h1>Nearest Neighbour Exercise</h1>
+  <h2>Description</h2>
+  <p>
+    Here you will generate different spatial distributions of objects and 
+    calculate the corresponding nearest neighbour statistic. 
+  </p>
+
+$$Rn=\frac{\bar{D}\left(Obs\right)}{0.5\sqrt{\frac{a}{n}}}$$
+
+where \(Rn\) is the statistic; \(\bar{D}\) is the average distance of the nearest 
+neighbour distance between all objects over a total area \(a\); and \(n\) is the number of 
+objects within that area. 
+
+<br><br>
+Calculating \(Rn\) can cause some confusion. For each object we need to find its nearest-neighbour object the square area and measure the distance to 
+it. This will be a list of measurements, \(D\), from which we calculate the mean and put this into the formula for the \(Rn\) statistic, above. 
+
+<br><br>
+
+What values of \(Rn\) do we expect?
+<br>
+Well, let us define the <i>total area</i> divided by the number of objects equal to the <i>average area of each object</i>. Taking the square-root of 
+the <i>average area of each object</i> would equal the <i>average distance between each object</i>. 
+
+<br><br>
+<b>Regular spacing</b><br><br>
+If the objects are <i>regularly spaced</i> 
+(i.e. they have equal spacings) then the <i>average distance between each object</i> is equal to 
+the <i>nearest neighbour distance</i>, so the limiting value of \(Rn\) in this case will be 2 (due to the factor of 0.5 in the denominator).
+
+<br><br>
+<b>Random spacing</b><br><br>
+In the case of random spacing there will be some objects closer than the <i>average distance between each object</i> and some further apart. However, mathematically
+it can be shown that the average of the <i>nearest neighbour spacing</i> in this case is exactly have of the average spacing. Therefore, \(Rn=1.0\)
+is the limiting value for randomly spaced objects.
+
+<br><br>
+<b>Clustering</b><br><br>
+
+The other case to consider is clustering. If the objects are clustered we observe that \(Rn<1.0\).
+<hr>
+<br><br>
+<h2>Simulations</h2>
+Below we can conduct computer simulations to space objects differently and calculate the \(Rn\) statistic. Click "Run Simulation" to compute the results.
+For each case do the following:
+<ul>
+<li> Save a copy of the image to your computer and record the value of the statistic. You can click on the camera above the image to save a PNG.
+<li> Change the length of the area under investigation (which determines the <i>total area</i>). Does this affect the results significantly? Comment why or why not.
+<li> Run the simulation several times to see how variable the results are - just click on "Run Simulation" a few times. Comment on the results.
+<li> Try increasing the number of objects along dimension \(x\) to a maximum of 100. How does this affect the results (in the case of regular spacing)? What do the results tend to?
+</ul>
+
+<br><br>
+
+
+<b>Choose type of simulation to do, corresponding to different spacings:</b><br>
+<input type="number" min="1" max="150" step="1" name="run" id="num1" value="10" size="10" /> Average number of objects along \(x\)<br>
+<input type="number"  min="5" max="10000" name="run" id="num2" value="250" size="10" /> Length of area in metres<br>
+<input id='regular' type="radio" name="run" value="regular" checked> Regular<br>
+<input id='random' type="radio" name="run" value="random"> Random<br>
+<input id='cluster1' type="radio" name="run" value="cluster1"> Cluster 1<br>
+<input id='cluster2' type="radio" name="run" value="cluster2"> Cluster 2<br>
+<br>
+<input id='mybutton1' type="button" value="Run Simulation"  onclick="doIt()"><br>
+<input id='mybutton2' type="button" value="Reset" hidden="hidden"><br>
+
+<br><br>
+
+
+<div id="myDiv" ></div>
+<div id="myText" ></div>
+
+  
+  <script>
+
+    function doIt() { 
+        //document.getElementById('mybutton1').style.display = "none";
+        //document.getElementById('mybutton2').style.display = "block";
+        // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        // Run the model
+        // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        arr=runModel();
+        xs=arr[0];
+        ys=arr[1];
+        totalNum=arr[2];
+        maxx=arr[3];
+        maxy=arr[4];
+        squareLen=arr[5];
+        Ds=arr[6];
+        mrows=arr[7];
+        // -----------------------------------------------------------------------------------
+
+
+
+    
+    
+    
+        // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        // Calculate statistic
+        // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        xs_old=[...xs];
+        ys_old=[...ys];
+        xn=[];
+        yn=[];
+        for (j = 0 ; j < totalNum ; ++j) {
+            xn.push(0.);
+            yn.push(0.);
+        }
+//         ir=Math.floor(Math.random() * Math.floor(totalNum));
+//         xcur=xs[ir];
+//         ycur=ys[ir];
+
+//         xn[0]=xcur;
+//         yn[0]=ycur;
+//         
+//         xstart=[];
+//         ystart=[];
+//         xstart.push(xcur);
+//         ystart.push(ycur);
+        // https://love2dev.com/blog/javascript-remove-from-array/
+//         removed = xs.splice(ir,1);
+//         removed = ys.splice(ir,1);
+
+
+        for (j=0;j<totalNum;++j) {
+
+            // Calculate the distances to all neighbours++++++++++++++++++++++++++++++++++
+            dists=[];
+            for (i=0;i<totalNum;++i) {
+                if (i != j) {
+                    dists.push(Math.sqrt((xs[j]-xs[i])**2+(ys[j]-ys[i])**2));
+                }
+            }
+            //----------------------------------------------------------------------------
+            
+            
+            // For this tree find, the nearest neighbour++++++++++++++++++++++++++++++++++
+            maxd=10000000.;
+            imin=-99;
+            for (i=0;i<totalNum;++i) {
+                if((dists[i]<maxd) & (i != j))  {
+                    maxd=dists[i];
+                    imin=i;
+                }
+            }
+            //----------------------------------------------------------------------------
+            
+            
+            Ds[j]=dists[imin];
+            xn[j+1]=xs[imin];
+            yn[j+1]=ys[imin];
+        }
+        
+        
+        var sum = 0.;
+        for (i=0;i<Ds.length;++i) sum += Ds[i];
+        var meanDs = sum / Ds.length;
+//         for (i=0;i<30;++i) sum += Ds[i];
+//         var meanDs = sum / 30;
+        
+        
+        
+
+        var delta1=0.; //maxx/mrows/2;
+        var area=(maxx+delta1)*(maxy+delta1);
+        var Rn=meanDs/(0.5*Math.sqrt(area/(totalNum)));
+    
+    
+        id=document.getElementById('myText');
+        id.innerHTML="The value of the NN statistic is: " + Rn.toFixed(2)  + 
+        '<br>The mean of the NN distances is: ' + meanDs.toFixed(2)  +
+        '<br>The area is: ' + area.toFixed(2)  +
+        '<br>The total number, n, is: ' + totalNum.toFixed(2)  +
+            "<br><br>";
+        //document.write("The value of the NN statistic is: " + Rn.toFixed(2));
+        //document.write("<br><br>(note that the actual value depends exactly where we start)");
+        // -----------------------------------------------------------------------------------
+    
+    
+    
+
+        // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        // Routine to set-up the plot
+        // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        var layout = {
+          width: 800,
+          title: 'Spatial Plot: Plan view',
+          xaxis: {
+            range: [0, maxx+10],
+            title: {
+                text: 'x (m)'
+            }
+          },
+          yaxis: {
+            range: [0, maxy+10],
+            title: {
+                text: 'y (m)'
+            }
+          },
+          scaleratio: 1,
+          scaleanchor: 'x'
+          //showlegend: false
+        };
+    
+        // https://plotly.com/javascript/line-and-scatter/
+        var trace1 = {
+          x: xs_old,
+          y: ys_old,
+          mode: 'markers',
+          marker: {
+            size: 10,
+            symbol: 'star',
+            color: 'rgba(156, 165, 196, 0.95)',
+          },
+          type: 'scatter',
+          name: 'location of plants'
+        }; 
+        
+        // -----------------------------------------------------------------------------------
+      
+        // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        // Do the plot
+        // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        // https://plotly.com/javascript/line-and-scatter/
+        var data=[trace1]; //,trace1a,trace2];
+        //document.write("Hello World1");
+        
+        Plotly.newPlot('myDiv', data, layout, {showSendToCloud: true});
+        //document.write("Hello World2");
+        // -----------------------------------------------------------------------------------
+    }  
+
+  
+  
+ 
+    function runModel() {
+        var a=1e2;
+        var b=1e1;
+        var tStat;
+    
+    
+        var num1=parseInt(document.getElementById('num1').value);
+        var num2=parseFloat(document.getElementById('num2').value);
+        var maxcols=num1;
+        var maxrows=num1*2;
+        var squareLen=num2;
+        var totalNum=maxrows/2*maxcols+maxrows/2*(maxcols-1);
+        var maxx=squareLen;
+        var maxy=squareLen*(maxrows-1)/(maxrows-2);
+        var cind=0;
+        
+        // zero array of length totalNum
+        xs=[];
+        ys=[];
+        for (j = 0 ; j < totalNum ; ++j) {
+            xs.push(0.);
+            ys.push(0.);
+        }
+        Ds=[];
+        for (j = 0 ; j < totalNum-1 ; ++j) {
+            Ds.push(0.);
+        }
+        for (j=0;j<maxrows;++j) {
+            if (((j+1) % 2) == 0) {
+                // even
+                number=maxcols-1;
+                for (i=0;i<number;++i) {
+                    xs[cind+i] = 0.+squareLen/(maxcols-1)*(number-1)/(number-1)*i+
+                        squareLen/number/2.;
+                    ys[cind+i]=(j)*maxy/(maxrows-1);//*1./2.;
+                }
+                cind=cind+number;
+                
+            } else {
+                // odd
+                number=maxcols;
+                for (i=0;i<number;++i) {
+                    xs[cind+i] = 0.+squareLen/(number-1)*i;
+                    ys[cind+i]=(j)*maxy/(maxrows-1);//*1./2.;
+                }
+                cind=cind+number;
+                
+            }
+        }
+        if(document.getElementById('random').checked) {
+            for (i=0;i<totalNum;++i) {
+                xs[i]=Math.random()*maxx;
+                ys[i]=Math.random()*maxy;
+            }        
+        }
+                
+        if(document.getElementById('cluster2').checked) {
+            for (i=0;i<totalNum;++i) {
+                r1=Math.random();
+                r2=Math.random();
+            
+    //             xs[i]+=jStat.beta.inv(r1,a, b)*maxx;
+    //             ys[i]+=jStat.beta.inv(r2,a, b)*maxy;
+            
+                if (i<totalNum/2) {
+                    xs[i]=jStat.normal.inv(r1,30, 10);
+                    ys[i]=jStat.normal.inv(r2,30, 10);
+                } else {
+                    xs[i]=jStat.normal.inv(r1,80, 5);
+                    ys[i]=jStat.normal.inv(r2,80, 5);            
+                }
+            
+                if (xs[i]> maxx) xs[i] = (xs[i] % maxx);
+                if (ys[i]> maxy) ys[i] = (ys[i] % maxy);
+                //ys[i]=Math.random()*maxy;
+            }        
+        }        
+        if(document.getElementById('cluster1').checked) {
+            for (i=0;i<totalNum;++i) {
+                r1=Math.random();
+                r2=Math.random();
+            
+                xs[i]=jStat.normal.inv(r1,100, 10);
+                ys[i]=jStat.normal.inv(r2,100, 10);
+            
+                if (xs[i]> maxx) xs[i] = (xs[i] % maxx);
+                if (ys[i]> maxy) ys[i] = (ys[i] % maxy);
+                //ys[i]=Math.random()*maxy;
+            }        
+        }        
+        
+        return [xs,ys,totalNum,maxx,maxy,squareLen,Ds,maxrows];  
+    }
+    
+  </script>
+  
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- default -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-8260571040605089"
+     data-ad-slot="8018166452"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+  
+</body>
+  
+</html>
+

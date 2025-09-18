@@ -1,0 +1,44 @@
+@charset "utf-8";
+/* CSS Document */
+
+/***
+ *** Scroll to top implementation
+ ***/
+#top-message a
+{
+    /* display: block before hiding */
+    display: block;
+    display: none;
+
+    /* link is above all other elements */
+    z-index: 999; 
+
+    /* link doesn't hide text behind it */
+    opacity: .75;
+
+    /* link stays at same place on page */
+    position: fixed;
+
+    /* link goes at the bottom of the page */
+    top: 100%;
+    margin-top: -80px; /* = height + preferred bottom margin */
+
+    /* link is centered */
+    left: 50%;
+    margin-left: -160px; /* = half of width */
+
+    /* round the corners (to your preference) */
+	border-radius: 24px;
+    -moz-border-radius: 24px;
+    -webkit-border-radius: 24px;
+
+    /* make it big and easy to see (size, style to preferences) */
+    width: 300px;
+    line-height: 48px;
+    height: 48px;
+    padding: 10px;
+    background-color: #000;
+    font-size: 24px;
+    text-align: center;
+    color: #fff;
+}

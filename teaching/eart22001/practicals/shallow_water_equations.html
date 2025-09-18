@@ -1,0 +1,365 @@
+<!DOCTYPE HTML>
+<html><!-- InstanceBegin template="/Templates/PageTemplate.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+<meta name="description" content="Shallow water model simulation in Python">
+<META NAME="ROBOTS" CONTENT="INDEX, NOFOLLOW">
+<!--<meta name="keywords" content="HTML,CSS,XML,JavaScript">-->
+<meta name="author" content="Paul Connolly">
+
+
+<link rel="stylesheet" type="text/css" href="css/ui-strong/jquery-ui-1.10.3.custom.min.css" />
+<link rel="stylesheet" type="text/css" href="css/import.css" />
+<!-- InstanceBeginEditable name="styles" -->
+<link rel="stylesheet" type="text/css" href="js/utils/scrolltotop/scrolltotop.css" />
+<!-- InstanceEndEditable -->
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>Shallow Water Equations</title>
+<!-- InstanceEndEditable -->
+<!-- InstanceBeginEditable name="head" -->
+<!--<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+	jax: ["input/TeX","output/HTML-CSS"],
+	tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+    },
+	menuSettings: {
+		zoom: "Click",
+		zscale: "150%"
+	},
+	styles: {
+		".MathJax_Display": {
+			"font-size" : "125%",
+			"padding-left" : "1em"
+		}
+	}
+});
+</script>-->
+<!--<script type="text/javascript"
+  src="https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>-->
+<script type="text/javascript"
+  src="../../../MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- InstanceEndEditable -->
+<!-- InstanceParam name="page-type" type="text" value="page-info" -->
+</head>
+
+<body>
+<!-- InstanceBeginEditable name="warnings" -->
+<!-- InstanceEndEditable -->
+<div id="climate-sim" class="page-info">
+<!-- InstanceBeginEditable name="main" -->
+<!--<div class="cs-page-back">
+	<span class="page-link"><a href="index.html">Back to Climate Sim</a></span>
+</div>-->
+<div class="text-page text-block">
+
+<h1>Shallow Water Equations in Python</h1>
+<dl>
+<dt><a name="overview"></a><dfn>Overview</dfn></dt>
+<dd>
+<p>This page is adapted from <a href="http://www.met.reading.ac.uk/~swrhgnrj/shallow_water_model/"> Robin Hogan's webpage </a> on Shallow Water Equations in MATLAB. The model can be used to illustrate the following phenomena:
+<ul>
+<li>Gravity waves </li>
+<li>Tsunamis </li>
+<li>Orographic Rossby waves </li>
+<li>Upscale energy cascades </li>
+<li>Barotropic instability and frontal cyclogenesis </li>
+<li>Equatorial Rossby and Kelvin waves </li>
+<li>Numerical instability and numerical artifacts </li>
+</ul>
+
+<div class="more-info">More info...</div>
+<div class="collapsable">
+    <p align="center"><font size="2" color="#008000" face="Century"> 
+    The equations that are solved are the <em>shallow water equations</em> which are:
+    \[
+    \begin{eqnarray}
+    \frac{\partial h}{\partial t}+\frac{\partial \left(uh\right)}{\partial x}+\frac{\partial \left(vh\right)}{\partial y}=0,\\
+
+    \frac{\partial uh}{\partial t}+\frac{\partial \left(u^2h+gh^2/2\right)}{\partial x}+\frac{\partial \left(uvh\right)}{\partial y}=h\left(fv-g\frac{\partial H}{\partial x} \right),\\    
+
+    \frac{\partial vh}{\partial t}+\frac{\partial \left(uvh\right)}{\partial x}+\frac{\partial \left(v^2h+gh^2/2\right)}{\partial y}=h\left(-fu-g\frac{\partial H}{\partial y} \right),
+    \end{eqnarray}
+    \]
+    More details on why we are solving these equations, and where they come from, is given below.
+    </font></p>
+</div>
+
+
+</p>
+
+</dd>
+
+<dt><a name="instructions"></a><dfn>Instructions</dfn></dt>
+<dd>
+<p> Download the files to a directory on the server computer and enter into the <b>python</b> directory as your working directory. The address is:<br><br>
+
+<a href="https://github.com/EnvModelling/shallow-water-model-practical">https://github.com/EnvModelling/shallow-water-model-practical</a>
+
+</p>
+
+
+<br>
+<p>Then, download the practical sheet here and work through it:
+<ul>
+<li> <a href="material/shallow_water/swe_notes_pc.pdf">swe_notes_pc.pdf</a> </li>
+</ul>
+</p>
+</dd>
+
+
+
+
+<dl>
+<dt><a name="examples"></a><dfn>Examples</dfn></dt>
+<dd>
+
+<p align="center"> <img src="material/shallow_water/barotropic01.gif" style="background-color:red alt="Smiley face" width="900"> </p>
+<p align="center"><font size="2" color="#008000" face="Century"> Above shows the height of the fluid, with wind vectors superimposed as well as vorticity of the fluid plotted in the lower graph. We start with a jet and this breaks down into barotropic instability.</font></p>
+
+<hr>
+
+<p align="center"> <img src="material/shallow_water/rossby_gw01.gif" style="background-color:red alt="Smiley face" width="900"> </p>
+<p align="center"><font size="2" color="#008000" face="Century"> Above shows easterly flow at the equator. Similar to barotropic instability the flow breaks down, but is guided by the change of sign of the Coriolis parameter.</font></p>
+
+<hr>
+
+<p align="center"> <img src="material/shallow_water/real_orography01.gif" style="background-color:red alt="Smiley face" width="900"> </p>
+<p align="center"><font size="2" color="#008000" face="Century"> The above shows how a uniform westerly flow can develop into a Rossby wave downwind of high mountains.</font></p>
+
+</dd>
+
+<dl>
+<dt><a name="equations"></a><dfn>Shallow Water Equations</dfn></dt>
+<dd>
+The shallow water equations do not necessarily have to describe the flow of water. They can describe the behaviour of other fluids under certain situations. For example we can think of the atmosphere as a fluid. The equations governing its behaviour are the Navier-Stokes equations; however, these are notoriously difficult to solve. The shallow water equations can be thought of as an approximation to the Navier-Stokes equations and are solved more readily. There are four points we need to consider (click on the info tabs below for details)
+<br>
+<br>
+
+<div class="more-info">Equation of continuity...</div>
+<div class="collapsable">
+  <p>
+    Key laws used in fluid mechanics are continuity equations. For a constant density fluid the continuity equation specifies that there can be no divergence within the fluid. If there were then the fluid could not maintain constant density because mass would either accumulate or be removed from different parts of the fluid. Hence, we set the divergence to zero:
+    <p>\[
+    \begin{eqnarray}
+    \nabla\cdot \vec{v}&=&0\\
+    \frac{\partial u}{\partial x} +\frac{\partial v}{\partial y} +\frac{\partial w}{\partial z} &=&0
+    \end{eqnarray}
+    \]</p>
+    In this shallow water model we are only considering 2-d flow; however, there is a third dimension, which is the height of the fluid. We assume that vertical motions are the same throughout the depth of the fluid; hence, we can integrate the contunuity equation over \(z\) between \(H\) and \(h+H\):
+    <p>
+    \[
+     \int _H ^{h+H} \frac{\partial u}{\partial x} dz+
+     \int _H ^{h+H} \frac{\partial v}{\partial y} dz+
+     \int _H ^{h+H} \frac{\partial w}{\partial z} dz=0
+    \]
+    </p>
+    For the first two terms we apply a technique called <a href="http://en.wikipedia.org/wiki/Differentiation_under_the_integral_sign"> <i>differentiation under the integral sign</i></a> to find, e.g.:
+    <p>
+    \[
+    \int _H^{H+h(x,y)} \frac{\partial u}{\partial x} dz = \frac{\partial }{\partial x}\left(\int _H^{H+h(x,y)} u dz \right)-u(x,y)\frac{\partial h}{\partial x} 
+    \]
+    </p>
+    <p>
+    We also note that the third term \(\int _H ^{h+H} \frac{\partial w}{\partial z} dz\) evaluates as \(w(H+h)-w(H)\) and since \(w(H)=0\) this is equal to the total derivative of the top of the fluid wrt time, \(=\frac{\partial h}{\partial t}+u\frac{\partial h}{\partial x}+v\frac{\partial h}{\partial y}\); hence:
+    </p>
+    <p>
+    \[
+    \frac{\partial h}{\partial t}+\frac{\partial \left(hu\right)}{\partial x}+\frac{\partial \left(hv\right)}{\partial y}=0
+    \]
+    </p>
+    This is the equation of continuity solved in the shallow water model; however, more equations need to be solved.
+  </p>
+</div>
+
+<br>
+
+
+<div class="more-info">Equation for pressure...</div>
+<div class="collapsable">
+  <p>
+    We assume that the fluid is in hydrostatic balance. That is:
+    <p>\[
+    \frac{\partial P}{\partial z}=-\rho g
+    \]</p>
+    with \(\rho\) equal to a constant.
+    <br>
+    <br>
+    The hydrostatic equation with constant density implies that we can describe the pressure at height \(z\) as:
+    <p>
+    \[
+    P\left(z\right)=-\rho g\left(z-H\right)+P_s\left(x,y,t \right)
+    \]
+    </p>  
+    where \(H\) is the height of the orography. With the boundary condition that \(P\left(z=h+H\right)=0\) we may determine \(P_s\) and find that:
+    <p>
+    \[
+    P\left(z\right)=-\rho g\left(z-\left(H+h\right)\right)
+    \]
+    </p>  
+  </p>
+</div>
+
+<br>
+
+<div class="more-info">Non-conservative Horizontal Momentum Equations...</div>
+<div class="collapsable">
+  <p>
+  The non-conservative horizontal momentum equations are (i.e. the Navier-Stokes equations in 2-d):
+    <p>
+    \[
+    \begin{eqnarray}
+      \frac{\partial u}{\partial t}+u\frac{\partial u}{\partial x}+v\frac{\partial u}{\partial y} &=& fv -\frac{1}{\rho}\frac{\partial P}{\partial x}\\
+
+      \frac{\partial v}{\partial t}+u\frac{\partial v}{\partial x}+v\frac{\partial v}{\partial y} &=& -fu -\frac{1}{\rho}\frac{\partial P}{\partial y}
+    \end{eqnarray}
+    \]
+    </p>
+
+    Recall from above we found that the pressure field:
+    <p>
+    \[
+    P\left(z\right)=-\rho g\left(z-\left(H+h\right)\right)
+    \]
+    </p>  
+    Now we use this equation to redefine the pressure derivatives on the right hand side of the momentum equations. We find that:
+    <p>
+    \[
+    \begin{eqnarray}
+       -\frac{1}{\rho}\frac{\partial P}{\partial x} &=& -g\frac{\partial \left( h+H\right)}{\partial x}\\
+       -\frac{1}{\rho}\frac{\partial P}{\partial y} &=& -g\frac{\partial \left( h+H\right)}{\partial y}
+    \end{eqnarray}
+    \]
+    </p>
+  </p>
+</div>
+
+<br>
+
+<div class="more-info">Conservative Horizontal Momentum Equations...</div>
+<div class="collapsable">
+  <p>
+  In order to derive the remaining two equations we use the Non-conservative Horizontal Momentum Equations with the Equation of continuity to derive the conservative Horizontal Momentum Equations. 
+  <br>
+  <br>
+  First we multiply the non-conservative horizontal momentum equations by \(h\)
+    <p>
+    \[
+    \begin{eqnarray}
+      h\frac{\partial u}{\partial t}+hu\frac{\partial u}{\partial x}+hv\frac{\partial u}{\partial y} &=& fhv -hg\frac{\partial \left(h+H\right)}{\partial x}\\
+
+      h\frac{\partial v}{\partial t}+hu\frac{\partial v}{\partial x}+hv\frac{\partial v}{\partial y} &=& -fhu -hg\frac{\partial \left(h+H\right)}{\partial y}
+    \end{eqnarray}
+    \]
+    </p>
+  
+  <br>
+  <br>
+  We then add the product of \(u\) and the continuity equation to the \(u\) momentum equation (above) and the product of \(v\) and continuity equation to the \(v\) momentum equation (above). The \(u\) momentum equation then becomes:
+    <p>
+    \[
+    \begin{eqnarray}
+      h\frac{\partial u}{\partial t}+u\frac{\partial h}{\partial t}+u\frac{\partial \left(hu\right)}{\partial x}+u\frac{\partial \left(hv\right)}{\partial y}+  hu\frac{\partial u}{\partial x}+hv\frac{\partial u}{\partial y} &=& fhv -hg\frac{\partial \left(h+H\right)}{\partial x}
+    \end{eqnarray}
+    \]
+    </p>
+    and there is a corresponding  \(v\) momentum equation.
+    <br>
+    <br>
+    We may gather some of the terms together by making use of the product rule for differentiation. The final result is the shallow water conservative momentum equations:
+    <p>
+    \[
+    \begin{eqnarray}
+      \frac{\partial hu}{\partial t}+\frac{\partial \left(hu^2+\frac{gh^2}{2}\right)}{\partial x}+\frac{\partial uvh}{\partial y} &=& fhv -hg\frac{\partial \left(H\right)}{\partial x}\\
+
+      \frac{\partial hv}{\partial t}+\frac{\partial uvh}{\partial x}+\frac{\partial \left(hv^2+\frac{gh^2}{2}\right)}{\partial y} &=& -fhu -hg\frac{\partial \left(H\right)}{\partial y}
+    \end{eqnarray}
+    \]
+    </p>
+
+  </p>
+</div>
+
+
+</dd>
+
+
+<dt><a name="instructions2"></a><dfn>Running the model</dfn></dt>
+<dd>
+<p> You should have downloaded the files to your working directory in Python. This exercise guides you through setting up and running the model for different scenarios. We will consider:
+<ul>
+<li> Gravity waves </li>
+<li> Tsunamis </li>
+<li> Barotropic instability </li>
+<li> Orographic Rossby waves </li>
+<li> Jupiter's Great Red Spot </li>
+<li> Equatorially trapped waves (Rossby-Gravity waves)</li>
+<li> Equatorial Kelvin wave </li>
+<li> Weather forecast </li>
+</ul>
+
+
+
+</p>
+
+</dd>
+
+
+
+
+<!-- InstanceEndEditable -->
+<footer>
+        <div class="logo">
+            <a href="http://www.manchester.ac.uk">
+                <img src="assets/logos/TAB_col_white_background.png" width="107" height="45" alt="University of Manchester">
+            </a>
+        </div>
+    	<!--<ul class="fmenu menu1">
+        	<li><a href="about.html">About</a></li>
+            <li><a href="credits.html">Credits</a></li>
+        </ul>-->
+        <ul class="fmenu menu2">
+            <li><a href="http://www.manchester.ac.uk/aboutus/documents/disclaimer/">Disclaimer</a></li>
+            <li><a href="http://www.manchester.ac.uk/aboutus/documents/privacy/">Privacy</a></li>
+            <li><a href="http://www.manchester.ac.uk/aboutus/documents/copyright/">Copyright notice</a></li>
+            <li><a href="http://www.manchester.ac.uk/aboutus/documents/accessibility/">Accessibility</a></li>
+            <li><a href="http://www.manchester.ac.uk/aboutus/documents/foi/">Freedom of information</a></li>
+            <li><a href="http://www.manchester.ac.uk/aboutus/governance/charitable-status/">Charitable status</a></li>
+            <li>Royal Charter Number: RC000797</li>
+        </ul>
+		
+    </footer>
+</div>
+
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- default -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-8260571040605089"
+     data-ad-slot="8018166452"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+<!-- InstanceBeginEditable name="scripts" -->
+
+<script language="javascript" type="text/javascript" src="js/jquery/jquery-1.10.2.min.js" ></script>
+<script type="text/javascript">
+jQuery(document).ready(function() {
+  $(".collapsable").hide();
+  $(".more-info").click(function() {
+  		$(this).next(".collapsable").slideToggle(500);
+  });
+});
+</script>
+
+<script type="text/javascript" src="js/utils/scrolltotop/scrolltotop.js"></script>
+<!-- InstanceEndEditable -->
+</body>
+<!-- InstanceEnd --></html>

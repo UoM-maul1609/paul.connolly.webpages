@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Dr Paul Connolly - teaching materials for EART20170 </title>
+<!-- Copyright (c) 2009-2013 The MathJax Consortium -->
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+<meta name="description" content="Course on Data Analysis and Statistics">
+<META NAME="ROBOTS" CONTENT="INDEX, NOFOLLOW">
+<!--<meta name="keywords" content="HTML,CSS,XML,JavaScript">-->
+<meta name="author" content="Paul Connolly">
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+    tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]}
+  });
+</script>
+<script type="text/javascript" src="../../MathJax/MathJax.js"></script>
+
+<style>
+h1 {text-align:center}
+h2 {
+  font-weight: bold;
+  background-color: #DDDDDD;
+  padding: .2em .5em;
+  margin-top: 1.5em;
+  border-top: 3px solid #666666;
+  border-bottom: 2px solid #999999;
+}
+</style>
+</head>
+<body>
+
+<noscript>
+<div style="color:#CC0000; text-align:center">
+<b>Warning: <a href="http://www.mathjax.org/">MathJax</a>
+requires JavaScript to process the mathematics on this page.<br />
+If your browser supports JavaScript, be sure it is enabled.</b>
+</div>
+<hr>
+</noscript>
+<h1>Dr Paul Connolly - teaching materials for EART20170</h1>
+
+<p><b><font color="red"><u>Interested in doing a PhD in Atmospheric Science?</u></font> Please see <a href="http://www.liv.ac.uk/studentships-earth-atmosphere-ocean/studentships/atmospheric/" target="_blank">this</a> webpage for a list of available projects.</b></p>
+<h2>Module EART20170 Data Analysis / Statistics </h2>
+
+<table style="width:90%">
+
+  <tr>
+  <td>
+  <a href="eart20170_student.pdf" target="_blank">Course notes for Paul's part of the course</a>
+  </td>
+
+  <td>
+  <a href="https://www.youtube.com/watch?v=W4B9wE19_YQ" target="_blank">Click here to see a video of how to install GNU Octave (free version of MATLAB)</a>
+  </td>
+
+  <td>
+  <a href="https://video.manchester.ac.uk/lectures" target="_blank">University Podcast service </a>
+  </td>
+  <!--<td>
+  <a href="material/matlab/stats_toolbox.zip" target="_blank">Statistical functions in MATLAB - download</a>
+  </td>-->
+  </tr>
+</table>
+<hr>
+
+<table style="width:90%; font-size: 8pt"; border="1">
+  <tr>
+    <td>
+    <b>Lecture&nbsp;1:</b>
+    </td> 
+    <td>
+    Intro to Stats and Data
+    </td>
+    <td>
+    <ul>
+    <li><a href="lecture1.ppt" target="_blank">Slides</a></li>
+    <li><a href="practical01.pdf" target="_blank">Practical PDF</a></li>
+    <li>Data: <a href="material/Excel/ELECTRIC.xlsx" target="_blank">ELECTRIC.xlsx</a>, 
+    <a href="material/Excel/FHEALTH.xlsx" target="_blank">FHEALTH.xlsx</a>, 
+    <a href="material/Excel/MHEALTH.xlsx" target="_blank">MHEALTH.xlsx</a></li>
+    <li> Excel videos: <a href="http://www.youtube.com/watch?v=6drKbhJA2EM">x-y scatter plot</a>; <a href="http://www.youtube.com/watch?v=mdixXI5hAW0">histogram</a>
+    <li> MATLAB / Octave videos: <a href="http://www.youtube.com/watch?v=KiASzo8Yukc">x-y scatter plot</a>; <a href="http://www.youtube.com/watch?v=OT_ZzHQkc98">histogram</a>
+
+    </ul>
+    </td>
+
+    <td>
+    <ul>
+     <li> Blackboard assessment(s): <a href="https://online.manchester.ac.uk/webapps/blackboard/content/launchAssessment.jsp?course_id=_42963_1&content_id=_4592135_1&mode=cpview&target=blank">Do this in your own time</a> and <a href="https://online.manchester.ac.uk/webapps/blackboard/content/launchAssessment.jsp?course_id=_42963_1&content_id=_4592137_1&mode=cpview&target=blank">Practical assessment</a></li>
+    <ul>
+    </td>
+
+    <!--<td> -->
+    <!--http://gmao.gsfc.nasa.gov/animations/aerosols_geos5.mov -->
+    <!--<div style="color:#555; font-size: 10px; display:block; padding-bottom:5px" align="right">NASA Global aerosol.</div>-->
+    <!--</td>-->
+
+    <td> <iframe src="https://video.manchester.ac.uk/embedded/00000000-7cab-7796-0000-0157aeadac80" width="240" height="135" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe> </td>    
+
+    
+
+  </tr>
+
+  
+
+  <tr>
+    <td>
+    <b>Lecture&nbsp;2:</b>
+    </td>
+    <td>
+    Descriptive Stats and Outliers
+    </td>
+    <td>
+    <ul>
+    <li><a href="lecture2.ppt" target="_blank">Slides</a> </li>
+    
+    <li><a href="practical02.pdf" target="_blank">Practical PDF</a> </li>
+    
+    <li>Data: <a href="material/Excel/OLDFAITH.xlsx" target="_blank">OLDFAITH.xlsx</a>, 
+    <a href="material/datasets/landgrav_csv/landgrav_all.csv" target="_blank">landgrav_all.csv</a>, 
+    <a href="material/Excel/VOLTAGE.xlsx" target="_blank">VOLTAGE.xlsx</a>,
+    <a href="material/matlab/coast.mat" target=_blank"">coast.mat</a></li>
+
+    <li> Excel videos: <a href="http://youtu.be/Q7RuUnLpXjM">Descriptive statistics and z-scores</a>
+    <li> MATLAB / Octave videos: <a href="http://youtu.be/c4yPS1kgcko">Descriptive statistics and z-scores</a>
+
+    </ul>
+    </td>
+
+    <td>
+    <ul>
+     <li> Blackboard assessment(s): <a href="https://online.manchester.ac.uk/webapps/blackboard/content/launchAssessment.jsp?course_id=_42963_1&content_id=_4592140_1&mode=cpview&target=blank">Practical assessment</a> </li>
+    <ul>
+    </td>
+
+    <td> <iframe src="https://video.manchester.ac.uk/embedded/ffffffff-e04a-6a5c-0000-0157d2ba3080" width="240" height="135" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe> </td>
+
+  </tr>
+   
+  <tr>
+    <td>
+    <b>Lecture&nbsp;3:</b>
+    </td> 
+    <td>
+    The Normal Distribution and Central Limit Theorem
+    </td>
+    <td>
+    <ul>
+    <li><a href="lecture3.ppt" target="_blank">Slides</a></li>
+    <li><a href="practical03.pdf" target="_blank">Practical PDF</a></li>
+
+    <li> Excel videos: <a href="http://youtu.be/JZXX231rIlg">NORMDIST</a>; <a href="http://youtu.be/5aAlTk-C21c">NORMINV</a>; <a href="http://youtu.be/l08MXJs0uz4">sample random numbers</a>; 
+    <li> MATLAB / Octave videos: <a href="http://youtu.be/Lo7tkbWIKco">normcdf</a>; <a href="http://youtu.be/aIi79zNJPTs">norminv</a>; <a href="http://youtu.be/p70ScjpZTwA">sample random numbers</a>;
+
+    </ul>
+    </td>
+
+    <td>
+    <ul>
+     <li> Blackboard assessment(s): <a href="https://online.manchester.ac.uk/webapps/blackboard/content/launchAssessment.jsp?course_id=_42963_1&content_id=_4592142_1&mode=cpview&target=blank">Practical assessment</a> </li>
+    <ul>
+    </td>
+
+    <td> <iframe src="https://video.manchester.ac.uk/embedded/00000000-2910-f6ec-0000-0157f6c6b480" width="240" height="135" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe> </td>
+
+  </tr>
+
+  <tr>
+    <td>
+    <b>Not used:</b>
+    </td>
+    <td>
+    Estimates and Sample sizes
+    </td>
+    <td>
+    <ul>
+      <li><a href="lecture4.old.ppt" target="_blank">Slides</a></li>
+
+      <li> <a href="material/datasets/data_from_alun_mcintyre.xlsx" target="_blank">data_from_alun_mcintyre.xlsx</a> </li>
+
+      <li><a href="http://personalpages.manchester.ac.uk/staff/paul.connolly/teaching/climatesim/index.html" target="_blank">Climate sim</a></li>
+
+
+      <!--<li><a href="RSTA_372_2031_Thumbnails.tif">Cover page</a></li>-->
+    </ul>
+
+    <td>
+    <ul>
+     <li> Blackboard assessment(s): None </li>
+    <ul>
+    </td>
+
+
+<!--    <td>
+    <iframe id="NASA_aerosol" width="240" height="135" name="main" title="Global Aerosol NASA"  align="right" src="//www.youtube.com/embed/WKP-X_puQak?feature=player_detailpage"  frameborder="0" allowfullscreen> Global Aerosol NASA</iframe>   
+    </td>-->
+  </tr>
+  
+
+  <tr>
+    <td>
+    <b>Reading week:</b>
+    </td>
+    <td>
+    Mid-term in your own time
+    </td>
+    <td>
+    </td>
+
+    <td>
+    <ul>
+     <li> Blackboard assessment(s): <a href="https://online.manchester.ac.uk/webapps/blackboard/content/launchAssessment.jsp?course_id=_42963_1&content_id=_4592143_1&mode=cpview&target=blank">Mid-term assessment </a> </li>
+    <ul>
+    </td>
+
+   </tr>
+
+
+
+
+  <tr> 
+    <td>
+    <b>Lecture&nbsp;4:</b> 
+    </td>
+    <td>
+    Hypothesis Testing about a proportion or a mean
+    </td>
+    <td>
+    <ul>
+      <li><a href="lecture4.ppt" target="_blank">Slides</a> </li>
+   
+      <li><a href="practical05.pdf" target="_blank">Practical PDF</a></li>
+      <li>Data: <a href="material/Excel/RUBBISH.xlsx" target="_blank">RUBBISH.xlsx</a></li>
+
+      <li> Excel videos: <a href="http://youtu.be/wb1q4FWOwTY">hypothesis test about a mean</a>; <a href="http://youtu.be/4Vcdn9gMWWA">Sampling procedure</a>; 
+      <li> MATLAB / Octave videos: <a href="http://youtu.be/o7yPcDnrXws">hypothesis test about a mean</a>; <a href="http://youtu.be/mwDi8tTkrW0">Sampling procedure</a>; 
+
+
+    </ul>
+    </td>
+
+    <td>
+    <ul>
+     <li> Blackboard assessment(s): <a href="https://online.manchester.ac.uk/webapps/blackboard/content/launchAssessment.jsp?course_id=_42963_1&content_id=_4592145_1&mode=cpview&target=blank">Practical assessment</a> </li>
+    <ul>
+    </td>
+
+    <td> <iframe src="https://video.manchester.ac.uk/embedded/00000000-1dda-530f-0000-01583f16ab00" width="240" height="135" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe> </td>
+
+   </tr>
+
+
+
+
+
+
+
+   <tr>
+     <td>
+     <b>Lecture&nbsp;5:</b> 
+     </td>
+     <td>
+     Hypothesis Testing about two proportions / means
+     </td>
+     <td>
+     <ul> 
+       <li><a href="lecture5.ppt" target="_blank">Slides</a></li>
+       <li><a href="practical06.pdf" target="_blank">Practical PDF</a></li>
+       <li> Note this week, if using Octave, type <br><br>
+       <code>pkg install -forge statistics</code> <br><br> and enter, then <br><br>
+       <code> pkg load statistics </code>
+
+       <li>Data: <a href="material/datasets/satellite_product/cloud_fraction/MODIS_satellite_data.zip" target="_blank">MODIS_satellite_data.zip</a></li>
+       <li>Files: <a href="material/datasets/satellite_product/cloud_fraction/additional_matlab_files.zip" target="_blank">additional_matlab_files.zip</a></li>
+
+      <li> Excel videos: <a href="http://youtu.be/94Dmwx_dezQ">First part in Excel</a>; <a href="http://youtu.be/4ckhCHqeu9o">Second part in Excel</a>; <a href="http://youtu.be/FLpsHYniDkc">Third part in Excel</a>;
+      <li> MATLAB / Octave videos: <a href="http://youtu.be/8Ae2vyGipTM">First part in MATLAB</a>; <a href="http://youtu.be/FIeC0x6oeDQ">Second part in MATLAB</a>; <a href="http://youtu.be/2Gxme2byqDc">Third part in MATLAB</a>;
+
+     </ul>
+     </td>
+
+    <td>
+    <ul>
+     <li> Blackboard assessment(s): <a href="https://online.manchester.ac.uk/webapps/blackboard/content/launchAssessment.jsp?course_id=_42963_1&content_id=_4592147_1&mode=cpview&target=blank">Practical assessment</a></li>
+    <ul>
+    </td>
+
+    <td> <iframe src="https://video.manchester.ac.uk/embedded/00000000-643b-6c7a-0000-015863232f00" width="240" height="135" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe> </td>
+
+<!--     <td>
+     <iframe  id="polar_orbit" width="240" height="135" align="right" src="//www.youtube.com/embed/MLrPyhT_YNg?feature=player_detailpage" frameborder="0" allowfullscreen></iframe>
+     </td>-->
+   </td>
+
+
+   <tr>
+     <td>
+     <b>Lecture&nbsp;6:</b> 
+     </td>
+     <td>
+     Correlation, regression and error propagation
+     </td>
+     <td>
+     <ul>
+       <li><a href="lecture6.ppt" target="_blank">Slides</a></li>
+       <li><a href="practical07.pdf" target="_blank">Practical PDF</a></li>
+
+       <li>Data: <a href="material/datasets/mars/AustralianCirrusClouds.csv" target="_blank">AustralianCirrusClouds.csv</a>, 
+                 <a href="material/datasets/mars/martian_clouds.csv" target="_blank">martian_clouds.csv</a></li>
+
+      <li> Excel videos: <a href="http://youtu.be/099eMWhb3d0">Calculate correlation cofficients and fit a line in Excel</a>; <a href="http://youtu.be/usPqUc7zSGg">Fit a power law in Excel</a>; 
+      <li> MATLAB / Octave videos: <a href="http://youtu.be/kQ7WxdcDsx8">Calculate correlation coffiecients and fit a line in MATLAB</a>; <a href="http://youtu.be/ptqQnO_TEe0">Fit a power law in MATLAB</a>; 
+
+     </ul>
+     </td>
+
+    <td>
+    <ul>
+     <li> Blackboard assessment(s): <a href="https://online.manchester.ac.uk/webapps/blackboard/content/launchAssessment.jsp?course_id=_42963_1&content_id=_4592148_1&mode=cpview&target=blank">Practical assessment</a> </li>
+    <ul>
+    </td>
+
+    <td> <iframe src="https://video.manchester.ac.uk/embedded/ffffffff-fa29-e1fb-0000-0158872fb300" width="240" height="135" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe> </td>
+
+<!--  <td><div style="color:#555; font-size: 10px; display:block; padding-bottom:5px" align="right" >Experiment showing Bergeron-Findeison process.</div>
+    <iframe id="NASA_co2" width="240" height="135" name="main" title="Global CO2 NASA"  align="right" src="//www.youtube.com/embed/x1SgmFa0r04?feature=player_detailpage"  frameborder="0" allowfullscreen> Global CO2 NASA</iframe>   
+     </td>-->
+     </tr>
+  <!--   <tr><td></td><td></td><td></td>
+     <td>
+     <div style="color:#555; font-size: 10px; display:block; padding-bottom:5px" align="right" >Thunderstorm in Australia</div>
+<iframe style="display:inline" id="Thunderstorm" width="240" height="135" align="right" name="main" title="Thunderstorm" src="http://www.youtube.com/embed/dknfK0R9jSA?feature=player_detailpage"  frameborder="0" allowfullscreen> Thunderstorm</iframe> 
+     </td>   
+   </tr>
+-->
+
+   <tr>
+     <td>
+     <b>Lecture&nbsp;7:</b>
+     </td>
+     <td>
+     Modelling and time-series analysis
+     </td>
+     <td>
+     <ul>
+       <li><a href="lecture7.ppt" target="_blank">Slides</a></li>
+       <li><a href="../practicals/solar_system.html" target="_blank">Solar System Practical</a></li>
+
+     </ul>
+     </td>
+
+    <td>
+    <ul>
+     <li> Blackboard assessment(s): <a href="https://online.manchester.ac.uk/webapps/blackboard/content/launchAssessment.jsp?course_id=_42963_1&content_id=_4592149_1&mode=cpview&target=blank">Practical assessment</a> </a></li>
+    <ul>
+    </td>
+
+<td> <iframe src="https://video.manchester.ac.uk/embedded/ffffffff-8886-31a6-0000-0158ab3c3700" width="240" height="135" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe> </td>
+
+
+     <td></td>
+     </tr>
+     <tr><td></td><td></td><td></td>
+     <td></td>
+   </tr>
+
+
+</table>
+
+
+<hr>
+
+<p>Just for fun: <a href="http://personalpages.manchester.ac.uk/staff/paul.connolly/teaching/practicals/shallow_water_equations.html" target="_blank">notes on a shallow water model in MATLAB able to simulate various atmospheric phenomena.</a></p>
+
+
+<p>Please note, I will update the slides as I go along with findings from my research.</p>
+
+
+
+<h2>Useful links</h2>
+
+<table style="width:60%">
+  <tr>
+    <td>
+    <a href="http://data.cas.manchester.ac.uk/micc/micc.htm" target="_blank">Manchester Ice Cloud Chamber </a>
+    </td>
+    <td>
+    Our cloud chamber for conducting research into cloud processes
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+    <a href="http://www.wetter3.de/" target="_blank">Wetter3 </a>
+    </td>
+    <td>
+    site for GFS model and surface charts
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+    <a href="http://manunicast.seaes.manchester.ac.uk/" target="_blank">ManUniCast</a>
+    </td>
+    <td>
+    our own model 
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+    <a href="http://www.cas.manchester.ac.uk/restools/whitworth/data/index.html" target="_blank">Whitworth Observatory</a>
+    </td>
+    <td>
+    Our own observatory here in Manchester 
+    </td>
+  </tr>
+  <tr>
+    <td>
+    <a href="http://www.eumetrain.org/eport.html" target="_blank">EUMETRAIN</a>
+    </td>
+    <td>
+    overlay met. fields on satellite images (via eport)
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+    <a href="http://www.sat24.com/en/eu" target="_blank">Satellite pictures</a>
+    </td>
+    <td>
+    from SAT24.com
+    </td>
+  </tr>
+
+</table>
+
+
+
+<h2>Some projects I am running this year</h2>
+<p><a href="http://personalpages.manchester.ac.uk/staff/paul.connolly/projects/env_science/geoengineering01.html" target="_blank">Is climate engineering worth the effort?<a/> &nbsp;&nbsp; Perform a cost-benefit analysis of a climate engineering proposal to mitigate against climate change.</p>
+
+<p><a href="http://personalpages.manchester.ac.uk/staff/paul.connolly/projects/env_science/ice_nucleation01.html" target="_blank">Ice nucleation study<a/> &nbsp;&nbsp;Investigate the effect of acidity on heteorogeneous ice nucleation to explain a problem we have found.</p>
+
+<p><a href="http://personalpages.manchester.ac.uk/staff/paul.connolly/projects/mphys_projects/ice_classification01.html" target="_blank">Automated classification of ice crystal images </a>&nbsp;&nbsp;There is a wealth of ice crystal image data that we have taken on various field projects. Devise a method of automatically determining their shape in this project</p>
+
+<h2>Ideas for future projects</h2>
+<p><a href="http://personalpages.manchester.ac.uk/staff/paul.connolly/teaching/practicals/solar_system.html" target="_blank">A simulation of the solar system in MATLAB </a>&nbsp;&nbsp;use accurate ODE solvers to simulate dynamics of planetary orbits</p>
+
+<p><a href="http://apod.nasa.gov/apod/ap120122.html" target="_blank">Saturn's hexagon </a>&nbsp;&nbsp;write a shallow water model in polar coordinates to attempt to simulate Saturn's hexagon: a planetary-scale wave that has the appearance of a regular hexagon.</p>
+
+<h2>Other fun stuff</h2>
+<p><a href="http://personalpages.manchester.ac.uk/staff/paul.connolly/teaching/practicals/gravitation.html" target="_blank"> Gravitational field strengths </a> &nbsp;&nbsp;Calculate the gravitational field strength of different shaped objects</p>
+
+<p><a href="http://personalpages.manchester.ac.uk/staff/paul.connolly/teaching/practicals/gaussian_plume_modelling.html" target="_blank"> Gaussian Plume Model in MATLAB </a> &nbsp;&nbsp;Understand how vertical stability in the atmosphere affects the dispersion of pollution from a stack.</p>
+
+
+<br>
+<br>
+
+            <p><img src="/staff/paul.connolly/common/bar.png" width=600
+            height=22></p>
+
+
+<footer>
+            <table width="100%"><tr><td align="left">
+            <i>Return to <a href="http://www.manchester.ac.uk/research/paul.connolly/">Paul's home page</a> |
+            <a href="http://www.cas.manchester.ac.uk/">Centre for Atmospheric Science</a> | <a
+            href="http://www.seaes.manchester.ac.uk/">School of Earth Atmospheric and Environmental Sciences</a>
+            | <a href="http://www.manchester.ac.uk/">The University of
+            Manchester</a></i></td><td align="right"><i>This page is
+            maintained by <a
+            href="mailto:p.connolly@manchester.ac.uk">Paul Connolly</a></i></td></tr></table>
+		
+</footer>
+
+
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- default -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-8260571040605089"
+     data-ad-slot="8018166452"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+
+</body></html>
