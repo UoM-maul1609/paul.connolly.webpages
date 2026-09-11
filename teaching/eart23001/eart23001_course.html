@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teaching materials for EART23001: Atmospheric Physics and Weather</title>
+<link rel="icon" type="image/png" href="https://www.manchester.ac.uk/favicon.ico">
+<style>
+:root{
+  --purple:#6a1b9a;
+  --purple-dark:#4a126c;
+  --paper:#ffffff;
+  --page:#f7f7f8;
+  --text:#2f3033;
+  --muted:#666;
+  --line:#d5d5d8;
+  --soft:#f0f0f2;
+  --info:#eef5ff;
+  --info-line:#2468ad;
+  --class:#f4eafa;
+  --try:#eef5ff;
+  --extra:#f3f3f4;
+}
+*{box-sizing:border-box}
+html{font-size:16px}
+body{
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  background:var(--page); color:var(--text);
+  margin:0; line-height:1.55;
+}
+main{max-width:1120px;margin:0 auto;padding:2rem 1.25rem 4rem}
+h1{
+  text-align:center; font-size:clamp(1.55rem,3vw,2rem);
+  margin:.3rem 0 1.8rem; padding-bottom:.65rem;
+  border-bottom:3px solid var(--purple);
+}
+h2{
+  font-size:1.2rem; line-height:1.3; font-weight:700;
+  background:var(--soft); padding:.55rem .75rem;
+  margin:2rem 0 .8rem; border-left:5px solid var(--purple);
+}
+a{color:var(--purple-dark)}
+a:hover{text-decoration-thickness:2px}
+.resource-bar{
+  display:grid; grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:.65rem; margin:1rem 0 1.4rem;
+}
+.resource-bar a{
+  display:flex; align-items:center; justify-content:center;
+  min-height:3.2rem; padding:.7rem .8rem; text-align:center;
+  background:var(--paper); border:1px solid var(--line);
+  border-radius:5px; font-weight:600; text-decoration:none;
+}
+.resource-bar a:hover{border-color:var(--purple);background:#fbf7fd}
+.course-note{
+  background:var(--info); border-left:4px solid var(--info-line);
+  padding:.75rem 1rem; margin:0 0 1.2rem;
+}
+.contact-box{
+  background:#fff; border:1px solid var(--line);
+  border-radius:5px; padding:.8rem 1rem; margin:1rem 0 1.4rem;
+}
+.contact-box p{margin:.2rem 0}
+.week-table{
+  width:100%; border-collapse:collapse; background:var(--paper);
+  margin:.75rem 0 1.5rem;
+}
+.week-table th,.week-table td{
+  border:1px solid var(--line); padding:.75rem; vertical-align:top;
+}
+.week-table th{background:#f4f4f5;text-align:left}
+.week-table .week{width:8.5rem;font-weight:700;white-space:nowrap}
+.week-table .topic{width:30%;font-weight:600}
+.material-label{font-weight:700;margin:.1rem 0}
+ul{margin:.35rem 0 .8rem 1.2rem;padding:0}
+li{margin:.2rem 0}
+.badges{
+  display:flex; flex-wrap:wrap; gap:.45rem; margin:.55rem 0 0;
+}
+.badge{
+  display:inline-block; padding:.18rem .5rem; border-radius:4px;
+  border:1px solid var(--line); font-size:.86rem; font-weight:600;
+}
+.badge.class{background:var(--class)}
+.badge.try{background:var(--try)}
+.badge.extra{background:var(--extra)}
+.assessment-grid{
+  display:grid; grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:.8rem; margin:1rem 0 1.2rem;
+}
+.assessment-card{
+  background:#fff; border:1px solid var(--line); border-radius:5px;
+  padding:.85rem 1rem;
+}
+.assessment-card strong{display:block;margin-bottom:.25rem}
+footer{
+  margin-top:2.5rem; padding-top:1rem; border-top:1px solid var(--line);
+  color:var(--muted); font-size:.9rem;
+}
+footer p{margin:.3rem 0}
+@media(max-width:760px){
+  main{padding:1rem .7rem 3rem}
+  .resource-bar{grid-template-columns:1fr}
+  .assessment-grid{grid-template-columns:1fr}
+  .week-table,.week-table tbody,.week-table tr,.week-table td,.week-table th{display:block;width:100%}
+  .week-table thead{display:none}
+  .week-table tr{margin:0 0 1rem;border:1px solid var(--line)}
+  .week-table td{border:0;border-bottom:1px solid #e8e8e8}
+  .week-table td:last-child{border-bottom:0}
+  .week-table .week,.week-table .topic{width:auto}
+}
+</style>
+</head>
+<body>
+<main>
+
+<h1>Teaching materials for EART23001: Atmospheric Physics and Weather</h1>
+
+<h2>Module EART23001 Atmospheric Physics and Weather</h2>
+
+<div class="resource-bar">
+  <a href="materials/EART23001_Course_Guide_and_Syllabus.pdf" target="_blank" rel="noopener">Course Guide and Syllabus</a>
+  <a href="materials/EART23001_Symbols_Constants_and_Units.pdf" target="_blank" rel="noopener">Symbols, Constants and Units</a>
+  <a href="https://video.manchester.ac.uk/lectures" target="_blank" rel="noopener">University Podcast service</a>
+</div>
+
+<div class="course-note">
+  Lectures are on <strong>Thursdays, 09:00–11:00, in Schuster Moseley Theatre</strong>.
+  For current timetable, assessment deadlines and announcements, see Canvas and the
+  <strong>Course Guide and Syllabus</strong>.
+</div>
+
+<div class="contact-box">
+  <strong>Teaching team</strong>
+  <p><strong>Prof Paul Connolly</strong> · <a href="mailto:p.connolly@manchester.ac.uk">p.connolly@manchester.ac.uk</a> · Simon Building</p>
+  <p><strong>Dr Ian Crawford</strong> · <a href="mailto:i.crawford@manchester.ac.uk">i.crawford@manchester.ac.uk</a> · Simon Building</p>
+  <p><strong>Dr Hugo Ricketts</strong> · <a href="mailto:h.ricketts@manchester.ac.uk">h.ricketts@manchester.ac.uk</a> · Simon Building</p>
+</div>
+
+<div class="assessment-grid">
+  <div class="assessment-card">
+    <strong>Assessment</strong>
+    20% Canvas coursework and 80% examination.
+  </div>
+  <div class="assessment-card">
+    <strong>Formative learning</strong>
+    Weekly example questions and Canvas quizzes are worth 0% and are provided to help you check your understanding.
+  </div>
+</div>
+
+<div class="course-note">
+  The practice sheets use three levels of activity:
+  <div class="badges">
+    <span class="badge class">IN CLASS</span>
+    <span class="badge try">YOU SHOULD TRY</span>
+    <span class="badge extra">EXTRA CHALLENGE</span>
+  </div>
+</div>
+
+<h2>Weekly teaching materials</h2>
+
+<table class="week-table">
+<thead><tr><th>Week</th><th>Topic</th><th>Materials</th></tr></thead>
+<tbody>
+
+<tr>
+<td class="week">Week 1</td>
+<td class="topic">Discovering the Atmosphere 1</td>
+<td>
+<div class="material-label">Practice and worked answers</div>
+<ul>
+<li><a href="materials/questions/Week_01_Discovering_the_Atmosphere_1_Practice_Questions.pdf" target="_blank">Practice questions</a></li>
+<li><a href="materials/answers/Week_01_Discovering_the_Atmosphere_1_Worked_Answers.pdf" target="_blank">Worked answers</a></li>
+</ul>
+</td>
+</tr>
+
+<tr>
+<td class="week">Week 2</td>
+<td class="topic">Discovering the Atmosphere 2</td>
+<td>
+<div class="material-label">Practice and worked answers</div>
+<ul>
+<li><a href="materials/questions/Week_02_Discovering_the_Atmosphere_2_Practice_Questions.pdf" target="_blank">Practice questions</a></li>
+<li><a href="materials/answers/Week_02_Discovering_the_Atmosphere_2_Worked_Answers.pdf" target="_blank">Worked answers</a></li>
+</ul>
+</td>
+</tr>
+
+<tr>
+<td class="week">Week 3</td>
+<td class="topic">Physics of the Atmosphere</td>
+<td>
+<div class="material-label">Practice and worked answers</div>
+<ul>
+<li><a href="materials/questions/Week_03_Physics_of_the_Atmosphere_Practice_Questions.pdf" target="_blank">Practice questions</a></li>
+<li><a href="materials/answers/Week_03_Physics_of_the_Atmosphere_Worked_Answers.pdf" target="_blank">Worked answers</a></li>
+</ul>
+</td>
+</tr>
+
+<tr>
+<td class="week">Week 4</td>
+<td class="topic">Vertical Profiles</td>
+<td>
+<div class="material-label">Practice and worked answers</div>
+<ul>
+<li><a href="materials/questions/Week_04_Vertical_Profiles_Practice_Questions.pdf" target="_blank">Practice questions</a></li>
+<li><a href="materials/answers/Week_04_Vertical_Profiles_Worked_Answers.pdf" target="_blank">Worked answers</a></li>
+</ul>
+</td>
+</tr>
+
+<tr>
+<td class="week">Week 5</td>
+<td class="topic">Atmospheric Dynamics</td>
+<td>
+<div class="material-label">Practice and worked answers</div>
+<ul>
+<li><a href="materials/questions/Week_05_Atmospheric_Dynamics_Practice_Questions.pdf" target="_blank">Practice questions</a></li>
+<li><a href="materials/answers/Week_05_Atmospheric_Dynamics_Worked_Answers.pdf" target="_blank">Worked answers</a></li>
+</ul>
+</td>
+</tr>
+
+<tr>
+<td class="week">Week 6</td>
+<td class="topic">Reading Week: Consolidation</td>
+<td>
+<div class="material-label">Optional consolidation</div>
+<ul>
+<li><a href="materials/questions/Week_06_Reading_Week_Consolidation_Practice_Questions.pdf" target="_blank">Consolidation questions</a></li>
+<li><a href="materials/answers/Week_06_Reading_Week_Consolidation_Worked_Answers.pdf" target="_blank">Worked answers</a></li>
+</ul>
+</td>
+</tr>
+
+<tr>
+<td class="week">Week 7</td>
+<td class="topic">Dry and Moist Air</td>
+<td>
+<div class="material-label">Practice and worked answers</div>
+<ul>
+<li><a href="materials/questions/Week_07_Dry_and_Moist_Air_Practice_Questions.pdf" target="_blank">Practice questions</a></li>
+<li><a href="materials/answers/Week_07_Dry_and_Moist_Air_Worked_Answers.pdf" target="_blank">Worked answers</a></li>
+</ul>
+</td>
+</tr>
+
+<tr>
+<td class="week">Week 8</td>
+<td class="topic">Convection and SALR</td>
+<td>
+<div class="material-label">Practice and worked answers</div>
+<ul>
+<li><a href="materials/questions/Week_08_Convection_and_SALR_Practice_Questions.pdf" target="_blank">Practice questions</a></li>
+<li><a href="materials/answers/Week_08_Convection_and_SALR_Worked_Answers.pdf" target="_blank">Worked answers</a></li>
+</ul>
+</td>
+</tr>
+
+<tr>
+<td class="week">Week 9</td>
+<td class="topic">Clouds and Precipitation</td>
+<td>
+<div class="material-label">Practice and worked answers</div>
+<ul>
+<li><a href="materials/questions/Week_09_Clouds_and_Precipitation_Practice_Questions.pdf" target="_blank">Practice questions</a></li>
+<li><a href="materials/answers/Week_09_Clouds_and_Precipitation_Worked_Answers.pdf" target="_blank">Worked answers</a></li>
+</ul>
+</td>
+</tr>
+
+<tr>
+<td class="week">Week 10</td>
+<td class="topic">Radiosondes</td>
+<td>
+<div class="material-label">Practice and worked answers</div>
+<ul>
+<li><a href="materials/questions/Week_10_Radiosondes_Practice_Questions.pdf" target="_blank">Practice questions</a></li>
+<li><a href="materials/answers/Week_10_Radiosondes_Worked_Answers.pdf" target="_blank">Worked answers</a></li>
+</ul>
+</td>
+</tr>
+
+<tr>
+<td class="week">Week 11</td>
+<td class="topic">Weather and Forecasting</td>
+<td>
+<div class="material-label">Practice and worked answers</div>
+<ul>
+<li><a href="materials/questions/Week_11_Weather_and_Forecasting_Practice_Questions.pdf" target="_blank">Practice questions</a></li>
+<li><a href="materials/answers/Week_11_Weather_and_Forecasting_Worked_Answers.pdf" target="_blank">Worked answers</a></li>
+</ul>
+</td>
+</tr>
+
+<tr>
+<td class="week">Week 12</td>
+<td class="topic">Global Energy</td>
+<td>
+<div class="material-label">Practice and worked answers</div>
+<ul>
+<li><a href="materials/questions/Week_12_Global_Energy_Practice_Questions.pdf" target="_blank">Practice questions</a></li>
+<li><a href="materials/answers/Week_12_Global_Energy_Worked_Answers.pdf" target="_blank">Worked answers</a></li>
+</ul>
+</td>
+</tr>
+
+</tbody>
+</table>
+
+<h2>How to use these materials</h2>
+<div class="course-note">
+  The weekly sheets are intended to support the Thursday teaching sessions rather than to be completed entirely in class.
+  We will normally work through selected <strong>IN CLASS</strong> problems together.
+  Students should then attempt the <strong>YOU SHOULD TRY</strong> questions independently and use the Canvas quizzes
+  to check understanding. <strong>EXTRA CHALLENGE</strong> questions are optional and provide additional depth.
+</div>
+
+<footer>
+<p>EART23001 Atmospheric Physics and Weather · Department of Earth and Environmental Sciences · The University of Manchester</p>
+<p>This page is maintained as a stable index to course materials; year-specific information is kept in the Course Guide and Syllabus and in Canvas.</p>
+</footer>
+
+</main>
+</body>
+</html>
