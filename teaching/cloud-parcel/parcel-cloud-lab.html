@@ -1,0 +1,1107 @@
+<title>Parcel Cloud Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#edf2f6; --panel:#ffffff; --panel-2:#f5f8fa; --ink:#0f2233; --ink-2:#465a6c; --ink-3:#74879a;
+  --line:#d3dde6; --grid:#e7edf2; --axis:#9aabb9;
+  --c-bg:#e0602b; --c-ss:#2a78d6; --c-tot:#0f2233; --c-pin:#8a9aa8;
+  --sky-top:#7fb6e3; --sky-bot:#dcecf8; --ground:#a9b98f; --cloud:#ffffff; --cloud-edge:#c8d6e2;
+  --chip:#e3eaf0; --focus:#2a78d6;
+  --f-display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --f-body:"IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --f-mono:"IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#0a131b; --panel:#101c27; --panel-2:#0d1822; --ink:#e7eef4; --ink-2:#a6b6c4; --ink-3:#72838f;
+    --line:#223241; --grid:#182633; --axis:#4b5d6c;
+    --c-bg:#e0692f; --c-ss:#4a93ec; --c-tot:#e7eef4; --c-pin:#6f808e;
+    --sky-top:#0b1f33; --sky-bot:#1d3d5a; --ground:#3b4a36; --cloud:#dbe5ee; --cloud-edge:#7f93a5;
+    --chip:#1a2936; --focus:#4a93ec;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0a131b; --panel:#101c27; --panel-2:#0d1822; --ink:#e7eef4; --ink-2:#a6b6c4; --ink-3:#72838f;
+  --line:#223241; --grid:#182633; --axis:#4b5d6c;
+  --c-bg:#e0692f; --c-ss:#4a93ec; --c-tot:#e7eef4; --c-pin:#6f808e;
+  --sky-top:#0b1f33; --sky-bot:#1d3d5a; --ground:#3b4a36; --cloud:#dbe5ee; --cloud-edge:#7f93a5;
+  --chip:#1a2936; --focus:#4a93ec;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.5;padding-inline:clamp(16px,3vw,40px);padding-block:28px 60px}
+.wrap{max-width:1360px;margin:0 auto;display:flex;flex-direction:column;gap:22px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;letter-spacing:-0.01em}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+header.top{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px 32px;align-items:end}
+header.top h1{font-size:clamp(30px,4.6vw,54px);font-weight:800;line-height:1.02;margin-top:6px}
+header.top p{max-width:64ch;color:var(--ink-2);margin:12px 0 0;font-size:16px}
+.legend-key{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--ink-2)}
+.sw{display:inline-flex;align-items:center;gap:7px}
+.sw i{display:inline-block;width:18px;height:3px;border-radius:2px;background:currentColor}
+.sw.bg i{background:var(--c-bg)} .sw.ss i{background:var(--c-ss)} .sw.tot i{background:var(--c-tot)}
+.sw.pin i{background:repeating-linear-gradient(90deg,var(--c-pin) 0 4px,transparent 4px 7px)}
+
+.lab{display:grid;grid-template-columns:340px minmax(0,1fr);gap:22px;align-items:start}
+.lab>*,.explain>*,.hero>*{min-width:0}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px}
+.controls{padding:18px;display:flex;flex-direction:column;gap:18px;position:sticky;top:calc(env(safe-area-inset-top,0px) + 12px)}
+.controls h2{font-size:13px;font-family:var(--f-mono);font-weight:500;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3)}
+.presets{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font:500 13px/1.2 var(--f-body);padding:7px 10px;border-radius:8px;border:1px solid transparent;background:var(--chip);color:var(--ink);cursor:pointer;text-align:left}
+.chip:hover{border-color:var(--axis)}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--panel)}
+.chip small{display:block;font-weight:400;opacity:.75;font-size:11.5px;margin-top:2px}
+.group{display:flex;flex-direction:column;gap:12px}
+.ctl{display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:baseline}
+.ctl label{font-size:13.5px;font-weight:500}
+.ctl output{font-family:var(--f-mono);font-size:13px;color:var(--ink);font-variant-numeric:tabular-nums}
+.ctl input[type=range]{grid-column:1/-1;width:100%;accent-color:var(--ink);margin:4px 0 0}
+.ctl .hint{grid-column:1/-1;font-size:12px;color:var(--ink-3)}
+.mode{border-radius:10px;padding:12px;background:var(--panel-2);display:flex;flex-direction:column;gap:12px;border-left:4px solid var(--mc)}
+.mode.bg{--mc:var(--c-bg)} .mode.ss{--mc:var(--c-ss)}
+.mode-head{display:flex;justify-content:space-between;gap:8px;align-items:center}
+.mode-head h3{font-size:16px;font-weight:700}
+select{font:inherit;font-size:13px;padding:4px 6px;border-radius:6px;border:1px solid var(--line);background:var(--panel);color:var(--ink);max-width:170px}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap}
+button.btn{font:600 13.5px/1 var(--f-body);padding:10px 14px;border-radius:9px;border:1px solid var(--ink);background:var(--ink);color:var(--panel);cursor:pointer}
+button.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+button.btn.ghost:hover{border-color:var(--axis)}
+button:focus-visible,select:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+details.adv summary{cursor:pointer;font-size:13px;color:var(--ink-2);font-weight:500}
+.adv-body{display:flex;flex-direction:column;gap:12px;margin-top:10px}
+.subtab{overflow-x:auto}
+.subtab table{border-collapse:collapse;font-size:12px;width:100%}
+.subtab th{font-weight:500;color:var(--ink-3);text-align:left;padding:2px 4px}
+.subtab td{padding:2px 3px}
+.subtab input{width:100%;min-width:56px;font:12px var(--f-mono);padding:3px 4px;border:1px solid var(--line);border-radius:5px;background:var(--panel);color:var(--ink)}
+
+.stage{display:flex;flex-direction:column;gap:22px;min-width:0}
+.hero{display:grid;grid-template-columns:170px minmax(0,1fr);gap:0;overflow:hidden}
+.column{position:relative;border-right:1px solid var(--line);min-height:100%}
+.column canvas{display:block;width:100%;height:100%}
+.hero-main{padding:18px 20px;display:flex;flex-direction:column;gap:16px;min-width:0}
+.status{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.status .runinfo{font-family:var(--f-mono);font-size:12.5px;color:var(--ink-3)}
+.insight{font-size:16.5px;line-height:1.45;max-width:72ch;margin:0}
+.insight b{font-weight:600}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(128px,1fr));gap:10px}
+.tile{background:var(--panel-2);border-radius:10px;padding:11px 13px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.tile .k{font-size:12px;color:var(--ink-3);font-weight:500}
+.tile .v{font-family:var(--f-display);font-weight:700;font-size:26px;line-height:1.1;font-variant-numeric:tabular-nums}
+.tile .v small{font-family:var(--f-body);font-weight:500;font-size:13px;color:var(--ink-2);margin-left:3px}
+.tile .d{font-size:12px;color:var(--ink-2);font-variant-numeric:tabular-nums;min-height:18px}
+.split{display:flex;height:6px;border-radius:3px;overflow:hidden;background:var(--grid);gap:2px;margin-top:5px}
+.split span{display:block;height:100%}
+.psd-wrap{display:flex;flex-direction:column;gap:6px}
+.psd-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.psd-head h3{font-size:15px;font-weight:700}
+.psd-head .note{font-size:12.5px;color:var(--ink-3)}
+canvas.psd{width:100%;height:230px;display:block;touch-action:pan-y}
+
+.profiles{padding:18px 20px 14px}
+.profiles-head{display:flex;justify-content:space-between;gap:12px;align-items:end;flex-wrap:wrap;margin-bottom:12px}
+.profiles-head h2{font-size:22px;font-weight:700}
+.profiles-head p{margin:4px 0 0;color:var(--ink-2);font-size:14px;max-width:70ch}
+.pgrid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px}
+.pan{display:flex;flex-direction:column;gap:4px;min-width:0}
+.pan .t{font-size:13px;font-weight:600;line-height:1.25;min-height:2.5em}
+.pan .r{font-family:var(--f-mono);font-size:12px;color:var(--ink-2);min-height:36px;font-variant-numeric:tabular-nums;line-height:1.45}
+.pan canvas{width:100%;height:380px;display:block;touch-action:pan-y;cursor:crosshair}
+.hoverz{font-family:var(--f-mono);font-size:12px;color:var(--ink-3)}
+
+.explain{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}
+.explain section{padding:20px}
+.explain h3{font-size:18px;font-weight:700;margin-bottom:8px}
+.explain p,.explain li{color:var(--ink-2);font-size:14.5px;margin:0 0 8px;max-width:65ch}
+.explain ul{padding-left:18px;margin:0}
+.eq{font-family:var(--f-mono);font-size:12.5px;background:var(--panel-2);border-radius:8px;padding:10px 12px;color:var(--ink);overflow-x:auto;white-space:pre;line-height:1.6;margin:6px 0 10px}
+a{color:var(--c-ss)}
+footer{font-size:12.5px;color:var(--ink-3)}
+
+@media (max-width:1180px){ .pgrid{grid-template-columns:repeat(3,minmax(0,1fr))} .explain{grid-template-columns:1fr 1fr} }
+@media (max-width:900px){ .lab{grid-template-columns:1fr} .controls{position:static} header.top{grid-template-columns:1fr} }
+@media (max-width:620px){
+  .hero{grid-template-columns:1fr} .column{border-right:0;border-bottom:1px solid var(--line);height:220px}
+  .pgrid{grid-template-columns:repeat(2,minmax(0,1fr))} .pan canvas{height:300px}
+  .explain{grid-template-columns:1fr} .hero-main,.profiles{padding:14px}
+}
+@media (prefers-reduced-motion: reduce){ *{scroll-behavior:auto} }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <div class="eyebrow">Parcel model · cloud droplet activation · two aerosol types</div>
+      <h1>Which particles become cloud droplets?</h1>
+      <p>Every cloud droplet grows on a tiny particle of aerosol. Here a rising air parcel carries two separate aerosol populations, background ammonium sulphate and sea salt. As the parcel cools, the two types compete for the same water vapour. Change the air or the aerosol and watch which particles win.</p>
+    </div>
+    <div class="legend-key" aria-label="Line key">
+      <span class="sw bg"><i></i>Background aerosol</span>
+      <span class="sw ss"><i></i>Sea-salt aerosol</span>
+      <span class="sw tot"><i></i>Parcel / total</span>
+      <span class="sw pin"><i></i>Pinned run</span>
+    </div>
+  </header>
+
+  <div class="lab">
+    <aside class="card controls" aria-label="Model settings">
+      <div class="group">
+        <h2>Try an experiment</h2>
+        <div class="presets" id="presets"></div>
+      </div>
+
+      <div class="group">
+        <h2>The air parcel</h2>
+        <div class="ctl"><label for="w">Updraft speed</label><output id="w-o"></output>
+          <input type="range" id="w" min="-2" max="1" step="0.01"></div>
+        <div class="ctl"><label for="rh">Starting humidity</label><output id="rh-o"></output>
+          <input type="range" id="rh" min="50" max="99" step="1"></div>
+        <div class="ctl"><label for="tc">Starting temperature</label><output id="tc-o"></output>
+          <input type="range" id="tc" min="0" max="30" step="0.5"></div>
+        <div class="ctl"><label for="zt">Rise to height</label><output id="zt-o"></output>
+          <input type="range" id="zt" min="1000" max="3000" step="50"></div>
+      </div>
+
+      <div class="group">
+        <h2>The aerosol</h2>
+        <div class="mode bg">
+          <div class="mode-head"><h3>Background</h3><select id="comp0" aria-label="Background aerosol composition"></select></div>
+          <div class="ctl"><label for="bgx">Amount</label><output id="bgx-o"></output>
+            <input type="range" id="bgx" min="-1.3" max="1" step="0.01">
+            <span class="hint" id="bg-hint"></span></div>
+        </div>
+        <div class="mode ss">
+          <div class="mode-head"><h3>Sea salt</h3><select id="comp1" aria-label="Sea-salt aerosol composition"></select></div>
+          <div class="ctl"><label for="ssn">Number</label><output id="ssn-o"></output>
+            <input type="range" id="ssn" min="0" max="3000" step="10"></div>
+          <div class="ctl"><label for="ssd">Median dry diameter</label><output id="ssd-o"></output>
+            <input type="range" id="ssd" min="1.3" max="3.3" step="0.01"></div>
+          <div class="ctl"><label for="sss">Spread, ln σ<sub>g</sub></label><output id="sss-o"></output>
+            <input type="range" id="sss" min="0.01" max="0.8" step="0.01">
+            <span class="hint">0.01 means nearly all particles are the same size.</span></div>
+        </div>
+      </div>
+
+      <details class="adv">
+        <summary>All six log-normal modes (as in namelist.in)</summary>
+        <div class="adv-body">
+          <div class="subtab" id="subtab"></div>
+          <div class="ctl"><label for="nb">Moving bins per aerosol type</label>
+            <select id="nb"><option value="30">30</option><option value="60" selected>60</option><option value="100">100</option></select></div>
+        </div>
+      </details>
+
+      <div class="btnrow">
+        <button class="btn" id="pin">Pin this run to compare</button>
+        <button class="btn ghost" id="unpin" hidden>Clear pinned</button>
+        <button class="btn ghost" id="replay">Replay</button>
+      </div>
+    </aside>
+
+    <div class="stage">
+      <div class="card hero">
+        <div class="column"><canvas id="col" aria-label="Rising parcel animation"></canvas></div>
+        <div class="hero-main">
+          <div class="status"><div class="eyebrow" id="phase">Running…</div><div class="runinfo" id="runinfo"></div></div>
+          <p class="insight" id="insight">&nbsp;</p>
+          <div class="tiles" id="tiles"></div>
+          <div class="psd-wrap">
+            <div class="psd-head"><h3>Dry aerosol sizes, and which ones activated</h3><span class="note" id="psd-note">Filled = became cloud droplets. Outline = stayed as haze.</span></div>
+            <canvas class="psd" id="psd" aria-label="Aerosol size distribution"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div class="card profiles">
+        <div class="profiles-head">
+          <div>
+            <h2>Up through the parcel</h2>
+            <p>The same six views as the practical's plotting script, all against height. Hover or drag on any panel to read every panel at one height.</p>
+          </div>
+          <div class="hoverz" id="hoverz">Readouts at cloud top</div>
+        </div>
+        <div class="pgrid" id="pgrid"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="explain">
+    <section class="card">
+      <h3>What you are seeing</h3>
+      <p>The parcel starts at the ground and rises at a steady speed. It cools by about 10 °C per kilometre until the vapour saturates. That point is cloud base.</p>
+      <p>Just above cloud base the air becomes slightly <b>supersaturated</b>, usually by less than 1 %. Every particle has a critical supersaturation that it must see before it can grow freely into a droplet. Big, soluble particles need less. The peak supersaturation decides who makes it.</p>
+      <p>Adding particles gives the vapour more places to go, so the peak falls. That is why extra sea salt can switch off some background particles.</p>
+    </section>
+    <section class="card">
+      <h3>The model</h3>
+      <p>The same equations as the Fortran bin-microphysics model used in the practical, solved here in your browser:</p>
+      <div class="eq">dP/dt   = −ρ g w
+dT/dt   = (R T / c<sub>p</sub> P) dP/dt + (L<sub>v</sub>/c<sub>p</sub>) dw<sub>l</sub>/dt
+dm<sub>i</sub>/dt  = 4π r<sub>i</sub> D* (e<sub>∞</sub> − e<sub>eq,i</sub>) / (R<sub>v</sub>T)
+e<sub>eq,i</sub>   = e<sub>s</sub>(T) · a<sub>w</sub> · exp(4 M<sub>w</sub> σ / R T ρ d)
+dw<sub>l</sub>/dt  = Σ N<sub>i</sub> dm<sub>i</sub>/dt = −dw<sub>v</sub>/dt</div>
+      <p>Condensation only. Collision-coalescence, ice and entrainment are switched off.</p>
+    </section>
+    <section class="card">
+      <h3>Full moving bins</h3>
+      <p>Each aerosol type is split into bins that hold equal numbers of particles. A bin keeps its own dry particle mass and composition for the whole run and only its water mass changes. Bins move along the size axis as they grow, so nothing is remapped and the two types never mix. That is what makes it an <b>external mixture</b>.</p>
+      <p>A bin counts as a cloud droplet once its water mass passes the peak of its Köhler curve. Droplet numbers are shown per cm³ of air.</p>
+      <p>Checked against the compiled Fortran model for the practical's runs: droplet numbers agree to within about 1 %.</p>
+    </section>
+  </div>
+  <footer>Physics after the <a href="https://github.com/EnvModelling/bin-microphysics-model" target="_blank" rel="noopener">bin-microphysics-model</a> by Paul Connolly, University of Manchester (EART22001 parcel modelling practical). Ventilation of falling drops is neglected, which is fine for drops smaller than about 20 µm.</footer>
+</div>
+
+<script>
+// Parcel model with full-moving bins and externally mixed aerosol.
+// A JavaScript port of the warm-phase condensation core of the
+// bin-microphysics-model (P. J. Connolly), without collision-coalescence.
+(function (root) {
+  'use strict';
+  const PI = Math.PI;
+  const R_GAS = 8.314, MOLW_A = 29e-3, MOLW_W = 18e-3;
+  const CP = 1005.0, CPV = 1870.0, CPW = 4.27e3, GRAV = 9.81, LV = 2.5e6, TTR = 273.15;
+  const RHOW = 1000.0, RA = R_GAS / MOLW_A, RV = R_GAS / MOLW_W, EPS1 = RA / RV;
+  const ERG = 1e-7, CAL = 4.187;
+
+  const COMPOSITIONS = {
+    ammsulph: { label: 'Ammonium sulphate', M: 132.14e-3, rho: 1770, nu: 3 },
+    nacl: { label: 'Sea salt (NaCl)', M: 58.44e-3, rho: 2165, nu: 2 },
+    organic: { label: 'Organic (weakly soluble)', M: 200e-3, rho: 1500, nu: 1 },
+  };
+
+  function svp(t) {
+    const tc = t - TTR;
+    return 100 * 6.1121 * Math.exp((18.678 - tc / 234.5) * tc / (257.14 + tc));
+  }
+  function dsvpdT(t) { const h = 1e-3; return (svp(t + h) - svp(t - h)) / (2 * h); }
+  function diffusivity(t, p) { const t1 = Math.max(t, 200); return 2.11e-5 * Math.pow(t1 / TTR, 1.94) * (101325 / p); }
+  function kair(t) { const t1 = Math.max(t, 200); return (5.69 + 0.017 * (t1 - TTR)) * 1e-3 * CAL; }
+  function surfaceTension(t) {
+    let tc = Math.max(t - TTR, -40), s;
+    if (tc >= 0) s = 76.1 - 0.155 * tc;
+    else s = 75.93 + 0.115 * tc + 6.818e-2 * tc ** 2 + 6.511e-3 * tc ** 3 + 2.933e-4 * tc ** 4 + 6.283e-6 * tc ** 5 + 5.285e-8 * tc ** 6;
+    return s * ERG * 1e4;
+  }
+  // erfc (Numerical Recipes, fractional error < 1.2e-7)
+  function erfc(x) {
+    const z = Math.abs(x), t = 1 / (1 + 0.5 * z);
+    const r = t * Math.exp(-z * z - 1.26551223 + t * (1.00002368 + t * (0.37409196 + t * (0.09678418 +
+      t * (-0.18628806 + t * (0.27886807 + t * (-1.13520398 + t * (1.48851587 + t * (-0.82215223 + t * 0.17087277)))))))));
+    return x >= 0 ? r : 2 - r;
+  }
+  function lnN(sub, d0, d1) {
+    let n = 0;
+    for (const s of sub) {
+      if (!(s.N > 0)) continue;
+      n += s.N * (0.5 * erfc(-Math.log(d1 / s.D) / Math.SQRT2 / s.sig) - 0.5 * erfc(-Math.log(d0 / s.D) / Math.SQRT2 / s.sig));
+    }
+    return n;
+  }
+  function lnM3(sub, d0, d1) {
+    let m = 0;
+    for (const s of sub) {
+      if (!(s.N > 0)) continue;
+      const z0 = Math.log(d0 / s.D) / s.sig, z1 = Math.log(d1 / s.D) / s.sig;
+      m += s.N * s.D ** 3 * Math.exp(4.5 * s.sig ** 2) *
+        (0.5 * erfc(-(z1 - 3 * s.sig) / Math.SQRT2) - 0.5 * erfc(-(z0 - 3 * s.sig) / Math.SQRT2));
+    }
+    return m;
+  }
+  // dN/dlnD for plotting
+  function dNdlnD(sub, d) {
+    let v = 0;
+    for (const s of sub) {
+      if (!(s.N > 0)) continue;
+      v += s.N / (Math.sqrt(2 * PI) * s.sig) * Math.exp(-(Math.log(d / s.D) ** 2) / (2 * s.sig ** 2));
+    }
+    return v;
+  }
+
+  // Köhler equilibrium saturation ratio for a particle with water mass mw.
+  function kohler(mw, md, comp, t, sigma) {
+    const vol = mw / RHOW + md / comp.rho;
+    const rhoat = (mw + md) / vol;
+    const dw = Math.cbrt((mw + md) * 6 / (PI * rhoat));
+    const nw = mw / MOLW_W, ns = md / comp.M * comp.nu;
+    const aw = nw / (nw + ns);
+    return { seq: Math.exp(4 * MOLW_W * sigma / R_GAS / t / rhoat / dw) * aw, rhoat, dw };
+  }
+  // equilibrium water mass at saturation ratio s (< 1): bisection in ln(mw)
+  function equilibriumWater(md, comp, t, s) {
+    const sigma = surfaceTension(t);
+    let lo = Math.log(1e-32), hi = Math.log(1e-3);
+    for (let k = 0; k < 200; k++) {
+      const mid = 0.5 * (lo + hi);
+      if (kohler(Math.exp(mid), md, comp, t, sigma).seq < s) lo = mid; else hi = mid;
+      if (hi - lo < 1e-12) break;
+    }
+    return Math.exp(0.5 * (lo + hi));
+  }
+  // critical (peak) point of the Köhler curve: golden section on ln(mw)
+  function criticalPoint(md, comp, t) {
+    const sigma = surfaceTension(t);
+    const f = (x) => -kohler(Math.exp(x), md, comp, t, sigma).seq;
+    // bracket: peak lies where water volume >> dry volume; scan coarsely first
+    let best = -Infinity, bx = 0;
+    for (let x = Math.log(md * 1e-2 + 1e-30); x < Math.log(md * 1e9 + 1e-20); x += 0.5) {
+      const v = -f(x); if (v > best) { best = v; bx = x; }
+    }
+    let a = bx - 0.5, b = bx + 0.5; const g = (Math.sqrt(5) - 1) / 2;
+    let c = b - g * (b - a), d = a + g * (b - a), fc = f(c), fd = f(d);
+    for (let k = 0; k < 80; k++) {
+      if (fc < fd) { b = d; d = c; fd = fc; c = b - g * (b - a); fc = f(c); }
+      else { a = c; c = d; fc = fd; d = a + g * (b - a); fd = f(d); }
+    }
+    const x = 0.5 * (a + b), r = kohler(Math.exp(x), md, comp, t, sigma);
+    return { mcrit: Math.exp(x), scrit: r.seq, dcrit: r.dw };
+  }
+
+  // Build full-moving bins: equal-number bins per external mode between dmin and dmax
+  function buildBins(modes, nb, dmin, dmax) {
+    const bins = [];
+    modes.forEach((mode, im) => {
+      const sub = mode.sub.map(s => ({ N: s.N, D: s.D, sig: s.sig }));
+      const ntot = lnN(sub, dmin, dmax);
+      if (!(ntot > 1)) return; // empty mode
+      const comp = mode.comp;
+      const edges = [dmin];
+      let lo = dmin;
+      for (let i = 1; i < nb; i++) {
+        const target = ntot * i / nb;
+        let a = Math.log(lo), b = Math.log(dmax);
+        for (let k = 0; k < 100; k++) {
+          const m = 0.5 * (a + b);
+          if (lnN(sub, dmin, Math.exp(m)) < target) a = m; else b = m;
+        }
+        lo = Math.exp(0.5 * (a + b)); edges.push(lo);
+      }
+      edges.push(dmax);
+      for (let i = 0; i < nb; i++) {
+        const n = lnN(sub, edges[i], edges[i + 1]);
+        if (!(n > 0)) continue;
+        const m3 = lnM3(sub, edges[i], edges[i + 1]);
+        const md = PI / 6 * comp.rho * m3 / n;
+        bins.push({ mode: im, N: n, md, ddry: Math.cbrt(m3 / n), d0: edges[i], d1: edges[i + 1], comp });
+      }
+    });
+    return bins;
+  }
+
+  // ---------------------------------------------------------------------------
+  function createRun(cfg) {
+    const nb = cfg.nbins || 60, dmin = cfg.dmin || 10e-9, dmax = cfg.dmax || 3e-6;
+    const bins = buildBins(cfg.modes, nb, dmin, dmax);
+    const n = bins.length;
+    const Nn = new Float64Array(n), MD = new Float64Array(n);
+    bins.forEach((b, i) => { Nn[i] = b.N; MD[i] = b.md; });
+    const comps = bins.map(b => b.comp);
+    const w = cfg.w;
+    const iP = n, iT = n + 1, iR = n + 2, iZ = n + 3, neq = n + 4;
+    const y = new Float64Array(neq);
+    const rh0 = Math.min(cfg.rh, 0.995);
+    bins.forEach((b, i) => { y[i] = equilibriumWater(b.md, b.comp, cfg.T, rh0); });
+    y[iP] = cfg.P; y[iT] = cfg.T; y[iR] = rh0; y[iZ] = cfg.z0 || 0;
+
+    // critical points (recomputed when T drifts)
+    let critT = -1; const mcrit = new Float64Array(n), scrit = new Float64Array(n), dcrit = new Float64Array(n);
+    function updateCrit(t) {
+      if (Math.abs(t - critT) < 0.5) return;
+      critT = t;
+      for (let i = 0; i < n; i++) { const c = criticalPoint(MD[i], comps[i], t); mcrit[i] = c.mcrit; scrit[i] = c.scrit; dcrit[i] = c.dcrit; }
+    }
+    updateCrit(cfg.T);
+    const scrit0 = Float64Array.from(scrit);
+
+    // work arrays
+    const rate = new Float64Array(n), dwA = new Float64Array(n);
+    function binRates(m, p, t, rh, out, dwOut) {
+      const s = svp(t);
+      let sl = s * rh / (p - s); sl = (sl * p / (1 + sl)) / s;
+      const sigma = surfaceTension(t), rhoa = p / RA / t, d1 = diffusivity(t, p), k1 = kair(t);
+      const lvTerm = LV * MOLW_W / t / R_GAS - 1;
+      const a1 = Math.sqrt(2 * PI / RV / t), a2 = Math.sqrt(2 * PI / RA / t);
+      for (let i = 0; i < n; i++) {
+        const mw = m[i] > 0 ? m[i] : 1e-30;
+        const md = MD[i], comp = comps[i];
+        const vol = mw / RHOW + md / comp.rho, rhoat = (mw + md) / vol;
+        const dw = Math.cbrt((mw + md) * 6 / (PI * rhoat)), rad = dw / 2;
+        const nw = mw / MOLW_W, ns = md / comp.M * comp.nu;
+        const seq = Math.exp(4 * MOLW_W * sigma / R_GAS / t / rhoat / dw) * nw / (nw + ns);
+        const dstar = d1 / (rad / (rad + 0.7 * 8e-8) + d1 / rad * a1);
+        const kstar = k1 / (rad / (rad + 2.16e-7) + k1 / rad / CP / rhoa * a2);
+        let den = dstar * LV * seq * s * rhoat / kstar / t * lvTerm + rhoat * R_GAS * t / MOLW_W;
+        const dadt = dstar * (sl - seq) * s / rad / den;
+        let dm = PI * rhoat * dw * dw * dadt;
+        if (m[i] <= 0 && dm < 0) dm = 0;
+        out[i] = dm;
+        if (dwOut) dwOut[i] = dw;
+      }
+    }
+    function stateRates(yv, drv, out) {
+      const p = yv[iP], t = yv[iT], rh = yv[iR];
+      const s = svp(t), wv = EPS1 * rh * s / (p - s), rm = RA + wv * RV;
+      let wl = 0; for (let i = 0; i < n; i++) wl += Nn[i] * yv[i];
+      const cpm = CP + wv * CPV + wl * CPW;
+      const dp = -p / rm / t * GRAV * w;
+      const dt = rm / p * dp * t / cpm - LV / cpm * drv;
+      const ds = dsvpdT(t);
+      const drh = ((p - s) * s * drv + s * wv * dp - wv * p * ds * dt) / (EPS1 * s * s);
+      out[0] = dp; out[1] = dt; out[2] = drh;
+      // d(f)/d(drv) at fixed state
+      out[3] = 0; out[4] = -LV / cpm; out[5] = ((p - s) * s - wv * p * ds * (-LV / cpm)) / (EPS1 * s * s);
+    }
+    const sr = new Float64Array(6);
+    function f(yv, out) {
+      binRates(yv, yv[iP], yv[iT], yv[iR], rate, null);
+      let drv = 0;
+      for (let i = 0; i < n; i++) { out[i] = rate[i]; drv -= Nn[i] * rate[i]; }
+      stateRates(yv, drv, sr);
+      out[iP] = sr[0]; out[iT] = sr[1]; out[iR] = sr[2]; out[iZ] = w;
+    }
+
+    // Jacobian pieces (arrowhead structure)
+    const A = new Float64Array(n), B = [new Float64Array(n), new Float64Array(n), new Float64Array(n)];
+    const JS = [[0, 0, 0], [0, 0, 0], [0, 0, 0]], CS = [0, 0, 0];
+    const tmpm = new Float64Array(n), r0 = new Float64Array(n), r1 = new Float64Array(n), ytmp = new Float64Array(neq);
+    const f0 = new Float64Array(neq), f1 = new Float64Array(neq);
+    function jacobian(yv, fv) {
+      const p = yv[iP], t = yv[iT], rh = yv[iR];
+      binRates(yv, p, t, rh, r0, null);
+      for (let i = 0; i < n; i++) tmpm[i] = yv[i] * (1 + 1e-6) + 1e-30;
+      binRates(tmpm, p, t, rh, r1, null);
+      for (let i = 0; i < n; i++) A[i] = (r1[i] - r0[i]) / (tmpm[i] - yv[i]);
+      const hs = [Math.max(1e-3, Math.abs(p) * 1e-7), 1e-5, 1e-7];
+      for (let k = 0; k < 3; k++) {
+        ytmp.set(yv); ytmp[n + k] += hs[k];
+        f(ytmp, f1);
+        for (let i = 0; i < n; i++) B[k][i] = (f1[i] - fv[i]) / hs[k];
+        for (let j = 0; j < 3; j++) JS[j][k] = (f1[n + j] - fv[n + j]) / hs[k];
+      }
+      stateRates(yv, 0, sr); CS[0] = sr[3]; CS[1] = sr[4]; CS[2] = sr[5];
+    }
+    // solve (I - g J) x = b in place
+    const Dg = new Float64Array(n);
+    function prepare(g) { for (let i = 0; i < n; i++) Dg[i] = 1 - g * A[i]; }
+    function solve(g, b) {
+      // x_i = (b_i + g sum_S B_S,i x_S)/Dg_i
+      // row S: x_S - g*[CS_S * sum_i(-N_i A_i x_i) + sum_S' JS_SS' x_S'] = b_S
+      let u = 0; const v = [0, 0, 0];
+      for (let i = 0; i < n; i++) {
+        const c = -Nn[i] * A[i] / Dg[i];
+        u += c * b[i];
+        v[0] += c * g * B[0][i]; v[1] += c * g * B[1][i]; v[2] += c * g * B[2][i];
+      }
+      const M = [[0, 0, 0], [0, 0, 0], [0, 0, 0]], r = [0, 0, 0];
+      for (let s = 0; s < 3; s++) {
+        for (let q = 0; q < 3; q++) M[s][q] = (s === q ? 1 : 0) - g * CS[s] * v[q] - g * JS[s][q];
+        r[s] = b[n + s] + g * CS[s] * u;
+      }
+      const x = solve3(M, r);
+      b[n] = x[0]; b[n + 1] = x[1]; b[n + 2] = x[2];
+      for (let i = 0; i < n; i++) b[i] = (b[i] + g * (B[0][i] * x[0] + B[1][i] * x[1] + B[2][i] * x[2])) / Dg[i];
+      // b[iZ] unchanged (no coupling)
+    }
+    function solve3(M, r) {
+      const a = M.map(row => row.slice()), bb = r.slice();
+      for (let c = 0; c < 3; c++) {
+        let piv = c; for (let k = c + 1; k < 3; k++) if (Math.abs(a[k][c]) > Math.abs(a[piv][c])) piv = k;
+        [a[c], a[piv]] = [a[piv], a[c]];[bb[c], bb[piv]] = [bb[piv], bb[c]];
+        for (let k = c + 1; k < 3; k++) { const fct = a[k][c] / a[c][c]; for (let j = c; j < 3; j++) a[k][j] -= fct * a[c][j]; bb[k] -= fct * bb[c]; }
+      }
+      const x = [0, 0, 0];
+      for (let c = 2; c >= 0; c--) { let s = bb[c]; for (let j = c + 1; j < 3; j++) s -= a[c][j] * x[j]; x[c] = s / a[c][c]; }
+      return x;
+    }
+
+    // tolerances
+    const rtol = cfg.rtol || 1e-4;
+    const atol = new Float64Array(neq);
+    for (let i = 0; i < n; i++) atol[i] = Math.max(1e-3 * MD[i], 1e-26);
+    atol[iP] = 0.1; atol[iT] = 1e-5; atol[iR] = 1e-7; atol[iZ] = 1e-3;
+
+    // Shampine's ode23s (Rosenbrock 2(3), L-stable)
+    const dcoef = 1 / (2 + Math.SQRT2), e32 = 6 + Math.SQRT2;
+    const k1 = new Float64Array(neq), k2 = new Float64Array(neq), k3 = new Float64Array(neq);
+    const F1 = new Float64Array(neq), F2 = new Float64Array(neq), ynew = new Float64Array(neq);
+    let tnow = 0, h = cfg.h0 || 0.01, nsteps = 0, nrej = 0;
+    const hmax = cfg.hmax || 2;
+    f(y, f0);
+    let fresh = false;
+
+    function step(tend) {
+      // attempt one step, not passing tend
+      let hh = Math.min(h, tend - tnow);
+      jacobian(y, f0);
+      for (let attempt = 0; attempt < 30; attempt++) {
+        const g = hh * dcoef;
+        prepare(g);
+        for (let i = 0; i < neq; i++) k1[i] = f0[i];
+        solve(g, k1);
+        for (let i = 0; i < neq; i++) ytmp[i] = y[i] + 0.5 * hh * k1[i];
+        f(ytmp, F1);
+        for (let i = 0; i < neq; i++) k2[i] = F1[i] - k1[i];
+        solve(g, k2);
+        for (let i = 0; i < neq; i++) { k2[i] += k1[i]; ynew[i] = y[i] + hh * k2[i]; }
+        f(ynew, F2);
+        for (let i = 0; i < neq; i++) k3[i] = F2[i] - e32 * (k2[i] - F1[i]) - 2 * (k1[i] - f0[i]);
+        solve(g, k3);
+        let err = 0, bad = false;
+        for (let i = 0; i < neq; i++) {
+          const e = hh / 6 * (k1[i] - 2 * k2[i] + k3[i]);
+          const sc = atol[i] + rtol * Math.max(Math.abs(y[i]), Math.abs(ynew[i]));
+          const r = Math.abs(e) / sc; if (!(r === r)) bad = true; if (r > err) err = r;
+        }
+        if (i_negative(ynew)) bad = true;
+        if (!bad && err <= 1) {
+          tnow += hh; y.set(ynew); f0.set(F2); nsteps++;
+          const fac = Math.min(4, 0.8 * Math.pow(Math.max(err, 1e-10), -1 / 3));
+          if (hh === h || fac < 1) h = Math.min(hmax, hh * fac); else h = Math.min(hmax, Math.max(h, hh * fac));
+          return;
+        }
+        nrej++;
+        hh *= bad ? 0.25 : Math.max(0.2, 0.8 * Math.pow(err, -1 / 3));
+        h = hh;
+        if (hh < 1e-12) throw new Error('step size underflow');
+      }
+      throw new Error('too many step rejections');
+    }
+    function i_negative(yv) {
+      if (yv[iR] <= 0 || yv[iT] <= 150 || yv[iP] <= 0) return true;
+      for (let i = 0; i < n; i++) if (yv[i] < -1e-3 * MD[i]) return true;
+      return false;
+    }
+
+    // diagnostics
+    const out = { t: [], z: [], p: [], T: [], rh: [], ss: [], ql: [], cdnc: [], cdncMode: [[], []], rhoa: [], dw: [], act: [] };
+    let smax = -1, zbase = null;
+    function record() {
+      const p = y[iP], t = y[iT], rh = y[iR];
+      const s = svp(t);
+      let sl = s * rh / (p - s); sl = (sl * p / (1 + sl)) / s;
+      const wv = EPS1 * rh * s / (p - s), rm = RA + wv * RV, rhoa = p / (rm * t);
+      updateCrit(t);
+      binRates(y, p, t, rh, rate, dwA);
+      let ql = 0, nd = 0; const ndm = [0, 0];
+      const dws = new Float32Array(n), act = new Uint8Array(n);
+      for (let i = 0; i < n; i++) {
+        ql += Nn[i] * Math.max(y[i], 0);
+        dws[i] = dwA[i];
+        if (y[i] > mcrit[i]) { act[i] = 1; nd += Nn[i]; ndm[bins[i].mode] += Nn[i]; }
+      }
+      out.t.push(tnow); out.z.push(y[iZ]); out.p.push(p); out.T.push(t); out.rh.push(rh * 100);
+      out.ss.push((sl - 1) * 100); out.ql.push(ql * 1000);
+      out.cdnc.push(nd * rhoa / 1e6); out.cdncMode[0].push(ndm[0] * rhoa / 1e6); out.cdncMode[1].push(ndm[1] * rhoa / 1e6);
+      out.rhoa.push(rhoa); out.dw.push(dws); out.act.push(act);
+      if (zbase === null && sl >= 1) zbase = y[iZ];
+    }
+    record();
+
+    const ztop = cfg.ztop, dzOut = cfg.dzOut || 5;
+    const tEnd = (ztop - y[iZ]) / w;
+    const dtOut = dzOut / w;
+    let nextOut = dtOut;
+    let done = false;
+
+    function advance(budgetMs) {
+      const t0 = Date.now();
+      while (!done) {
+        const target = Math.min(nextOut, tEnd);
+        while (tnow < target - 1e-9) {
+          step(target);
+          const s = svp(y[iT]); let sl = s * y[iR] / (y[iP] - s); sl = (sl * y[iP] / (1 + sl)) / s;
+          if ((sl - 1) * 100 > smax) smax = (sl - 1) * 100;
+        }
+        record();
+        nextOut += dtOut;
+        if (tnow >= tEnd - 1e-9) done = true;
+        if (budgetMs && Date.now() - t0 > budgetMs) break;
+      }
+      return done;
+    }
+
+    return {
+      bins, out, advance,
+      get done() { return done; },
+      get smax() { return smax; },
+      get zbase() { return zbase; },
+      get stats() { return { nsteps, nrej }; },
+      scrit0, scritNow: scrit, dcrit, mcrit,
+    };
+  }
+
+  const api = { createRun, COMPOSITIONS, dNdlnD, criticalPoint, equilibriumWater, svp };
+  if (typeof module !== 'undefined' && module.exports) module.exports = api;
+  else root.ParcelModel = api;
+})(this);
+
+</script>
+<script>
+(function(){
+'use strict';
+const PM = window.ParcelModel, COMPS = PM.COMPOSITIONS;
+const $ = (id) => document.getElementById(id);
+
+// ------------------------------------------------------------------ state
+const BASE_BG = [{N:46.64e6,D:18e-9,sig:.348},{N:153.42e6,D:39e-9,sig:.354},{N:166.77e6,D:154e-9,sig:.465}];
+const BASE_SS = [{N:0,D:1e-6,sig:.3},{N:0,D:1e-6,sig:.3},{N:0,D:100e-9,sig:.5}];
+const clone = (a) => a.map(s => ({...s}));
+const state = { w:0.3, rh:65, tc:290-273.15, zt:1200, bgx:1, comp:['ammsulph','nacl'], nb:60, sub:[clone(BASE_BG), clone(BASE_SS)] };
+
+const PRESETS = [
+  {id:'def', t:'Practical default', s:'Background only, 0.3 m/s', set:{}},
+  {id:'r1', t:'1 · Add sea salt', s:'1000 × 10⁶ kg⁻¹ at 100 nm', set:{ss:[1000e6,100e-9,.5]}},
+  {id:'r2', t:'2 · Narrow sea salt', s:'same, ln σg = 0.01', set:{ss:[1000e6,100e-9,.01]}},
+  {id:'r3', t:'3 · Giant sea salt', s:'same, 800 nm', set:{ss:[1000e6,800e-9,.01]}},
+  {id:'slow', t:'Gentle updraft', s:'0.03 m/s', set:{w:0.03}},
+  {id:'fast', t:'Strong updraft', s:'3 m/s', set:{w:3}},
+  {id:'humid', t:'Humid start', s:'95 % at the ground', set:{rh:95}},
+];
+function applyPreset(p){
+  state.w=0.3; state.rh=65; state.tc=16.85; state.zt=1200; state.bgx=1; state.comp=['ammsulph','nacl'];
+  state.sub=[clone(BASE_BG), clone(BASE_SS)];
+  if (p.set.w) state.w=p.set.w;
+  if (p.set.rh) state.rh=p.set.rh;
+  if (p.set.ss){ const s=state.sub[1][2]; s.N=p.set.ss[0]; s.D=p.set.ss[1]; s.sig=p.set.ss[2]; }
+  activePreset=p.id; syncControls(); renderPresets(); scheduleRun(0);
+}
+let activePreset='def';
+
+// ------------------------------------------------------------------ controls
+function renderPresets(){
+  const box=$('presets'); box.innerHTML='';
+  PRESETS.forEach(p=>{
+    const b=document.createElement('button'); b.className='chip'; b.type='button';
+    b.setAttribute('aria-pressed', String(p.id===activePreset));
+    b.innerHTML=`${p.t}<small>${p.s}</small>`;
+    b.onclick=()=>applyPreset(p); box.appendChild(b);
+  });
+}
+for (const i of [0,1]){
+  const sel=$('comp'+i);
+  for (const [k,c] of Object.entries(COMPS)){ const o=document.createElement('option'); o.value=k; o.textContent=c.label; sel.appendChild(o); }
+  sel.onchange=()=>{ state.comp[i]=sel.value; userChanged(); };
+}
+const fmtN=(x)=>x>=100?x.toFixed(0):x>=10?x.toFixed(1):x.toFixed(2);
+function fmtD(d){ return d>=1e-6 ? (d*1e6).toPrecision(3).replace(/\.?0+$/,'')+' µm' : (d*1e9).toPrecision(3).replace(/\.0+$/,'')+' nm'; }
+function totalN(sub){ return sub.reduce((a,s)=>a+s.N,0); }
+function syncControls(){
+  $('w').value=Math.log10(state.w); $('w-o').textContent=(state.w<0.1?state.w.toFixed(3):state.w<1?state.w.toFixed(2):state.w.toFixed(1))+' m/s';
+  $('rh').value=state.rh; $('rh-o').textContent=state.rh.toFixed(0)+' %';
+  $('tc').value=state.tc; $('tc-o').textContent=state.tc.toFixed(1)+' °C';
+  $('zt').value=state.zt; $('zt-o').textContent=state.zt.toFixed(0)+' m';
+  $('bgx').value=Math.log10(state.bgx); $('bgx-o').textContent='× '+(state.bgx<1?state.bgx.toFixed(2):state.bgx.toFixed(1));
+  const nbg=totalN(state.sub[0])*state.bgx;
+  $('bg-hint').textContent=`${fmtN(nbg/1e6)} × 10⁶ particles per kg of air, in three modes`;
+  const s=state.sub[1][2];
+  $('ssn').value=s.N/1e6; $('ssn-o').textContent=s.N>0?`${(s.N/1e6).toFixed(0)} × 10⁶ kg⁻¹`:'none';
+  $('ssd').value=Math.log10(s.D*1e9); $('ssd-o').textContent=fmtD(s.D);
+  $('sss').value=s.sig; $('sss-o').textContent=s.sig.toFixed(2);
+  $('comp0').value=state.comp[0]; $('comp1').value=state.comp[1]; $('nb').value=String(state.nb);
+  renderSubTable();
+}
+function renderSubTable(){
+  const names=['Background','Sea salt'];
+  let h='<table><thead><tr><th></th><th>N (10⁶ kg⁻¹)</th><th>D (nm)</th><th>ln σg</th></tr></thead><tbody>';
+  for (let m=0;m<2;m++) for (let j=0;j<3;j++){
+    const s=state.sub[m][j];
+    h+=`<tr><th>${names[m]} ${j+1}</th>
+      <td><input id="sub-${m}-${j}-N" type="number" min="0" step="any" value="${+(s.N/1e6).toPrecision(5)}" aria-label="${names[m]} mode ${j+1} number"></td>
+      <td><input id="sub-${m}-${j}-D" type="number" min="1" step="any" value="${+(s.D*1e9).toPrecision(4)}" aria-label="${names[m]} mode ${j+1} diameter"></td>
+      <td><input id="sub-${m}-${j}-S" type="number" min="0.005" step="0.01" value="${s.sig}" aria-label="${names[m]} mode ${j+1} width"></td></tr>`;
+  }
+  $('subtab').innerHTML=h+'</tbody></table>';
+  $('subtab').querySelectorAll('input').forEach(inp=>inp.addEventListener('change',()=>{
+    const [,m,j,k]=inp.id.split('-'); const v=parseFloat(inp.value); if(!(v>=0)) return;
+    const s=state.sub[+m][+j];
+    if(k==='N') s.N=v*1e6; else if(k==='D') s.D=Math.max(v,1)*1e-9; else s.sig=Math.max(v,0.005);
+    userChanged();
+  }));
+}
+function bindRange(id, fn){ const el=$(id); el.addEventListener('input',()=>{ fn(parseFloat(el.value)); userChanged(true); }); el.addEventListener('change',()=>userChanged()); }
+bindRange('w', v=>state.w=Math.pow(10,v));
+bindRange('rh', v=>state.rh=v);
+bindRange('tc', v=>state.tc=v);
+bindRange('zt', v=>state.zt=v);
+bindRange('bgx', v=>state.bgx=Math.pow(10,v));
+bindRange('ssn', v=>state.sub[1][2].N=v*1e6);
+bindRange('ssd', v=>state.sub[1][2].D=Math.pow(10,v)*1e-9);
+bindRange('sss', v=>state.sub[1][2].sig=v);
+$('nb').onchange=()=>{ state.nb=+$('nb').value; userChanged(); };
+function userChanged(live){ activePreset=null; renderPresets(); syncControlsLite(); scheduleRun(live?350:0); }
+function syncControlsLite(){ const a=document.activeElement; syncControls(); if(a&&a.id&&$(a.id)) try{$(a.id).focus();}catch(e){} }
+
+// ------------------------------------------------------------------ run management
+let run=null, pinned=null, runToken=0, revealIdx=0, timer=null, lastFrame=0, runLabel='';
+function scheduleRun(delay){ clearTimeout(timer); timer=setTimeout(startRun, delay); }
+function buildCfg(){
+  const bg=state.sub[0].map(s=>({N:s.N*state.bgx,D:s.D,sig:s.sig}));
+  return { w:state.w, T:state.tc+273.15, P:100000, rh:state.rh/100, ztop:state.zt, nbins:state.nb,
+    dzOut: Math.max(4, state.zt/300),
+    modes:[{comp:COMPS[state.comp[0]], sub:bg},{comp:COMPS[state.comp[1]], sub:state.sub[1].map(s=>({...s}))}] };
+}
+function describe(){
+  const s=state.sub[1][2], ssN=totalN(state.sub[1]);
+  return `w ${state.w<0.1?state.w.toFixed(3):state.w.toFixed(2)} m/s · RH ${state.rh}% · sea salt ${ssN>0?(ssN/1e6).toFixed(0)+'×10⁶ kg⁻¹, '+fmtD(s.D):'none'}`;
+}
+const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function startRun(){
+  const tok=++runToken; const cfg=buildCfg();
+  try { run=PM.createRun(cfg); } catch(e){ $('phase').textContent='Could not start: '+e.message; return; }
+  run.cfg=cfg; run.label=describe(); run.sizes=precomputePSD(run, cfg);
+  revealIdx=0; lastFrame=performance.now(); $('phase').textContent='Parcel rising…';
+  const tEnd=(cfg.ztop)/cfg.w; run.animMs = reduceMotion?0:4200;
+  const loop=(now)=>{
+    if (tok!==runToken) return;
+    try { run.advance(14); } catch(e){ $('phase').textContent='Solver stopped: '+e.message; return; }
+    const nrec=run.out.z.length;
+    const total=Math.round(cfg.ztop/cfg.dzOut)+1;
+    const dt=now-lastFrame; lastFrame=now;
+    if (run.animMs===0) revealIdx=nrec-1;
+    else revealIdx=Math.min(nrec-1, revealIdx + Math.max(1, total*dt/run.animMs));
+    drawAll();
+    if (!run.done || revealIdx<nrec-1) requestAnimationFrame(loop);
+    else finish();
+  };
+  requestAnimationFrame(loop);
+}
+function finish(){ $('phase').textContent='Reached '+state.zt+' m'; drawAll(); }
+$('replay').onclick=()=>{ if(run&&run.done){ revealIdx=0; lastFrame=performance.now(); const tok=runToken;
+  const loop=(now)=>{ if(tok!==runToken) return; const n=run.out.z.length; const dt=now-lastFrame; lastFrame=now;
+    revealIdx=reduceMotion?n-1:Math.min(n-1,revealIdx+Math.max(1,n*dt/4200)); drawAll(); if(revealIdx<n-1) requestAnimationFrame(loop); };
+  requestAnimationFrame(loop);} };
+$('pin').onclick=()=>{ if(!run||!run.done) return; pinned=run; $('unpin').hidden=false; drawAll(); };
+$('unpin').onclick=()=>{ pinned=null; $('unpin').hidden=true; drawAll(); };
+
+// ------------------------------------------------------------------ derived results
+function summarize(r, idx){
+  const o=r.out, k=Math.min(Math.floor(idx), o.z.length-1);
+  const nTot=[0,0]; r.bins.forEach(b=>nTot[b.mode]+=b.N);
+  const rhoa=o.rhoa[k];
+  // activated set and smallest activated dry diameter per mode (max over path so far)
+  const everAct=new Uint8Array(r.bins.length);
+  for (let j=0;j<=k;j++){ const a=o.act[j]; for(let i=0;i<a.length;i++) if(a[i]) everAct[i]=1; }
+  const dmin=[Infinity,Infinity]; let s3=0, sn=0;
+  r.bins.forEach((b,i)=>{ if(o.act[k][i]){ if(b.ddry<dmin[b.mode]) dmin[b.mode]=b.ddry; s3+=b.N*o.dw[k][i]**3; sn+=b.N; } });
+  let smax=-Infinity, zb=null; for(let j=0;j<=k;j++){ if(o.ss[j]>smax) smax=o.ss[j]; if(zb===null&&o.ss[j]>=0) zb=o.z[j]; }
+  if (r.done && k===o.z.length-1) { smax=Math.max(smax, r.smax); if (r.zbase!==null) zb=r.zbase; }
+  return { k, z:o.z[k], cdnc:o.cdnc[k], cm:[o.cdncMode[0][k],o.cdncMode[1][k]], ql:o.ql[k],
+    frac:[nTot[0]>0?o.cdncMode[0][k]/(nTot[0]*rhoa/1e6):null, nTot[1]>0?o.cdncMode[1][k]/(nTot[1]*rhoa/1e6):null],
+    nTot, dmin, smax, zb, dmean: sn>0?Math.cbrt(s3/sn):null, everAct, rhoa, T:o.T[k] };
+}
+
+// ------------------------------------------------------------------ canvas helpers
+function css(name){ return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+let C={};
+function readColors(){ C={bg:css('--c-bg'),ss:css('--c-ss'),tot:css('--c-tot'),pin:css('--c-pin'),ink:css('--ink'),ink2:css('--ink-2'),ink3:css('--ink-3'),
+  grid:css('--grid'),axis:css('--axis'),panel:css('--panel'),panel2:css('--panel-2'),skyT:css('--sky-top'),skyB:css('--sky-bot'),ground:css('--ground'),cloud:css('--cloud'),cloudE:css('--cloud-edge'),line:css('--line')}; }
+function setup(cv){
+  const dpr=window.devicePixelRatio||1, w=cv.clientWidth, h=cv.clientHeight;
+  if (cv.width!==Math.round(w*dpr)||cv.height!==Math.round(h*dpr)){ cv.width=Math.round(w*dpr); cv.height=Math.round(h*dpr); }
+  const ctx=cv.getContext('2d'); ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,w,h); return {ctx,w,h};
+}
+function niceTicks(a,b,n){
+  const span=b-a; if(!(span>0)) return [a];
+  const step0=span/n, mag=Math.pow(10,Math.floor(Math.log10(step0))), r=step0/mag;
+  const step=(r<1.5?1:r<3?2:r<7?5:10)*mag; const t=[];
+  for(let v=Math.ceil(a/step-1e-9)*step; v<=b+step*1e-9; v+=step) t.push(Math.abs(v)<step*1e-9?0:v);
+  return t;
+}
+function logTicks(a,b){ const t=[]; for(let e=Math.floor(Math.log10(a)); e<=Math.ceil(Math.log10(b)); e++) t.push(Math.pow(10,e)); return t.filter(v=>v>=a*0.999&&v<=b*1.001); }
+function fmtTick(v){ const a=Math.abs(v); if(a===0) return '0'; if(a>=1e4||a<1e-3) return v.toExponential(0).replace('e+','e'); return +v.toPrecision(3)+''; }
+function fmtLog(v){ if(v>=1e-6) { const um=v*1e6; return um>=1?(+um.toPrecision(3))+' µm':(+(v*1e9).toPrecision(3))+' nm'; } return (+(v*1e9).toPrecision(3))+' nm'; }
+
+// ------------------------------------------------------------------ profile panels
+const PANELS = [
+  {id:'T', t:'Temperature', u:'°C', scale:'lin'},
+  {id:'RH', t:'Relative humidity', u:'%', scale:'lin'},
+  {id:'SS', t:'Supersaturation', u:'%', scale:'lin'},
+  {id:'QL', t:'Liquid water', u:'g kg⁻¹', scale:'lin'},
+  {id:'N', t:'Cloud droplet number', u:'cm⁻³', scale:'lin'},
+  {id:'D', t:'Droplet diameter, every bin', u:'µm', scale:'log'},
+];
+const pgrid=$('pgrid'); const pcv={};
+PANELS.forEach(p=>{
+  const d=document.createElement('div'); d.className='pan';
+  d.innerHTML=`<div class="t">${p.t} <span style="color:var(--ink-3);font-weight:400">(${p.u})</span></div><div class="r" id="r-${p.id}"></div><canvas id="cv-${p.id}" aria-label="${p.t} against height"></canvas>`;
+  pgrid.appendChild(d); pcv[p.id]=d.querySelector('canvas');
+});
+let hoverZ=null;
+Object.values(pcv).forEach(cv=>{
+  const mv=(e)=>{ const r=cv.getBoundingClientRect(); const y=e.clientY-r.top; const M=pmargin(); const zt=state.zt;
+    const z=(1-(y-M.t)/(r.height-M.t-M.b))*zt; hoverZ=Math.max(0,Math.min(zt,z)); drawProfiles(); };
+  cv.addEventListener('pointermove',mv); cv.addEventListener('pointerdown',mv);
+  cv.addEventListener('pointerleave',()=>{ hoverZ=null; drawProfiles(); });
+});
+function pmargin(){ return {l:40,r:10,t:8,b:34}; }
+
+function seriesFor(r, pid, upto){
+  const o=r.out, n=Math.min(Math.floor(upto)+1, o.z.length);
+  const pick=(arr,f)=>{ const x=new Array(n); for(let i=0;i<n;i++) x[i]=f?f(arr[i]):arr[i]; return x; };
+  switch(pid){
+    case 'T': return [{x:pick(o.T,v=>v-273.15), c:'tot'}];
+    case 'RH': return [{x:pick(o.rh), c:'tot'}];
+    case 'SS': return [{x:pick(o.ss), c:'tot'}];
+    case 'QL': return [{x:pick(o.ql), c:'tot'}];
+    case 'N': {
+      const s=[{x:pick(o.cdnc), c:'tot', w:2.2}];
+      if (r.bins.some(b=>b.mode===0)) s.push({x:pick(o.cdncMode[0]), c:'bg'});
+      if (r.bins.some(b=>b.mode===1)) s.push({x:pick(o.cdncMode[1]), c:'ss'});
+      return s;
+    }
+  }
+}
+function domainFor(pid, runs){
+  let lo=Infinity, hi=-Infinity;
+  for (const {r,upto} of runs){
+    const o=r.out, n=r.done?o.z.length:Math.min(o.z.length, Math.floor(upto)+1);
+    const arr = pid==='T'?o.T.slice(0,n).map(v=>v-273.15): pid==='RH'?o.rh.slice(0,n): pid==='QL'?o.ql.slice(0,n): pid==='N'?o.cdnc.slice(0,n): o.ss.slice(0,n);
+    for (const v of arr){ if(v<lo) lo=v; if(v>hi) hi=v; }
+  }
+  if (pid==='SS'){ const top=Math.max(0.05, hi); return [-Math.max(0.05, top*0.6), top*1.12]; }
+  if (pid==='RH'){ return [Math.floor(Math.min(lo,95)/5)*5, Math.max(101, Math.ceil(hi))]; }
+  if (pid==='QL'||pid==='N'){ return [0, Math.max(hi*1.08, pid==='N'?10:0.05)]; }
+  const pad=(hi-lo)*0.06||1; return [lo-pad, hi+pad];
+}
+function drawProfiles(){
+  if (!run) return;
+  const runs=[{r:run,upto:revealIdx}]; if (pinned&&pinned!==run) runs.push({r:pinned,upto:pinned.out.z.length-1});
+  const zt=state.zt; const M=pmargin();
+  for (const p of PANELS){
+    const {ctx,w,h}=setup(pcv[p.id]); const pw=w-M.l-M.r, ph=h-M.t-M.b;
+    const Y=(z)=>M.t+ph*(1-z/zt);
+    let dom, X;
+    if (p.id==='D'){
+      let lo=Infinity, hi=0;
+      for (const {r} of runs){ const o=r.out; for (let j=0;j<o.dw.length;j++){ const a=o.dw[j]; for(let i=0;i<a.length;i++){ if(a[i]<lo) lo=a[i]; if(a[i]>hi) hi=a[i]; } } }
+      lo=Math.max(lo*0.8,1e-9); hi=Math.max(hi*1.25, lo*10);
+      dom=[lo*1e6,hi*1e6]; const la=Math.log10(dom[0]), lb=Math.log10(dom[1]);
+      X=(v)=>M.l+pw*(Math.log10(Math.max(v,1e-12))-la)/(lb-la);
+    } else { dom=domainFor(p.id, runs); X=(v)=>M.l+pw*(v-dom[0])/(dom[1]-dom[0]); }
+    // cloud base band
+    const zb = run.zbase!==null && run.done ? run.zbase : summarize(run, revealIdx).zb;
+    if (zb!==null){ ctx.fillStyle=C.panel2; ctx.fillRect(M.l, Y(zt), pw, Y(zb)-Y(zt)); }
+    // grid
+    ctx.font='11px "IBM Plex Mono", ui-monospace, monospace'; ctx.lineWidth=1;
+    const yt=niceTicks(0,zt,6);
+    ctx.textAlign='right'; ctx.textBaseline='middle';
+    for (const z of yt){ const y=Math.round(Y(z))+.5; ctx.strokeStyle=C.grid; ctx.beginPath(); ctx.moveTo(M.l,y); ctx.lineTo(w-M.r,y); ctx.stroke(); ctx.fillStyle=C.ink3; ctx.fillText(z>=1000?(z/1000)+'k':z, M.l-5, y); }
+    const xt = p.id==='D'? logTicks(dom[0],dom[1]) : niceTicks(dom[0],dom[1], pw<150?3:4);
+    ctx.textAlign='center'; ctx.textBaseline='top';
+    for (const v of xt){ const x=Math.round(X(v))+.5; ctx.strokeStyle=C.grid; ctx.beginPath(); ctx.moveTo(x,M.t); ctx.lineTo(x,M.t+ph); ctx.stroke(); ctx.fillStyle=C.ink3; ctx.fillText(p.id==='D'?(v>=1?v:(v*1000)+'n').toString().replace(/^(\d+)n$/,'$1 nm'):fmtTick(v), x, M.t+ph+5); }
+    if (p.id==='D'){ ctx.fillStyle=C.ink3; ctx.textAlign='right'; ctx.fillText('µm', w-M.r, M.t+ph+19); }
+    // reference lines
+    if (p.id==='SS'&&dom[0]<0&&dom[1]>0){ const x=Math.round(X(0))+.5; ctx.strokeStyle=C.axis; ctx.setLineDash([3,3]); ctx.beginPath(); ctx.moveTo(x,M.t); ctx.lineTo(x,M.t+ph); ctx.stroke(); ctx.setLineDash([]); }
+    if (p.id==='RH'){ const x=Math.round(X(100))+.5; ctx.strokeStyle=C.axis; ctx.setLineDash([3,3]); ctx.beginPath(); ctx.moveTo(x,M.t); ctx.lineTo(x,M.t+ph); ctx.stroke(); ctx.setLineDash([]); }
+    // axes
+    ctx.strokeStyle=C.axis; ctx.beginPath(); ctx.moveTo(M.l+.5,M.t); ctx.lineTo(M.l+.5,M.t+ph); ctx.lineTo(w-M.r,M.t+ph+.5); ctx.stroke();
+    ctx.save(); ctx.beginPath(); ctx.rect(M.l,M.t-2,pw+2,ph+4); ctx.clip();
+    // draw runs: pinned first
+    for (let ri=runs.length-1; ri>=0; ri--){
+      const {r,upto}=runs[ri]; const isPin = r!==run; const o=r.out; const n=Math.min(Math.floor(upto)+1,o.z.length);
+      if (p.id==='D'){
+        const nb=r.bins.length;
+        for (let i=0;i<nb;i++){
+          const mode=r.bins[i].mode; const act=o.act[n-1][i];
+          ctx.strokeStyle=isPin?C.pin:(mode===0?C.bg:C.ss);
+          ctx.globalAlpha=isPin?0.25:(act?0.9:0.3); ctx.lineWidth=act&&!isPin?1.2:0.8;
+          ctx.beginPath(); for (let j=0;j<n;j++){ const x=X(o.dw[j][i]*1e6), y=Y(o.z[j]); j?ctx.lineTo(x,y):ctx.moveTo(x,y); } ctx.stroke();
+        }
+        ctx.globalAlpha=1;
+      } else {
+        for (const s of seriesFor(r,p.id,n-1)){
+          ctx.strokeStyle=isPin?C.pin:C[s.c]; ctx.lineWidth=isPin?1.5:(s.w||2); ctx.setLineDash(isPin?[5,4]:[]);
+          ctx.lineJoin='round'; ctx.beginPath();
+          for (let j=0;j<n;j++){ const x=X(s.x[j]), y=Y(o.z[j]); j?ctx.lineTo(x,y):ctx.moveTo(x,y); } ctx.stroke(); ctx.setLineDash([]);
+        }
+      }
+    }
+    ctx.restore();
+    if (zb!==null){ ctx.fillStyle=C.ink3; ctx.font='10.5px "IBM Plex Sans", system-ui, sans-serif'; ctx.textAlign='right'; ctx.textBaseline='bottom'; ctx.fillText('cloud', w-M.r-3, Y(zb)-2); }
+    // hover line
+    if (hoverZ!==null){ const y=Math.round(Y(hoverZ))+.5; ctx.strokeStyle=C.ink2; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(M.l,y); ctx.lineTo(w-M.r,y); ctx.stroke(); }
+    // readout
+    $('r-'+p.id).innerHTML = readout(p.id);
+  }
+  $('hoverz').textContent = hoverZ===null ? (run.done?'Readouts at cloud top':'Readouts at the parcel') : `Readouts at ${hoverZ.toFixed(0)} m`;
+}
+function idxAt(r, z){ const o=r.out; let best=0, bd=Infinity; for(let i=0;i<o.z.length;i++){ const d=Math.abs(o.z[i]-z); if(d<bd){bd=d;best=i;} } return best; }
+function readout(pid){
+  const lines=[];
+  const one=(r, isPin)=>{
+    const o=r.out; const lim = isPin? o.z.length-1 : Math.floor(revealIdx);
+    let k = hoverZ===null? lim : Math.min(idxAt(r,hoverZ), lim);
+    if (hoverZ!==null && o.z[k] < hoverZ-10 && !isPin && !r.done) return isPin?'':'—';
+    let v;
+    switch(pid){
+      case 'T': v=(o.T[k]-273.15).toFixed(2)+' °C'; break;
+      case 'RH': v=o.rh[k].toFixed(1)+' %'; break;
+      case 'SS': v=(o.ss[k]>=-0.995? (o.ss[k]>=0?'+':'')+o.ss[k].toFixed(3):o.ss[k].toFixed(1))+' %'; break;
+      case 'QL': v=o.ql[k].toFixed(3); break;
+      case 'N': v=o.cdnc[k].toFixed(0)+' <span style="color:var(--c-bg)">'+o.cdncMode[0][k].toFixed(0)+'</span> <span style="color:var(--c-ss)">'+o.cdncMode[1][k].toFixed(0)+'</span>'; break;
+      case 'D': { const a=o.act[k]; let s3=0,sn=0; r.bins.forEach((b,i)=>{ if(a[i]){ s3+=b.N*o.dw[k][i]**3; sn+=b.N; } }); v= sn>0? 'mean drop '+(Math.cbrt(s3/sn)*1e6).toFixed(1)+' µm' : 'no droplets'; break; }
+    }
+    if (pid==='T' && !isPin) v += ' · '+(o.p[k]/100).toFixed(0)+' hPa';
+    return v;
+  };
+  lines.push(one(run,false));
+  if (pinned&&pinned!==run) lines.push('<span style="color:var(--ink-3)">pinned '+one(pinned,true)+'</span>');
+  return lines.join('<br>');
+}
+
+// ------------------------------------------------------------------ size distribution
+function precomputePSD(r, cfg){
+  const n=160, dmin=10e-9, dmax=3e-6, D=[], Y=[[],[]];
+  const rho0=cfg.P/(287.05*cfg.T);
+  for (let i=0;i<n;i++){ const d=dmin*Math.pow(dmax/dmin, i/(n-1)); D.push(d);
+    for (let m=0;m<2;m++) Y[m].push(PM.dNdlnD(cfg.modes[m].sub, d)*Math.LN10*rho0/1e6); }
+  return {D,Y,rho0};
+}
+const psdCv=$('psd'); let psdHover=null;
+psdCv.addEventListener('pointermove',(e)=>{ const r=psdCv.getBoundingClientRect(); psdHover=e.clientX-r.left; drawPSD(); });
+psdCv.addEventListener('pointerleave',()=>{ psdHover=null; drawPSD(); });
+function drawPSD(){
+  if (!run) return;
+  const {ctx,w,h}=setup(psdCv); const M={l:44,r:12,t:10,b:34}; const pw=w-M.l-M.r, ph=h-M.t-M.b;
+  const P=run.sizes, S=summarize(run, revealIdx);
+  let ymax=1; for (const m of [0,1]) for (const v of P.Y[m]) if (v>ymax) ymax=v;
+  if (pinned&&pinned!==run) for (const m of [0,1]) for (const v of pinned.sizes.Y[m]) if (v>ymax) ymax=v;
+  const ylo=1, yhi=Math.pow(10, Math.ceil(Math.log10(ymax*1.5)));
+  const la=Math.log10(10e-9), lb=Math.log10(3e-6);
+  const X=(d)=>M.l+pw*(Math.log10(d)-la)/(lb-la);
+  const Yv=(v)=>M.t+ph*(1-(Math.log10(Math.max(v,ylo))-Math.log10(ylo))/(Math.log10(yhi)-Math.log10(ylo)));
+  ctx.font='11px "IBM Plex Mono", ui-monospace, monospace'; ctx.lineWidth=1;
+  ctx.textAlign='right'; ctx.textBaseline='middle';
+  for (const v of logTicks(ylo,yhi)){ const y=Math.round(Yv(v))+.5; ctx.strokeStyle=C.grid; ctx.beginPath(); ctx.moveTo(M.l,y); ctx.lineTo(w-M.r,y); ctx.stroke(); ctx.fillStyle=C.ink3; ctx.fillText(v>=1e3?'1e'+Math.log10(v):v, M.l-5, y); }
+  ctx.textAlign='center'; ctx.textBaseline='top';
+  for (const d of (pw<420?[10e-9,100e-9,1e-6]:[10e-9,20e-9,50e-9,100e-9,200e-9,500e-9,1e-6,2e-6])){ const x=Math.round(X(d))+.5; ctx.strokeStyle=C.grid; ctx.beginPath(); ctx.moveTo(x,M.t); ctx.lineTo(x,M.t+ph); ctx.stroke(); ctx.fillStyle=C.ink3; ctx.fillText(fmtLog(d),x,M.t+ph+5); }
+  ctx.fillStyle=C.ink3; ctx.textAlign='left'; ctx.fillText('dN/dlogD (cm⁻³)', M.l+4, M.t+2);
+  ctx.textAlign='right'; ctx.fillText('dry diameter', w-M.r, M.t+ph+19);
+  ctx.strokeStyle=C.axis; ctx.beginPath(); ctx.moveTo(M.l+.5,M.t); ctx.lineTo(M.l+.5,M.t+ph); ctx.lineTo(w-M.r,M.t+ph+.5); ctx.stroke();
+  ctx.save(); ctx.beginPath(); ctx.rect(M.l,M.t,pw,ph); ctx.clip();
+  // fill activated ranges
+  const act=run.out.act[S.k];
+  for (const m of [0,1]){
+    const col = m===0?C.bg:C.ss;
+    ctx.fillStyle=col; ctx.globalAlpha=0.28;
+    const iv=[]; run.bins.forEach((b,i)=>{ if(b.mode!==m||!act[i]) return; const L=iv[iv.length-1];
+      if (L && Math.abs(L[1]-b.d0)<=b.d0*1e-6) L[1]=b.d1; else iv.push([b.d0,b.d1]); });
+    const Yd=(d)=>PM.dNdlnD(run.cfg.modes[m].sub,d)*Math.LN10*P.rho0/1e6;
+    for (const [a,bb] of iv){ ctx.beginPath(); ctx.moveTo(X(a),Yv(ylo)); const n=120;
+      for (let j=0;j<=n;j++){ const d=a*Math.pow(bb/a,j/n); ctx.lineTo(X(d),Yv(Yd(d))); }
+      ctx.lineTo(X(bb),Yv(ylo)); ctx.closePath(); ctx.fill(); }
+    ctx.globalAlpha=1;
+  }
+  const drawCurve=(Pz, m, col, dash, lw)=>{ if (!Pz.Y[m].some(v=>v>ylo)) return; ctx.strokeStyle=col; ctx.lineWidth=lw; ctx.setLineDash(dash); ctx.beginPath(); let started=false;
+    for (let j=0;j<Pz.D.length;j++){ const x=X(Pz.D[j]), y=Yv(Pz.Y[m][j]); if(!started){ctx.moveTo(x,y);started=true;} else ctx.lineTo(x,y);} ctx.stroke(); ctx.setLineDash([]); };
+  if (pinned&&pinned!==run) for (const m of [0,1]) drawCurve(pinned.sizes, m, C.pin, [5,4], 1.3);
+  for (const m of [0,1]) drawCurve(P, m, m===0?C.bg:C.ss, [], 2);
+  // bin ticks along bottom
+  run.bins.forEach(b=>{ const x=X(Math.max(b.ddry,10e-9)); ctx.strokeStyle=b.mode===0?C.bg:C.ss; ctx.globalAlpha=.55; ctx.beginPath(); ctx.moveTo(x, M.t+ph - (b.mode===0?0:6)); ctx.lineTo(x, M.t+ph-(b.mode===0?6:12)); ctx.stroke(); });
+  ctx.globalAlpha=1;
+  ctx.restore();
+  // activation cut labels
+  ctx.font='11.5px "IBM Plex Sans", system-ui, sans-serif'; ctx.textBaseline='bottom';
+  for (const m of [0,1]){ const d=S.dmin[m]; if(!isFinite(d)) continue; const x=X(d);
+    ctx.strokeStyle=m===0?C.bg:C.ss; ctx.setLineDash([2,3]); ctx.beginPath(); ctx.moveTo(x+.5, M.t+12+m*16); ctx.lineTo(x+.5, M.t+ph); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle=C.ink2; ctx.textAlign= x>w-140?'right':'left'; ctx.fillText(`${m===0?'background':'sea salt'} ≥ ${fmtLog(d)}`, x+(x>w-140?-4:4), M.t+24+m*16); }
+  if (psdHover!==null && psdHover>M.l && psdHover<w-M.r){
+    const d=Math.pow(10, la+(psdHover-M.l)/pw*(lb-la)); const x=Math.round(psdHover)+.5;
+    ctx.strokeStyle=C.ink2; ctx.beginPath(); ctx.moveTo(x,M.t); ctx.lineTo(x,M.t+ph); ctx.stroke();
+    const v0=PM.dNdlnD(run.cfg.modes[0].sub,d)*Math.LN10*P.rho0/1e6, v1=PM.dNdlnD(run.cfg.modes[1].sub,d)*Math.LN10*P.rho0/1e6;
+    $('psd-note').textContent=`${fmtLog(d)}: background ${v0<0.1?'0':v0.toPrecision(3)}, sea salt ${v1<0.1?'0':v1.toPrecision(3)} cm⁻³ per log D`;
+  } else $('psd-note').textContent='Filled = became cloud droplets. Outline = stayed as haze. Ticks = bin positions.';
+}
+
+// ------------------------------------------------------------------ parcel column
+const colCv=$('col');
+function hash(i){ const x=Math.sin(i*127.1+311.7)*43758.5453; return x-Math.floor(x); }
+function drawColumn(){
+  if (!run) return;
+  const {ctx,w,h}=setup(colCv); const zt=state.zt; const top=36, bot=h-26;
+  const Y=(z)=>bot-(bot-top)*z/zt;
+  const g=ctx.createLinearGradient(0,0,0,h); g.addColorStop(0,C.skyT); g.addColorStop(1,C.skyB); ctx.fillStyle=g; ctx.fillRect(0,0,w,h);
+  ctx.fillStyle=C.ground; ctx.fillRect(0,bot,w,h-bot);
+  const S=summarize(run, revealIdx); const z=S.z;
+  // cloud body
+  if (S.zb!==null && z>S.zb){
+    const y0=Y(S.zb), y1=Y(z); ctx.fillStyle=C.cloud; ctx.globalAlpha=.92;
+    ctx.beginPath(); ctx.rect(14,y1,w-28,y0-y1); ctx.fill();
+    for (let i=0;i<40;i++){ const zz=S.zb+(z-S.zb)*hash(i); const side=i%2; const r=8+10*hash(i+99);
+      ctx.beginPath(); ctx.arc(side?w-16:16, Y(zz), r, 0, Math.PI*2); ctx.fill(); }
+    for (let i=0;i<7;i++){ ctx.beginPath(); ctx.arc(14+(w-28)*(i/6), y1, 9+6*hash(i+7), 0, Math.PI*2); ctx.fill(); }
+    ctx.globalAlpha=1;
+    ctx.strokeStyle=C.cloudE; ctx.setLineDash([4,4]); ctx.beginPath(); ctx.moveTo(0,Math.round(y0)+.5); ctx.lineTo(w,Math.round(y0)+.5); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle=C.ink; ctx.font='600 11px "IBM Plex Sans", system-ui, sans-serif'; ctx.textAlign='left'; ctx.textBaseline='top';
+    ctx.fillText('cloud base '+S.zb.toFixed(0)+' m', 6, y0+3);
+  }
+  // height ticks
+  ctx.font='10.5px "IBM Plex Mono", ui-monospace, monospace'; ctx.fillStyle=C.ink2; ctx.textAlign='right'; ctx.textBaseline='middle';
+  for (const t of niceTicks(0,zt,5)){ const y=Math.round(Y(t))+.5; ctx.strokeStyle=C.ink3; ctx.globalAlpha=.5; ctx.beginPath(); ctx.moveTo(w-8,y); ctx.lineTo(w,y); ctx.stroke(); ctx.globalAlpha=1; ctx.fillText(t+' m', w-10, y); }
+  // parcel
+  const py=Y(z), px=w*0.42, R=24;
+  ctx.fillStyle=C.panel; ctx.globalAlpha=0.55; ctx.beginPath(); ctx.arc(px,py,R,0,Math.PI*2); ctx.fill(); ctx.globalAlpha=1;
+  ctx.strokeStyle=C.ink; ctx.lineWidth=1.5; ctx.beginPath(); ctx.arc(px,py,R,0,Math.PI*2); ctx.stroke();
+  // droplets inside, split by type
+  const nd=Math.min(42, Math.round(S.cdnc>0? 10+Math.sqrt(S.cdnc)*1.2 : 0));
+  const fbg = S.cdnc>0? S.cm[0]/S.cdnc : 0;
+  for (let i=0;i<Math.max(nd,14);i++){
+    const a=hash(i+3)*Math.PI*2, rr=Math.sqrt(hash(i+50))*(R-5);
+    const x=px+Math.cos(a)*rr, y=py+Math.sin(a)*rr;
+    if (i<nd){ ctx.fillStyle = (i/nd)<fbg? C.bg : C.ss; ctx.beginPath(); ctx.arc(x,y,2.4,0,Math.PI*2); ctx.fill(); }
+    else { ctx.fillStyle=C.ink3; ctx.globalAlpha=.5; ctx.beginPath(); ctx.arc(x,y,1.1,0,Math.PI*2); ctx.fill(); ctx.globalAlpha=1; }
+  }
+  ctx.fillStyle=C.ink; ctx.font='600 12px "IBM Plex Mono", ui-monospace, monospace'; ctx.textAlign='center'; ctx.textBaseline='top';
+  ctx.fillText((S.T-273.15).toFixed(1)+' °C', px, Math.min(py+R+4, bot-14));
+  ctx.fillStyle=C.ink; ctx.font='11px "IBM Plex Sans", system-ui, sans-serif'; ctx.textBaseline='middle'; ctx.textAlign='center';
+  ctx.fillText('ground', w/2, bot+13);
+}
+
+// ------------------------------------------------------------------ tiles and insight
+function pct(x){ return x===null? '—' : (x*100<1&&x>0? '<1' : (x*100).toFixed(0)); }
+function deltaTxt(a,b,unit,dp){ if(b===null||a===null||b===undefined) return ''; const d=a-b; if(Math.abs(d)<Math.pow(10,-dp)/2) return 'same as pinned'; return (d>0?'▲ ':'▼ ')+Math.abs(d).toFixed(dp)+' '+unit+' vs pinned'; }
+function drawTiles(){
+  const S=summarize(run, revealIdx); const P = pinned&&pinned!==run ? summarize(pinned, pinned.out.z.length-1) : null;
+  const hasSS=S.nTot[1]>0, hasBG=S.nTot[0]>0;
+  const tiles=[];
+  tiles.push({k:'Cloud base', v: S.zb===null?'none':S.zb.toFixed(0), u:S.zb===null?'':'m', d: P&&S.zb!==null&&P.zb!==null? deltaTxt(S.zb,P.zb,'m',0):''});
+  tiles.push({k:'Peak supersaturation', v: S.smax>-1e9? (S.smax>0?S.smax.toFixed(2):'<0') : '—', u:S.smax>0?'%':'', d: P? deltaTxt(S.smax,P.smax,'%',2):''});
+  const tot=S.cdnc; const split = tot>0? `<div class="split"><span style="width:${S.cm[0]/tot*100}%;background:var(--c-bg)"></span><span style="width:${S.cm[1]/tot*100}%;background:var(--c-ss)"></span></div>`:'<div class="split"></div>';
+  tiles.push({k:'Cloud droplets', v: tot.toFixed(0), u:'cm⁻³', d: (P? deltaTxt(tot,P.cdnc,'',0):'')+split});
+  if (hasBG) tiles.push({k:'Background activated', v:pct(S.frac[0]), u:'%', d:`of ${(S.nTot[0]*S.rhoa/1e6).toFixed(0)} cm⁻³`, c:'bg'});
+  if (hasSS) tiles.push({k:'Sea salt activated', v:pct(S.frac[1]), u:'%', d:`of ${(S.nTot[1]*S.rhoa/1e6).toFixed(0)} cm⁻³`, c:'ss'});
+  tiles.push({k:'Mean droplet size', v: S.dmean? (S.dmean*1e6).toFixed(1):'—', u:S.dmean?'µm':'', d: P&&S.dmean&&P.dmean? deltaTxt(S.dmean*1e6,P.dmean*1e6,'µm',1):''});
+  $('tiles').innerHTML = tiles.map(t=>`<div class="tile"><span class="k">${t.c?`<span class="sw ${t.c}" style="gap:6px"><i style="width:10px"></i>${t.k}</span>`:t.k}</span><span class="v">${t.v}<small>${t.u}</small></span><span class="d">${t.d}</span></div>`).join('');
+  $('runinfo').textContent = run.label;
+  // insight
+  let txt;
+  const fin = run.done && revealIdx>=run.out.z.length-1;
+  if (!fin && S.zb===null) txt = `The parcel is rising and cooling. At ${S.z.toFixed(0)} m it is ${(S.T-273.15).toFixed(1)} °C, and the aerosol particles are swelling with water as humidity climbs.`;
+  else if (S.zb===null) txt = `<b>No cloud droplets.</b> The air never became supersaturated. ${hasSS?'The large sea-salt particles soaked up the water vapour as fast as it became available, so they grew as big haze drops without formally activating.':'The parcel did not rise far enough to reach saturation.'}`;
+  else {
+    const bits=[];
+    bits.push(`Cloud base is at <b>${S.zb.toFixed(0)} m</b> and supersaturation peaks at <b>${Math.max(S.smax,0).toFixed(2)} %</b>.`);
+    const parts=[]; if(hasBG) parts.push(`<b>${pct(S.frac[0])} %</b> of the background particles`); if(hasSS) parts.push(`<b>${pct(S.frac[1])} %</b> of the sea-salt particles`);
+    bits.push(`That is enough to activate ${parts.join(' and ')}, giving <b>${S.cdnc.toFixed(0)} droplets per cm³</b>.`);
+    if (P && P.cdnc>0){ const r=(S.cdnc-P.cdnc)/P.cdnc*100; if (Math.abs(r)>=1) bits.push(`That is ${Math.abs(r).toFixed(0)} % ${r>0?'more':'fewer'} droplets than the pinned run.`); }
+    else if (hasSS && S.frac[0]!==null && P && P.cdnc===0) bits.push('The pinned run made no droplets at all.');
+    txt=bits.join(' ');
+  }
+  $('insight').innerHTML = txt;
+}
+
+function drawAll(){ if(!run) return; readColors(); drawColumn(); drawTiles(); drawPSD(); drawProfiles(); }
+
+// theme / resize
+const mq=window.matchMedia('(prefers-color-scheme: dark)'); if(mq.addEventListener) mq.addEventListener('change',drawAll);
+new MutationObserver(drawAll).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme','class']});
+let rz; window.addEventListener('resize',()=>{ clearTimeout(rz); rz=setTimeout(drawAll,80); });
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(drawAll);
+
+renderPresets(); syncControls(); readColors(); startRun();
+})();
+</script>
